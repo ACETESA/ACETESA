@@ -1,0 +1,87 @@
+﻿@using Acetesa.TomaPedidos.AdminMvc.Models
+
+@model Acetesa.TomaPedidos.AdminMvc.Models.VentaViewModel
+
+@{
+    ViewBag.Title = "Consulta de Venta";
+}
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+<h2>Consulta Venta</h2>
+<iframe id="ifrmReporte" style="display:none"></iframe>
+@using (Ajax.BeginForm(new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result"
+}))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="ui-widget">
+                    @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<div class="table-responsive" id="result">
+    @{
+        Html.RenderPartial("_PartialVentaList", Model);
+    }
+</div>
+@{
+    Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
+}
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.fileDownload.js"></script>
+    <script src="~/Scripts/app/email-service.js?v=1"></script>
+    <script>
+        _baseUrl = "@ViewBag.BaseUrl";
+    </script>
+    <script>
+        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Venta")";
+    </script>
+    <script src="~/Scripts/app/VentaScript.js?v=1"></script>
+    <script src="~/Scripts/app/VentaFindScript.js?v=1"></script>
+}

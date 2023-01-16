@@ -1,0 +1,161 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.AdminMvc", "Acetesa.TomaPedidos.AdminMvc\Acetesa.TomaPedidos.AdminMvc.csproj", "{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E2DD28C8-D618-46E3-91D5-B6872BAB38CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{54F09A42-622A-4A18-B1C8-96DC0D6C3E90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{AAB9AE35-3521-4C2A-9442-9E0D9AD61D73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.Transversal", "Acetesa.TomaPedidos.Transversal\Acetesa.TomaPedidos.Transversal.csproj", "{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.DataEntityFramework", "Acetesa.TomaPedidos.DataEntityFramework\Acetesa.TomaPedidos.DataEntityFramework.csproj", "{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.Entity", "Acetesa.TomaPedidos.Entity\Acetesa.TomaPedidos.Entity.csproj", "{79271D57-71CE-48C1-A0C1-49150E39F06C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.Core", "Acetesa.TomaPedidos.Core\Acetesa.TomaPedidos.Core.csproj", "{ED0C6C21-EF36-416F-BD1A-9907412B3D33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.Domain", "Acetesa.TomaPedidos.Domain\Acetesa.TomaPedidos.Domain.csproj", "{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.Repository", "Acetesa.TomaPedidos.Repository\Acetesa.TomaPedidos.Repository.csproj", "{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acetesa.TomaPedidos.IRepository", "Acetesa.TomaPedidos.IRepository\Acetesa.TomaPedidos.IRepository.csproj", "{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EB0154D1-1D00-49F2-9BC6-70D223CD234F}"
+	ProjectSection(SolutionItems) = preProject
+		WebEssentials-Settings.json = WebEssentials-Settings.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcRazorToPdf", "MvcRazorToPdf\MvcRazorToPdf.csproj", "{50E76C53-09C0-4A25-91A7-16C78F50BAE2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{112C578F-E2E4-4B6D-8F41-90AEF2B89D7B}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Qa|Any CPU = Qa|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79271D57-71CE-48C1-A0C1-49150E39F06C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79271D57-71CE-48C1-A0C1-49150E39F06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79271D57-71CE-48C1-A0C1-49150E39F06C}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{79271D57-71CE-48C1-A0C1-49150E39F06C}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{79271D57-71CE-48C1-A0C1-49150E39F06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79271D57-71CE-48C1-A0C1-49150E39F06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}.Qa|Any CPU.ActiveCfg = Qa|Any CPU
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}.Qa|Any CPU.Build.0 = Qa|Any CPU
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2}.Qa|Any CPU.ActiveCfg = Release|Any CPU
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2}.Qa|Any CPU.Build.0 = Release|Any CPU
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5012F6FD-A6D3-4161-8DEB-EA773D96B0A3} = {AAB9AE35-3521-4C2A-9442-9E0D9AD61D73}
+		{BF0919DE-0E92-45F1-B724-2944C3F9CCCA} = {E2DD28C8-D618-46E3-91D5-B6872BAB38CB}
+		{B24FE8F0-A5D8-43BF-8822-6182C22F54F7} = {54F09A42-622A-4A18-B1C8-96DC0D6C3E90}
+		{79271D57-71CE-48C1-A0C1-49150E39F06C} = {E2DD28C8-D618-46E3-91D5-B6872BAB38CB}
+		{ED0C6C21-EF36-416F-BD1A-9907412B3D33} = {E2DD28C8-D618-46E3-91D5-B6872BAB38CB}
+		{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA} = {E2DD28C8-D618-46E3-91D5-B6872BAB38CB}
+		{AEB4ECFE-CD4E-4803-8AC8-E65FE3BCFCD0} = {54F09A42-622A-4A18-B1C8-96DC0D6C3E90}
+		{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682} = {E2DD28C8-D618-46E3-91D5-B6872BAB38CB}
+		{50E76C53-09C0-4A25-91A7-16C78F50BAE2} = {AAB9AE35-3521-4C2A-9442-9E0D9AD61D73}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29C513BC-4506-4EE3-BAF6-DECFA030B687}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://jesus-lazaro-quispe.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Acetesa.TomaPedidos.AdminMvc\\Acetesa.TomaPedidos.AdminMvc.csproj
+		SccProjectTopLevelParentUniqueName1 = Acetesa.TomaPedidos.sln
+		SccProjectName1 = Acetesa.TomaPedidos.AdminMvc
+		SccLocalPath1 = Acetesa.TomaPedidos.AdminMvc
+		SccProjectUniqueName2 = Acetesa.TomaPedidos.Transversal\\Acetesa.TomaPedidos.Transversal.csproj
+		SccProjectTopLevelParentUniqueName2 = Acetesa.TomaPedidos.sln
+		SccProjectName2 = Acetesa.TomaPedidos.Transversal
+		SccLocalPath2 = Acetesa.TomaPedidos.Transversal
+		SccProjectUniqueName3 = Acetesa.TomaPedidos.DataEntityFramework\\Acetesa.TomaPedidos.DataEntityFramework.csproj
+		SccProjectTopLevelParentUniqueName3 = Acetesa.TomaPedidos.sln
+		SccProjectName3 = Acetesa.TomaPedidos.DataEntityFramework
+		SccLocalPath3 = Acetesa.TomaPedidos.DataEntityFramework
+		SccProjectUniqueName4 = Acetesa.TomaPedidos.Entity\\Acetesa.TomaPedidos.Entity.csproj
+		SccProjectTopLevelParentUniqueName4 = Acetesa.TomaPedidos.sln
+		SccProjectName4 = Acetesa.TomaPedidos.Entity
+		SccLocalPath4 = Acetesa.TomaPedidos.Entity
+		SccProjectUniqueName5 = Acetesa.TomaPedidos.Core\\Acetesa.TomaPedidos.Core.csproj
+		SccProjectTopLevelParentUniqueName5 = Acetesa.TomaPedidos.sln
+		SccProjectName5 = Acetesa.TomaPedidos.Core
+		SccLocalPath5 = Acetesa.TomaPedidos.Core
+		SccProjectUniqueName6 = Acetesa.TomaPedidos.Domain\\Acetesa.TomaPedidos.Domain.csproj
+		SccProjectTopLevelParentUniqueName6 = Acetesa.TomaPedidos.sln
+		SccProjectName6 = Acetesa.TomaPedidos.Domain
+		SccLocalPath6 = Acetesa.TomaPedidos.Domain
+		SccProjectUniqueName7 = Acetesa.TomaPedidos.Repository\\Acetesa.TomaPedidos.Repository.csproj
+		SccProjectTopLevelParentUniqueName7 = Acetesa.TomaPedidos.sln
+		SccProjectName7 = Acetesa.TomaPedidos.Repository
+		SccLocalPath7 = Acetesa.TomaPedidos.Repository
+		SccProjectUniqueName8 = Acetesa.TomaPedidos.IRepository\\Acetesa.TomaPedidos.IRepository.csproj
+		SccProjectTopLevelParentUniqueName8 = Acetesa.TomaPedidos.sln
+		SccProjectName8 = Acetesa.TomaPedidos.IRepository
+		SccLocalPath8 = Acetesa.TomaPedidos.IRepository
+		SccProjectUniqueName9 = MvcRazorToPdf\\MvcRazorToPdf.csproj
+		SccProjectTopLevelParentUniqueName9 = Acetesa.TomaPedidos.sln
+		SccProjectName9 = MvcRazorToPdf
+		SccLocalPath9 = MvcRazorToPdf
+	EndGlobalSection
+EndGlobal

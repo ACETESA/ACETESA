@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Acetesa.TomaPedidos.Domain.EstadoCuentaDetalleModel>
+
+@{
+    ViewBag.Title = "Detallado";
+}
+
+<h2>Detallado</h2>
+@if (Model != null && Model.Any())
+{
+    <div class="row table-ec">
+        <h3>
+            @{
+    var estadoCuentaDetalleModel = Model.FirstOrDefault();
+            }
+            @if (estadoCuentaDetalleModel != null)
+            {
+                <b>@estadoCuentaDetalleModel.Razon_Social</b>
+            }
+        </h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table" id="table-ec-detalle">
+            <thead>
+                <tr>
+                    <th>TD</th>
+                    <th>Número</th>
+                    <th>F. Emisión</th>
+                    <th>F. Vcto</th>
+                    <th>Días Vcto</th>
+                    <th>Imp. Total</th>
+                    <th>A Cuenta</th>
+                    <th>Saldos</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var fechaDocumento = item.Fecha_Documento;
+                    var sFechaDoc = "";
+                    if (fechaDocumento != default(DateTime))
+                    {
+                        sFechaDoc = fechaDocumento.ToString("ddMMMyy");
+                    }
+                    var fechaVcto = item.Fecha_Vencimiento;
+                    var sFechaVcto = "";
+                    if (fechaVcto != default(DateTime))
+                    {
+                        sFechaVcto = fechaVcto.ToString("ddMMMyy");
+                    }
+
+                    var diasVcto = item.Dias_Vcto;
+                    var sDiasVcto = "";
+                    if (diasVcto != default(decimal))
+                    {
+                        sDiasVcto = diasVcto.HasValue ? diasVcto.Value.ToString("F0") : "";
+                    }
+
+                    var sTotal = item.Tot_Docum.HasValue ? item.Tot_Docum.Value.ToString("N2") : "0.00";
+                    var sAcuenta = item.Acta_Docum.HasValue ? item.Acta_Docum.Value.ToString("N2") : "0.00";
+                    var sSaldo = item.Sal_Docum.HasValue ? item.Sal_Docum.Value.ToString("N2") : "0.00";
+
+                    var tiposMonedas = new[] { "Total Soles", "Total Dólares" };
+                    var isTotal = tiposMonedas.Contains(item.Mon_Docum);
+                    if (isTotal)
+                    {
+                        <tr class="alert alert-info">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="2" style="text-align: right;"><b>@item.Mon_Docum</b></td>
+                            <td><b>@sTotal</b></td>
+                            <td><b>@sAcuenta</b></td>
+                            <td><b>@sSaldo</b></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@item.TipoDocumento</td>
+                            <td>@item.Nro_Documento</td>
+                            <td>@sFechaDoc</td>
+                            <td>@sFechaVcto</td>
+                            <td>@sDiasVcto</td>
+                            <td>@sTotal</td>
+                            <td>@sAcuenta</td>
+                            <td>@sSaldo</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<input type="button" name="name" id="btnRegresar" value="Regresar" class="btn btn-info" />

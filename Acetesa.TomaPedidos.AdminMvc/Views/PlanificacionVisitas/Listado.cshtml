@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "Listado";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Planificación Visitas</h2>
+        <hr />
+    </div>
+
+    <div class="row">
+        <div class="bs-example" data-example-id="contextual-panels">
+
+            <div class="panel">
+                <div class="panel-heading" style="background-color:#272323; color:white;">
+                    <h3 class="panel-title" id="panel-title">Planificación Visitas Clientes<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="selectpicker">Cliente</label>
+                        <div class="col-md-12">
+                            <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="FechaInicio">Fecha Inicio</label>
+                        <div class="col-md-12">
+                            <input class="form-control hasDatepicker" data-val="true" id="FechaInicio" name="FechaInicio" type="date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="FechaInicio">Fecha Fin</label>
+                        <div class="col-md-12">
+                            <input class="form-control hasDatepicker" data-val="true" id="FechaFin" name="FechaFin" type="date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="EstadoPlanificacion">Estado Visita</label>
+                        <div class="col-md-12">
+                            <select class="form-control" id="sEstadoVisita">
+                                <option value="%">Todos</option>
+                                <option value="1" selected>Registrado</option>
+                                <option value="2">Realizado</option>
+                                <option value="0">Cancelado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="sPlanificacionFilter">Planificación</label>
+                        <div class="col-md-12">
+                            <select class="form-control" id="sPlanificacionFilter"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <a id="btnBuscarVisitas" onclick="buscarVisitasMain();" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Buscar</a>
+                    <a class="btn btn-success" data-toggle="modal" data-target="#newVisitaModel" onclick="cargarVariableAccion(1,null);"><i class="glyphicon glyphicon-plus-sign"></i> Nuevo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="bs-example" data-example-id="contextual-panels">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="TablePlanificacionVisitas">
+
+                            <thead>
+                                <tr>
+                                    <th style="display:none; text-align:left;">PlanificacionID</th>
+                                    <th style="display:none; text-align:left;">VisitaClienteID</th>
+                                    <th style="text-align:left">Planificación</th>
+                                    <th style="text-align:left">Cliente</th>
+                                    <th style="text-align:left">Fecha Visita</th>
+                                    <th style="text-align:left">Estado</th>
+                                    <th style="text-align:center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="TablePlanificacionVisitas_BODY"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge-error {
+        background-color: #b94a48;
+    }
+
+    .badge-info {
+        background-color: #3a87ad;
+    }
+
+    .badge-success {
+        background-color: #5cc45e;
+    }
+</style>
+
+
+
+@{Html.RenderPartial("_PartialVisitaClienteNuevo");}
+@{Html.RenderPartial("_PartialLiquidacionGastosCancelar");}
+
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
+
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+    <script src="~/Scripts/app/email-service.js?v=1"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script type="text/javascript">
+
+        urlListadoVisitas = "@Url.Action("ListadoVisitas", "PlanificacionVisitas")";
+        urlClienteAsignado = "@Url.Action("ClientesAsignadosSelect", "Cliente")";
+        urlListaNumeroPlanificacionActivas = "@Url.Action("ListaNumeroPlanificacionActivas", "PlanificacionVisitas")";
+        urlListaNumeroPlanificacionNoActivas = "@Url.Action("ListaNumeroPlanificacionNoActivas", "PlanificacionVisitas")";
+        urlListaMotivosVisita = "@Url.Action("ListaMotivosVisita", "PlanificacionVisitas")";
+        urlListaContactoCliente = "@Url.Action("ListaContactoCliente", "PlanificacionVisitas")";
+        urlRegistrarVisitaCliente = "@Url.Action("RegistrarVisitaCliente", "PlanificacionVisitas")";
+        urlListaMotivosCancelacion = "@Url.Action("ListaMotivosCancelacion", "PlanificacionVisitas")";
+        urlCancelarVisitaCliente = "@Url.Action("CancelarVisitaCliente", "PlanificacionVisitas")";
+        urlRecuperarVisitaCliente = "@Url.Action("RecuperarVisitaCliente", "PlanificacionVisitas")";
+        urlEditarVisitaCliente = "@Url.Action("EditarVisitaCliente", "PlanificacionVisitas")";
+        urlListaNumeroPlanificacionTodos = "@Url.Action("ListaNumeroPlanificacionTodos", "PlanificacionVisitas")";
+
+        urlListaDepartamentos = "@Url.Action("ListaDepartamentos", "PlanificacionVisitas")";
+        urlListaProvincia = "@Url.Action("ListaProvincia", "PlanificacionVisitas")";
+        urlListaDistrito = "@Url.Action("ListaDistrito", "PlanificacionVisitas")";
+    </script>
+    <script src="~/Scripts/app/PlanificacionVisitasMainScript.js?v=6"></script>
+    <script src="~/Scripts/app/PlanificacionVisitasNewScript.js?v=6"></script>
+    <script src="~/Scripts/app/PlanificacionVisitasCancelScript.js?v=6"></script>
+
+}

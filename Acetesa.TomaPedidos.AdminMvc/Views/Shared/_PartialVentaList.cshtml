@@ -1,0 +1,256 @@
+﻿@using System.Globalization
+@model Acetesa.TomaPedidos.AdminMvc.Models.VentaViewModel
+@{
+    Boolean tipoResultado = false;
+}
+@if (Model != null && Model.DatosSP != null && Model.DatosSP.Any())
+{
+    <table class="table table-striped table-hover" id="tblListadoVenta">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                @foreach (string item in Model.CabecerasSP)
+                {
+                    if (item != "Ruta" && item != "Ruc")
+                    {
+                        <th>
+                            @item
+                        </th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Dictionary<string, object> item in Model.DatosSP)
+            {
+            <tr>
+                @if (!Model.CabecerasSP.Contains("Documento"))
+                {
+                    tipoResultado = false;
+                    <td></td>
+                    <td></td>
+                }
+                else
+                {
+                    tipoResultado = true;
+                }
+                @foreach (string itemCab in Model.CabecerasSP)
+                {
+                    if (itemCab == "Documento")
+                    {
+                        if (item["Ruta"].ToString().Replace(@"\", "@") == "")
+                        {
+                            <td>
+                                <a id="nohovera" class="btn btn-primary btn-sm glyphicon glyphicon-envelope" href="#" title="No se ha encontrado el archivo en el directorio" style="opacity:0.2;cursor:no-drop;"></a>
+                            </td>
+                            <td>
+                                <a id="nohoverb" class="btn btn-default btn-sm glyphicon glyphicon-download-alt" href="#" title="No se ha encontrado el archivo en el directorio" style="opacity:0.2;cursor:no-drop;"></a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a id="aEnviarCorreo" class="btn btn-primary btn-sm glyphicon glyphicon-envelope" href="#" onclick="onclickEnviarCorreo('@item["Ruc"].ToString()','@item["Documento"].ToString()','@item["Ruta"].ToString().Replace(@"\","@")');" title="Enviar documento por correo"></a>
+                            </td>
+                            <td>
+                                <a id="aDescargar" class="btn btn-default btn-sm glyphicon glyphicon-download-alt" href="#" onclick="descargarDocumentosDisponibles('@item["Ruta"].ToString().Replace(@"\", "@")','@item["Documento"].ToString()');" title="Descargar"> </a>
+                            </td>
+                        }
+                        @*if (item["Ruta"].ToString().Replace(@"\", "@").Contains("sin ruta"))
+                {
+                    <td>
+                        <a id="nohovera" class="btn btn-primary btn-sm glyphicon glyphicon-envelope" href="#" title="No se ha encontrado el archivo en el directorio" style="opacity:0.2;cursor:no-drop;"></a>
+                    </td>
+                    <td>
+                        <a id="nohoverb" class="btn btn-default btn-sm glyphicon glyphicon-download-alt" href="#" title="No se ha encontrado el archivo en el directorio" style="opacity:0.2;cursor:no-drop;"></a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a class="btn btn-primary btn-sm glyphicon glyphicon-envelope" href="#" onclick="onclickEnviarCorreo('@item["Ruc"].ToString()','@item["Documento"].ToString()','@item["Ruta"].ToString().Replace(@"\","@")');" title="Enviar documento por correo"></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-default btn-sm glyphicon glyphicon-download-alt" href="#" onclick="descargarPDF('@item["Documento"].ToString()'); descargarZIP('@item["Documento"].ToString()'); descargarXML('@item["Documento"].ToString()');" title="Descargar"> </a>
+                    </td>
+                }*@
+
+                        <script>
+                            function descargarDocumentosDisponibles(tipoDocumDisponible, documento) {
+                                if (tipoDocumDisponible == ("PDF-")) {
+                                    descargarPDF(documento);
+                                }
+                                if (tipoDocumDisponible == ("ZIP-")) {
+                                    descargarZIP(documento);
+                                }
+                                if (tipoDocumDisponible == ("XML")) {
+                                    descargarXML(documento);
+                                }
+                                if (tipoDocumDisponible == ("PDF-ZIP-")) {
+                                    descargarPDF(documento);
+                                    descargarZIP(documento);
+                                }
+                                if (tipoDocumDisponible == ("PDF-XML")) {
+                                    descargarPDF(documento);
+                                    descargarXML(documento);
+                                }
+                                if (tipoDocumDisponible == ("ZIP-XML")) {
+                                    descargarZIP(documento);
+                                    descargarXML(documento);
+                                }
+                                if (tipoDocumDisponible == ("PDF-ZIP-XML")) {
+                                    descargarPDF(documento);
+                                    descargarZIP(documento);
+                                    descargarXML(documento);
+                                }
+                            }
+                        </script>
+
+                    }
+                    if (itemCab != "Ruta" && itemCab != "Ruc")
+                    {
+                        if (itemCab == "Guía Remisión")
+                        {
+                            <td>
+                                @item[itemCab].ToString()
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @item[itemCab].ToString().Replace(",", ".")
+                            </td>
+                        }
+                    }
+                }
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                @foreach (string item in Model.CabecerasSP)
+                {
+                    if (item != "Ruta" && item != "Ruc")
+                    {
+                        <th>
+                        </th>
+                    }
+                }
+            </tr>
+        </tfoot>
+
+    </table>
+
+    if (tipoResultado == true)
+        {
+            <script type="text/javascript">
+                var table = jQuery("#tblListadoVenta").DataTable(
+                    {
+                        "language": {
+                            "sProcessing": "Procesando...",
+                            "sLengthMenu": "Mostrar _MENU_ registros",
+                            "sZeroRecords": "No hay ítems para mostrar",
+                            "sEmptyTable": "Ningún dato disponible en esta tabla",
+                            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sSearch": "Buscar:",
+                            "sUrl": "",
+                            "sInfoThousands": ",",
+                            "sLoadingRecords": "Cargando...",
+                            "oPaginate": {
+                                "sFirst": "Primero",
+                                "sLast": "Último",
+                                "sNext": "Siguiente",
+                                "sPrevious": "Anterior"
+                            },
+                            "oAria": {
+                                "sSortAscending": "Activar para ordenar la columna de manera ascendente",
+                                "sSortDescending": "Activar para ordenar la columna de manera descendente"
+                            },
+                        },
+                        "columnDefs": [
+                            { className: "text-right align-middle", "targets": [0,3,4,5] },
+                            { className: "text-nowrap align-middle", "targets": [2] },
+                            { orderable: false, "targets": [0, 1] }
+                        ],
+                        "order": [[2, "desc"]],
+                    }
+                );
+
+            </script>
+        }
+        else
+        {
+            <script type="text/javascript">
+                var table = jQuery("#tblListadoVenta").DataTable(
+                    {
+                        "language": {
+                            "sProcessing": "Procesando...",
+                            "sLengthMenu": "Mostrar _MENU_ registros",
+                            "sZeroRecords": "No hay ítems para mostrar",
+                            "sEmptyTable": "Ningún dato disponible en esta tabla",
+                            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sSearch": "Buscar:",
+                            "sUrl": "",
+                            "sInfoThousands": ",",
+                            "sLoadingRecords": "Cargando...",
+                            "oPaginate": {
+                                "sFirst": "Primero",
+                                "sLast": "Último",
+                                "sNext": "Siguiente",
+                                "sPrevious": "Anterior"
+                            },
+                            "oAria": {
+                                "sSortAscending": "Activar para ordenar la columna de manera ascendente",
+                                "sSortDescending": "Activar para ordenar la columna de manera descendente"
+                            },
+                        },
+                        "columnDefs": [
+                            { className: "text-right align-middle", "targets": [3, 4, 5, 6, 7, 8, 9, 10] },
+                            { className: "text-nowrap align-middle", "targets": [2] },
+                            { orderable: false, "targets": [0, 1] }
+                        ],
+                        "order": [[2, "desc"]],
+                        "fnFooterCallback": function (row, data, start, end, display) {
+                            var api = this.api(), data;
+                            // Remove the formatting to get integer data for summation
+                            var intVal = function (i) {
+                                return typeof i === 'string' ?
+                                    i.replace(/[\$,]/g, '') * 1 :
+                                    typeof i === 'number' ?
+                                        i : 0;
+                            };
+                            //Update footer
+                            $(api.column(2).footer()).html(
+                                'Total'
+                            );
+
+                            var columnas = [3, 4, 5, 6, 7, 8, 9, 10]; //the columns you wish to add
+                            for (var j in columnas) {
+
+                                var columnaActual = columnas[j];
+                                // Total en todas las páginas
+                                total = api
+                                    .column(columnaActual)
+                                    .data()
+                                    .reduce(function (a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                // Update footer
+                                $(api.column(columnaActual).footer()).html(total.toFixed(2));
+                            }
+                        }
+                    }
+                );
+
+            </script>
+        }
+}

@@ -1,0 +1,11 @@
+﻿@model HandleErrorInfo
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "500";
+}
+
+<h2>@Model.Exception.GetType()</h2>
+<p>@Model.Exception.Message en @Model.ActionName</p>
+
+<input type="button" name="name" id="btnRegresar" value="Regresar" class="btn btn-info" />
+<a href="@Url.Action("Venta","Venta")" class="btn btn-default">Consulta Ventas</a>

@@ -1,0 +1,356 @@
+﻿@using System.Globalization
+@using Acetesa.TomaPedidos.Repository;
+@using Humanizer
+@model Acetesa.TomaPedidos.AdminMvc.Models.PedidoClienteViewModel
+@{
+    Layout = null;
+    var imagePath = Server.MapPath("~/Content/images");
+
+    var pedidoAdicional = Model.Adicional;
+
+    var idPedido = Model.Pedido.cn_pedido;
+    var razonSocial = Model.Pedido.cd_razsoc;
+    var ruc = Model.Pedido.cc_analis;
+    var oVendedor = VendedorRepository.getVendedorPedido(idPedido);
+    var sucursal = "";// Model.Pedido.TSUCCLIE.cd_direc;
+    var direccion = Model.Cliente.cd_direc;
+    var telefono = Model.Cliente.cn_telf1;
+    var email = Model.Cliente.ct_email;
+    var formaPago = Model.Pedido.TCONDVTA.cd_vta;
+    var fecha = Model.Pedido.df_emision.ToShortDateString();
+    var fechaEntrega = "";// Model.Pedido.df_entrega.ToShortDateString();
+    var igv_bo = Model.Adicional.igv_bo;
+    var idMoneda = Model.Pedido.cc_moneda;
+    var moneda = "";
+    var monedaSon = "";
+    var esSoles = false;
+    var esDolares = false;
+    var tipoCambio = (decimal)0.0;
+    var totalSoles = (decimal)0.0;
+    var sTotalSoles = "";
+    var tienda = Model.Adicional.cd_tienda;
+    var zonaLiberada = Model.Adicional.zonaLiberada;
+    var mostrarIGV = zonaLiberada == 1 ? 0 : 1;
+    
+    switch (idMoneda)
+    {
+        case "01":
+            moneda = "";
+            monedaSon = "nuevos soles";
+            esSoles = true;
+            break;
+        case "02":
+            moneda = "$";
+            monedaSon = "dólares americanos";
+            esDolares = true;
+            tipoCambio = Model.Pedido.fm_tipcam;
+            if (tipoCambio > 0)
+            {
+                totalSoles = Model.Pedido.fm_totvta * tipoCambio;
+                sTotalSoles = totalSoles.ToString("N3");
+            }
+            else
+            {
+                esDolares = false;
+            }
+            break;
+    }
+    var splitTotal = Model.Pedido.fm_totvta
+        .ToString(CultureInfo.InvariantCulture)
+        .Split(new[] { "." }, StringSplitOptions.None);
+    var parteEntera = splitTotal[0];
+    var parteDecimal = splitTotal[1];
+    var son = Convert.ToInt32(parteEntera)
+        .ToWords(new CultureInfo("es-PE"))
+        .Humanize()
+        .Transform(To.SentenceCase);
+    var y = parteDecimal.Substring(0, 2) + "/100";
+    var totalSon = string.Format("Son {0} y {1} {2}", son, y, monedaSon);
+    var pesoTotal = 0m;
+    var precioTON = 0m;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Nota de Pedido</title>
+    <style>
+        html {
+            font-family: Arial;
+        }
+
+        body, table {
+            font-size: 10px;
+        }
+
+        table {
+            border-spacing: 0px;
+            font-family: Arial;
+        }
+
+            table tr th {
+                background-color: gray;
+                color: white;
+                padding: 2px;
+            }
+
+            table tr td {
+                margin: 0px;
+                padding: 2px;
+            }
+    </style>
+</head>
+<body>
+
+    <table style="width:100%;">
+        @{
+            var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
+                System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            if (sqlDB.InitialCatalog == "ZICO_ERP04")
+            {
+                <tr>
+                    <td>
+                        <img src="@imagePath\logo-galpesa.png" height="50" />
+                    </td>
+                    <td style="vertical-align: top;">
+                        <h3>GALVANIZADORA PERUANA S.A.</h3>
+                        Jr. Abraham Valdelomar Nro. 150.<br />
+                        Calleria, Coronel Portillo, Ucayali.<br />
+                        Telef: (061)575033<br />
+                    </td>
+                    <td style="text-align: right; vertical-align: top;"></td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <img src="@imagePath\logo-acetesa.png" height="50" />
+                    </td>
+                    <td style="vertical-align: top;">
+                        <h3>ACEROS Y TECHOS S.A.</h3>
+                        Av. la Encalada Nro. 1010 Int. 503.<br />
+                        Santiago de Surco.<br />
+                        Telef: 252-0000<br />
+                    </td>
+                    <td style="text-align: right; vertical-align: top;"></td>
+                </tr>
+            }
+        }
+    </table>
+    <table style="margin-top: 10px; width:100%;">
+        <tr>
+            <td style="text-align: center;">
+                <h2>NOTA DE PEDIDO - @tienda - N° @idPedido</h2>
+            </td>
+        </tr>
+    </table>
+    <table style="border: 1px solid gray; border-radius: 10px;background-color: #c2c2c2; padding: 5px; width:100%;">
+        <tr>
+            <td>Señor (es)&nbsp;&nbsp;</td>
+            <td>:&nbsp;</td>
+            <td style="border-bottom: 1px solid #000000;"><b>@razonSocial</b></td>
+            <td>RUC</td>
+            <td>:&nbsp;</td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3"><b>@ruc</b></td>
+        </tr>
+        <tr>
+            <td>Dirección</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@direccion</td>
+            <td>Correo</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3">@email</td>
+        </tr>
+        <tr>
+            <td>Punto de Entrega</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Cn_lug) ? "" : pedidoAdicional.cd_direc))</td>
+            <td>Teléfono</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@telefono</td>
+            <td width="50px;">Fecha :</td>
+            <td style="border-bottom: 1px solid #000000;">@fecha</td>
+        </tr>
+        <tr>
+            <td>Forma de pago</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@formaPago</td>
+            <td>Vendedor</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3">@oVendedor.ct_nombreCompleto</td>
+        </tr>
+
+        @if (!string.IsNullOrWhiteSpace(pedidoAdicional.CC_transp))
+        {
+            <tr>
+                <td width="50px">Agencia Transporte</td>
+                <td width="5px">:</td>
+                <td style="border-bottom: 1px solid #000000;" colspan="6">@pedidoAdicional.cd_transp</td>
+            </tr>
+
+            <tr>
+                <td>Dirección</td>
+                <td>:</td>
+                <td style="border-bottom: 1px solid #000000;" colspan="6">@pedidoAdicional.ct_direccion</td>
+            </tr>
+
+            <tr>
+                <td>Correo</td>
+                <td>:</td>
+                <td style="border-bottom: 1px solid #000000;">@pedidoAdicional.cd_email</td>
+                <td width="50px">Teléfono</td>
+                <td width="5px">:</td>
+                <td style="border-bottom: 1px solid #000000;" colspan="3">@pedidoAdicional.cn_telefono1</td>
+            </tr>
+
+            <tr>
+                <td>Contacto</td>
+                <td>:</td>
+                <td style="border-bottom: 1px solid #000000;">@pedidoAdicional.ContactoNombre</td>
+                <td width="50px">Teléfono</td>
+                <td width="5px">:</td>
+                <td style="border-bottom: 1px solid #000000;" colspan="3">@pedidoAdicional.ContactoTelefono1</td>
+            </tr>
+        }
+    </table>
+
+    <table style="margin-top: 20px; width:100%;">
+        <tr>
+            <th style="text-align: center; width: 15px;">N°</th>
+            <th style="text-align: left">Código</th>
+            <th style="text-align: left">Descripción</th>
+            <th style="text-align: left">UM</th>
+            <th style="text-align: right">Cantidad</th>
+            <th style="text-align: right">Peso</th>
+            <th style="text-align: right">Precio Unit</th>
+            <th style="text-align: right">Precio TON</th>
+            <th style="text-align: right">Total</th>
+        </tr>
+        @foreach (var item in Model.Pedido.LDPEDIDO_WEB)
+        {
+
+            pesoTotal += item.fq_peso;
+            precioTON = (item.fm_precio_fin * 1000) / (item.fq_peso / item.fq_cantidad);
+            <tr>
+                <td style="text-align: center">@Convert.ToInt16(item.cn_item)</td>
+                <td>@item.MARTICUL.cc_artic</td>
+                <td>@item.MARTICUL.cd_artic</td>
+                <td>@item.MARTICUL.cc_unmed</td>
+                <td style="text-align: right">@item.fq_cantidad.ToString("N2")</td>
+                <td style="text-align: right">@((item.fq_peso).ToString("N2"))</td>
+                <td style="text-align: right">@item.fm_precio_fin.ToString("N4")</td>
+                <td style="text-align: right">@precioTON.ToString("N2")</td>
+                <td style="text-align: right">@(moneda + item.fm_total.ToString("N2"))</td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        @{
+            //if (sqlDB.InitialCatalog == "ZICO_ERP04")
+            if (mostrarIGV == 0)
+            {
+                <tr>
+                    <td colspan="3" style="padding: 5px;">
+                        @totalSon
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                    <td></td>
+                    <td style="text-align: right">
+                        TOTAL
+                    </td>
+                    <td style="text-align: right">
+                        <b>@(moneda + Model.Pedido.fm_totvta.ToString("N2"))</b>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="padding: 5px;">
+                        @totalSon
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                    <td></td>
+                    <td style="text-align: right">
+                        Sub Total
+                    </td>
+                    <td style="text-align: right">
+                        <b>@(moneda + Model.Pedido.fm_valvta.ToString("N2"))</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right">
+                        IGV
+                    </td>
+                    <td style="text-align: right">
+                        <b>@(moneda + Model.Pedido.fm_igv.ToString("N2"))</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right">
+                        TOTAL
+                    </td>
+                    <td style="text-align: right">
+                        <b>@(moneda + Model.Pedido.fm_totvta.ToString("N2"))</b>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+
+    @{
+        if (sqlDB.InitialCatalog == "ZICO_ERP01")
+        {
+            if (igv_bo == 1)
+            {
+                <h2>Los precios incluyen IGV.</h2>
+            }
+            else
+            {
+                <h2>Los precios no incluyen IGV.</h2>
+            }
+        }
+    }
+
+
+    @if (!string.IsNullOrWhiteSpace(pedidoAdicional.Vt_observacion))
+    {
+        <table border="0" style="width:100%; padding: 5px;">
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Vt_observacion) ? "" : pedidoAdicional.Vt_observacion))</td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+        </table>
+    }
+</body>
+</html>

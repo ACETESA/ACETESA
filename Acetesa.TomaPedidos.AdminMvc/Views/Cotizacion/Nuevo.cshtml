@@ -1,0 +1,647 @@
+﻿@using System.Configuration;
+@using Acetesa.TomaPedidos.AdminMvc.Helpers
+@using Acetesa.TomaPedidos.AdminMvc.Models
+@using Acetesa.TomaPedidos.Transversal.Enums
+@model CotizacionEditViewModel
+
+@{
+    ViewBag.Title = "Nueva Cotización";
+    EnviarMailViewModel emailModel = ViewBag.EmailModel;
+}
+
+<h3>Nueva Cotización</h3>
+
+@using (Ajax.BeginForm("NuevoDetalle", "Cotizacion", new AjaxOptions
+{
+    HttpMethod = "POST",
+    Url = Url.Action("NuevoDetalle", "Cotizacion"),
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccess",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result"
+}, new { @id = "cotizacionForm" }))
+{
+    @Html.Hidden("sessionType", SessionTypes.Nuevo)
+    @Html.HiddenFor(model => model.cd_razsoc)
+    @Html.HiddenFor(model => model.CotizacionDetailViewModel.cd_artic)
+<div class="form-horizontal">
+    <hr />
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-5">
+            @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-default" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "control-label col-md-2" })
+        </div>
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.zonaLiberada_bo, htmlAttributes: new { @class = "control-label col-md-2" })
+        </div>
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.zonaLiberada_bo, ViewBag.GetZonaLiberada as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.zonaLiberada_bo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.igv_bo, htmlAttributes: new { @class = "control-label col-md-2" })
+        </div>
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.igv_bo, ViewBag.GetIgv as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.igv_bo, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2" style="display:none;">
+            @Html.LabelFor(model => model.mostrarIGV_bo, htmlAttributes: new { @class = "control-label col-md-2" })
+        </div>
+        <div class="col-md-2" style="display:none;">
+            @Html.DropDownListFor(model => model.mostrarIGV_bo, ViewBag.GetMostrarIGV as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.mostrarIGV_bo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @{
+            var selectSucursales = ViewBag.GetSucursales as SelectList;
+            int filas = selectSucursales.Count();
+            if (filas > 2)
+            {
+                <div class="col-md-2" id="lblCnSuc">
+                    @Html.LabelFor(model => model.cn_suc, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6" id="ddlCnSuc">
+                    @Html.DropDownListFor(model => model.cn_suc, ViewBag.GetSucursales as SelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.cn_suc, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2" id="lblCnContacto">
+                    @Html.LabelFor(model => model.cn_contacto, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-2" id="ddlCnContacto">
+                    <div class="input-group">
+                        @Html.DropDownListFor(model => model.cn_contacto, ViewBag.GetContactos as SelectList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.cn_contacto, "", new { @class = "text-danger" })
+                        <div class="input-group-addon mostrar-grilla-contactoEntregaDirecta" style="cursor: pointer;">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-2" id="lblCnSuc" style="display:none;">
+                    @Html.LabelFor(model => model.cn_suc, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6" id="ddlCnSuc" style="display:none;">
+                    @Html.DropDownListFor(model => model.cn_suc, ViewBag.GetSucursales as SelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.cn_suc, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2" id="lblCnContacto">
+                    @Html.LabelFor(model => model.cn_contacto, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6" id="ddlCnContacto">
+                    <div class="input-group">
+                        @Html.DropDownListFor(model => model.cn_contacto, ViewBag.GetContactos as SelectList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.cn_contacto, "", new { @class = "text-danger" })
+                        <div class="input-group-addon mostrar-grilla-contactoEntregaDirecta" style="cursor: pointer;">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.cc_moneda, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.cc_moneda, ViewBag.GetMonedas as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.cc_moneda, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.n_i_val_venta, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-1">
+            @Html.TextBoxFor(model => model.n_i_val_venta, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.cc_vta, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.cc_vta, ViewBag.GetCondicionesVentas as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.cc_vta, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*Nueva fila de formulario para Imprimir Precio TN*@
+    @{var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        if (sqlDB2.InitialCatalog == "ZICO_ERP01")
+        {
+            <div class="form-group">
+                <div class="col-md-2" id="lblVisitaClienteID">
+                    @Html.LabelFor(model => model.VisitaClienteID, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6" id="ddlVisitaClienteID">
+                    @Html.DropDownListFor(model => model.VisitaClienteID, ViewBag.GetVisitasClientes as SelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VisitaClienteID, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.imprimirPrecioTN, htmlAttributes: new { @class = "control-label col-md-2" })
+                </div>
+                <div class="col-md-2">
+                    @Html.DropDownListFor(model => model.imprimirPrecioTN, ViewBag.GetImprimirPrecioTN as SelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.imprimirPrecioTN, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.imprimirPrecioTN, htmlAttributes: new { @class = "control-label col-md-2" })
+                </div>
+                <div class="col-md-2">
+                    @Html.DropDownListFor(model => model.imprimirPrecioTN, ViewBag.GetImprimirPrecioTN as SelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.imprimirPrecioTN, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+    }
+
+
+    @*Nueva fila para observacion*@
+    <div class="form-group">
+        <div class="form-group">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.observacion, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.observacion, new { maxlength = 250, @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <h5>Agregar Artículos</h5>
+    <hr />
+    <div id="articulo">
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_grupo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_grupo, ViewBag.GetGrupo as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_grupo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_subgrupo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_subgrupo, ViewBag.GetSubGrupo as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_artic, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "form-control a" })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.fq_cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CotizacionDetailViewModel.fq_cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fq_cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio_tonelada, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-sm-2">
+                @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio_tonelada, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio_tonelada, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-default" id="btnClienteNew" title="Recalcular Precio Final" onclick="calcularPrecioFinalPrecioTM(0);"><i class="glyphicon glyphicon-refresh"></i> </button>
+            </div>
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.fq_peso_teorico, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-sm-2">
+                @Html.EditorFor(model => model.CotizacionDetailViewModel.fq_peso_teorico, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fq_peso_teorico, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            if (sqlDB3.InitialCatalog == "ZICO_ERP01")
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio2, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio_fin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio_fin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio_fin, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-default" id="btnClienteNew" title="Recalcular Precio TM" onclick="calcularPrecioFinalPrecioTM(1);"><i class="glyphicon glyphicon-refresh"></i> </button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Agregar" class="btn btn-default" id="btnAdd" />
+        </div>
+    </div>
+</div>
+}
+<hr />
+<div class="table-responsive" id="result">
+    @if (Session["DetailNuevo"] != null)
+    {
+        Html.RenderPartial("_PartialCotizacionDetail", Session["DetailNuevo"]);
+    }
+</div>
+
+@{
+    Html.RenderPartial("_PartialClienteNew", Model.ClienteNewViewModel);
+    Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
+    //Html.RenderPartial("_PartialContactoEntregaDirecta", Model.ContactoEntregaDirectaNewViewModel);
+    Html.RenderPartial("_PartialContactoEntregaDirecta", Model.ContactoEntregaDirectaNewViewModel);
+
+}
+
+@using (Html.BeginForm("Nuevo", "Cotizacion", FormMethod.Post, new { @id = "formNewCotizacion" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.cn_proforma)
+    @Html.Hidden("scc_analis", "")
+    @Html.Hidden("scc_moneda", "")
+    @Html.Hidden("scc_vta", "")
+    @Html.Hidden("sfecha_emision", "")
+    @Html.Hidden("scn_suc", "")
+    @Html.Hidden("sVisitaClienteID", "")
+    @Html.Hidden("scn_contacto", "")
+    @Html.Hidden("sfm_tipcam", "0")
+    @Html.Hidden("sPara", "")
+    @Html.Hidden("sConCopia", "")
+    @Html.Hidden("sAsunto", "")
+    @Html.Hidden("sTienda", "")
+    @Html.Hidden("sIgv_bo", "")
+    @Html.Hidden("sZonaLiberada", "")
+    @Html.Hidden("sImprimirPrecioTN", "")
+    @Html.Hidden("sObservacion", "")
+    @Html.Hidden("sMensaje", "")
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-primary" id="btnSave" />
+                <input type="button" value="Guardar y enviar" class="btn btn-default" id="btnSaveAndSend" />
+            </div>
+        </div>
+    </div>
+}
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=9"></script>
+    <script src="~/Scripts/app/email-service.js?v=9"></script>
+    <script type="text/javascript">
+        urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
+        //urlTiendaSegunVendedor = "@Url.Action("TiendaSegunVendedor", "Cotizacion")";
+        urlListarSectores = "@Url.Action("Sectores", "Cotizacion")";
+        urlListarDepartamentos = "@Url.Action("Departamentos", "Cotizacion")";
+        urlListarProvincias = "@Url.Action("Provincias", "Cotizacion")";
+        urlListarDistritos = "@Url.Action("Distritos", "Cotizacion")";
+        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Cotizacion")";
+        urlSucursales = "@Url.Action("GetSucursalesJson", "Cotizacion")";
+        urlContactoPorSucursal = "@Url.Action("ContactoPorSucursal", "Cotizacion")";
+        urlGetClientesByParam ="@Url.Action("GetClientesByParam", "Cotizacion")";
+        urlGetCondicionesVentasJson ="@Url.Action("GetCondicionesVentasJson", "Cotizacion")";
+        urlGetPrecioLista ="@Url.Action("GetPrecioLista", "Cotizacion")";
+        urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Cotizacion")";
+        urlEnviarMail ="@Url.Action("EnviarMail", "Cotizacion")";
+        urlClienteNew ="@Url.Action("ClienteNew", "Cotizacion")";
+        urlChangePreciosByMoneda ="@Url.Action("ChangePreciosByMoneda", "Cotizacion")";
+        urlChangeTipoCambio ="@Url.Action("ChangeTipoCambio", "Cotizacion")";
+        urlGetColumnasContactoEntregaDirecta ="@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
+        urlGetContactoEntregaDirectaJsonTodos ="@Url.Action("GetContactoEntregaDirectaJsonTodos", "Pedido")";
+        urlGetSucursalesJson ="@Url.Action("GetSucursalesJson", "Pedido")";
+        urlContactoEntregaDirectaNew = "@Url.Action("ContactoEntregaDirectaNew", "Pedido")";
+        urlGetContactoEditar ="@Url.Action("GetContactoEditar", "Pedido")";
+        urlActualizarContacto ="@Url.Action("ActualizarContacto", "Pedido")";
+        urlGetEmailCliente = "@Url.Action("GetEmailCliente", "Cotizacion")";
+        urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
+        urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
+        urlGetVisitasClientesJson ="@Url.Action("GetVisitasClientesJson", "Cotizacion")";
+
+        //urlStockSegunArticulo = "Url.Action("StockSegunArticulo", "Pedido")";
+
+    </script>
+    <script>
+        //var gl_stock;
+        _baseUrl = "@ViewBag.BaseUrl";
+        var emailModel = @Html.Json(emailModel);
+        if (emailModel != null) {
+            emailModel.cnProforma = "@ViewBag.CnProforma";
+        }
+
+        //Variable Global de edicion:
+        var gs_editando = 0;
+    </script>
+
+
+    @{var sqlDB1 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
+
+    @*INICIO: Bloquear controles select*@
+    @if (sqlDB1.InitialCatalog == "ZICO_ERP04")
+    {
+        <script>
+            $(document).ready(function () {
+                document.getElementById("zonaLiberada_bo").value = "0";
+                document.getElementById("igv_bo").value = "0";
+                document.getElementById("mostrarIGV_bo").value = "1";
+
+                $('#zonaLiberada_bo option:not(:selected)').attr('disabled', true);
+                $('#igv_bo option:not(:selected)').attr('disabled', true);
+                $('#mostrarIGV_bo option:not(:selected)').attr('disabled', true);
+
+            });
+        </script>
+    }
+    else
+    {
+        <script>
+            document.getElementById("zonaLiberada_bo").value = "0";
+            document.getElementById("igv_bo").value = "0";
+            document.getElementById("mostrarIGV_bo").value = "1";
+
+
+            $('#zonaLiberada_bo option:not(:selected)').attr('disabled', true);
+            $('#mostrarIGV_bo option:not(:selected)').attr('disabled', true);
+        </script>
+    }
+    @*FIN: Bloquear controles select*@
+
+    @*INICIO: Reseleccionar segun Zona Liberada*@
+    <script>
+        var slcchange = document.getElementById("zonaLiberada_bo");
+        slcchange.addEventListener("change", function () {
+            //alert(this.value);
+            if (this.value == "1") {
+                document.getElementById("igv_bo").value = "0";
+                document.getElementById("mostrarIGV_bo").value = "0";
+            } else {
+                document.getElementById("igv_bo").value = "0";
+                document.getElementById("mostrarIGV_bo").value = "1";
+            }
+        });
+
+    </script>
+    @*FIN: Reseleccionar segun Zona Liberada*@
+
+
+
+    <script>
+        $("#Ruc").blur(function () {
+            validarExistenciaClienteXRUC();
+        });
+
+        function validarExistenciaClienteXRUC() {
+            var $Ruc = $("#Ruc");
+            var ccAnalis = $Ruc.val();
+            $.ajax({
+                destroy: true,
+                url: urlValidarExistenciaClienteRUC,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    cc_analis: ccAnalis
+                }),
+                dataType: "json",
+                beforeSend: function () {
+                },
+                success: function (data) {
+                    var error = data.error;
+                    var mensaje = data.mensaje;
+                    if (error === "True") {//Si hay error
+                        $('#clienteForm').trigger("reset");
+                        //$("#Ruc").val("");
+                        //$("#RazonSocial").val("");
+                        //$("#Domicilio").val("");
+                        $("#btnSendClienteNew").prop("disabled", true);
+                        toastr.error(mensaje);
+                    }
+                    else {//No hay error
+                        $("#btnSendClienteNew").prop("disabled", false);
+                    }
+                },
+                error: function (err) {
+                }
+            });
+        }
+    </script>
+
+    @{var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
+
+    @if (sqlDB2.InitialCatalog == "ZICO_ERP01")
+    {
+
+        <script>
+            function validarClienteZonaLiberadaXRUC() {
+                var $Ruc = document.getElementById('cc_analis').value;
+
+                var ccAnalis = $Ruc;
+                $.ajax({
+                    destroy: true,
+                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        ruc: ccAnalis
+                    }),
+                    dataType: "json",
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        var zonaLiberada = data;
+
+                        $('#zonaLiberada_bo option:not(:selected)').attr('disabled', false);
+                        $('#mostrarIGV_bo option:not(:selected)').attr('disabled', false);
+
+
+
+                        $("#zonaLiberada_bo").attr('selectedIndex', '-1').find("option:selected").removeAttr("selected");
+                        $('select[id^="zonaLiberada_bo"] option[value="' + zonaLiberada + '"]').attr("selected", "selected");
+                        document.getElementById("zonaLiberada_bo").value = zonaLiberada;
+
+
+                        if (zonaLiberada == "1") {
+                            //document.getElementById("igv_bo").value = "0";
+                            document.getElementById("mostrarIGV_bo").value = "0";
+                        } else {
+                            //document.getElementById("igv_bo").value = "1";
+                            document.getElementById("mostrarIGV_bo").value = "1";
+                        }
+
+                        $('#zonaLiberada_bo option:not(:selected)').attr('disabled', true);
+                        $('#mostrarIGV_bo option:not(:selected)').attr('disabled', true);
+
+                    },
+                    error: function (err) {
+                    }
+                });
+            }
+
+        </script>
+
+    }
+    else
+    {
+
+        <script>
+            function validarClienteZonaLiberadaXRUC() {
+                var $Ruc = document.getElementById('cc_analis').value;
+
+                var ccAnalis = $Ruc;
+                $.ajax({
+                    destroy: true,
+                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        ruc: ccAnalis
+                    }),
+                    dataType: "json",
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        var zonaLiberada = data;
+
+                        $('#zonaLiberada_bo option:not(:selected)').attr('disabled', false);
+                        $('#igv_bo option:not(:selected)').attr('disabled', false);
+                        $('#mostrarIGV_bo option:not(:selected)').attr('disabled', false);
+
+
+
+                        $("#zonaLiberada_bo").attr('selectedIndex', '-1').find("option:selected").removeAttr("selected");
+                        $('select[id^="zonaLiberada_bo"] option[value="' + zonaLiberada + '"]').attr("selected", "selected");
+                        document.getElementById("zonaLiberada_bo").value = zonaLiberada;
+
+
+                        if (zonaLiberada == "1") {
+                            document.getElementById("igv_bo").value = "0";
+                            document.getElementById("mostrarIGV_bo").value = "0";
+                        } else {
+                            document.getElementById("igv_bo").value = "0";
+                            document.getElementById("mostrarIGV_bo").value = "1";
+                        }
+
+                        $('#zonaLiberada_bo option:not(:selected)').attr('disabled', true);
+                        $('#igv_bo option:not(:selected)').attr('disabled', true);
+                        $('#mostrarIGV_bo option:not(:selected)').attr('disabled', true);
+
+                    },
+                    error: function (err) {
+                    }
+                });
+            }
+
+        </script>
+    }
+
+    <script src="~/Scripts/app/GlobalScript.js?v=9"></script>
+    <script src="~/Scripts/app/CotizacionNewScript.js?v=9"></script>
+    <script src="~/Scripts/app/Cotizacion.js?v=9"></script>
+    <script>
+        var messageValidation = "@ViewBag.MessageValidation";
+        if ($.trim(messageValidation).length > 0) {
+            toastr.warning(messageValidation);
+            scrollToScreen("#articulo", 1000);
+        }
+        var info = "@ViewBag.Info";
+        if ($.trim(info).length > 0) {
+            toastr.info(info);
+        }
+        var success = "@ViewBag.Success";
+        if ($.trim(success).length > 0) {
+            toastr.success(success);
+        }
+    </script>
+}
+@{var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
+
+@if (sqlDB.InitialCatalog == "ZICO_ERP01")
+{
+    @*<script type='text/javascript'>
+            runScript();
+
+            function runScript() {
+                if (window.$) {
+                    var igv_bo = $("#igv_bo");
+                    igv_bo.val("1");
+                } else {
+                    window.setTimeout(runScript, 50);
+                }
+            }
+        </script>*@
+}
+else
+{
+    @*<script type='text/javascript'>
+            runScript();
+
+            function runScript() {
+                if (window.$) {
+                    var igv_bo = $("#igv_bo");
+                    igv_bo.val("0");
+                } else {
+                    window.setTimeout(runScript, 50);
+                }
+            }
+        </script>*@
+}

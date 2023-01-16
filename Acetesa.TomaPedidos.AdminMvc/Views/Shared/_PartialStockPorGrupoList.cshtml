@@ -1,0 +1,233 @@
+﻿@using System.Globalization
+@model Acetesa.TomaPedidos.AdminMvc.Models.StockPorGrupoViewModel
+@if (Model != null && Model.StockPorGrupoModels != null && Model.StockPorGrupoModels.Any())
+{
+    <div class="well">
+        <a href="javascript:void(0);" class="btn btn-primary act-button-expand">+ Expandir</a>
+        <a href="javascript:void(0);" class="btn btn-primary act-button-collapse">- Contraer</a>
+        <a href="javascript:ExportarExcelStock('collaptable')" class="btn btn-primary">Exportar</a>
+    </div>
+    <div class="fixedHeaderTable">
+        <table id="collaptable" class="table table-bordered table-hover fixed">
+            @{
+                var nivel1 = 1;
+                var nivel2 = 1;
+                var nivel3 = 1;
+                var nivel4 = 1;
+            }
+            <thead>
+                <tr>
+                    <th id="thDescripcion" rowspan="2" colspan="3">Descripción</th>
+                    <th  id="thPU" rowspan="2">PU</th>
+                    <th colspan="2">Stk Real</th>
+                    <th colspan="3">Stk En UN</th>
+                </tr>
+                <tr>
+                    <th id="thUN">UN</th>
+                    <th id="thTN">TN</th>
+                    <th id="thTotal">Total</th>
+                    <th id="thReser">Reser</th>
+                    <th id="thDispo">Dispo</th>
+                </tr>
+                <tr class="excluir-excel" id="cabeceraNP">
+                    <td id="C_NP">NP</td>
+                    <td id="C_Fec">Fec</td>
+                    <td id="C_Cli">Cli</td>
+                    <td id="C_PU">PU</td>
+                    <td id="C_Pedi">Pedi</td>
+                    <td id="C_Desp">Desp</td>
+                    <td id="C_Pend">Pend</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var grupo in Model.StockPorGrupoModels.GroupBy(x => x.Art_Grupo))
+                {
+                    <tr bgcolor="#8BCE84" data-id="@nivel1.ToString()a" data-parent="">
+                        <td colspan="9" align="left">@grupo.Key</td>
+                    </tr>
+                    foreach (var subGrupo in grupo.GroupBy(x => x.Art_SubGrupo))
+                    {
+                        <tr bgcolor="#ECFFE7" data-id="@nivel2.ToString()b" data-parent="@nivel1.ToString()a">
+                            <td colspan="9" align="left">@subGrupo.Key</td>
+                        </tr>
+                        foreach (var group2 in subGrupo.GroupBy(Y => new { Y.cd_desc, Y.fq_embalaje, Y.fq_unidades, Y.fq_peso, Y.tot_un, Y.tot_tn }))
+                        {
+                            <tr data-id="@nivel3.ToString()c" data-parent="@nivel2.ToString()b" style="font-style : italic; font-size:80%">
+                                <td colspan="3" align="left">@group2.Key.cd_desc</td>
+                                <td align="right">@group2.Key.fq_embalaje</td>
+                                <td align="right">@group2.Key.fq_unidades.ToString("#,##0.00")</td>
+                                <td align="right">@group2.Key.fq_peso.ToString("#,##0.00")</td>
+
+                                <td align="right">@group2.Key.tot_un.ToString("#,##0.00")</td>
+                                <td align="right">@group2.Sum(x => x.ReservadoUN).ToString("#,##0.00")</td>
+                                <td align="right">@((group2.Key.tot_un - group2.Sum(x => x.ReservadoUN)).ToString("#,##0.00"))</td>
+                            </tr>
+                            foreach (var item in group2)
+                            {
+                                if (@item.cn_serienp != "x")
+                                {
+                                    <tr bgcolor="#EBEDEF" data-id="@nivel4.ToString()d" data-parent="@nivel3.ToString()c" style="font-style : italic; font-size:70%" class="excluir-excel">
+                                        <td id="D_NP" align="center">@item.cn_serienp-@item.cn_notpedvta </td>
+                                        <td id="D_Fec" align="center">@item.df_notpedvta.ToString("dd/MM/yyyy")</td>
+                                        <td id="D_Cli" align="left">@item.cd_razsoc</td>
+                                        <td id="D_PU" align="right">@item.fq_embalaje</td>
+                                        <td id="D_Pedi" align="right">@item.fq_cantped.ToString("#,##0.00")</td>
+                                        <td id="D_Desp" align="right">@item.fq_cant_desp.ToString("#,##0.00")</td>
+                                        <td id="D_Pend" align="right">@item.ReservadoUN.ToString("#,##0.00")</td>
+                                    </tr>
+                                }
+                                nivel4 = nivel4 + 1;
+                            }
+                            nivel3 = nivel3 + 1;
+                        }
+                        nivel2 = nivel2 + 1;
+                    }
+                    nivel1 = nivel1 + 1;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //CABECERAS
+            var elem = document.getElementById("D_NP");
+            if (elem) {
+                //Tamaños cabecera NP
+                var width = document.getElementById('D_NP').offsetWidth;
+                document.getElementById("C_NP").setAttribute('width', width);
+
+                var width = document.getElementById('D_Fec').offsetWidth;
+                document.getElementById("C_Fec").setAttribute('width', width);
+
+                var width = document.getElementById('D_Cli').offsetWidth;
+                document.getElementById("C_Cli").setAttribute('width', width);
+
+                var width = document.getElementById('D_PU').offsetWidth;
+                document.getElementById("C_PU").setAttribute('width', width);
+
+                var width = document.getElementById('D_Pedi').offsetWidth;
+                document.getElementById("C_Pedi").setAttribute('width', width);
+
+                var width = document.getElementById('D_Desp').offsetWidth;
+                document.getElementById("C_Desp").setAttribute('width', width);
+
+                var width = document.getElementById('D_Pend').offsetWidth;
+                document.getElementById("C_Pend").setAttribute('width', width);
+
+                //Tamaños cabecera principal
+                var elem = document.getElementById('collaptable').rows[5].cells[6].offsetWidth;
+                if (elem) {
+                    var width = document.getElementById('collaptable').rows[5].cells[5].offsetWidth;
+                    document.getElementById("thReser").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[6].offsetWidth;
+                    document.getElementById("thDispo").setAttribute('width', width);
+                }
+
+                //Mostrar cabecera NP si hay detalle NP
+                document.getElementById("cabeceraNP").setAttribute('style', 'display:normal');
+            } else {
+                var elem = document.getElementById('collaptable').rows[5].cells[6].offsetWidth;
+                if (elem) {
+                    var width = document.getElementById('collaptable').rows[5].cells[0].offsetWidth;
+                    document.getElementById("thDescripcion").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[1].offsetWidth;
+                    document.getElementById("thPU").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[2].offsetWidth;
+                    document.getElementById("thUN").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[3].offsetWidth;
+                    document.getElementById("thTN").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[4].offsetWidth;
+                    document.getElementById("thTotal").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[5].offsetWidth;
+                    document.getElementById("thReser").setAttribute('width', width);
+
+                    var width = document.getElementById('collaptable').rows[5].cells[6].offsetWidth;
+                    document.getElementById("thDispo").setAttribute('width', width);
+                }
+                //Ocultar cabecera NP si hay detalle NP
+                document.getElementById("cabeceraNP").setAttribute('style', 'display:none');
+            }
+
+            $('#collaptable').aCollapTable({
+                startCollapsed: true,
+                addColumn: false,
+                plusButton: '<i class="glyphicon glyphicon-plus"></i> ',
+                minusButton: '<i class="glyphicon glyphicon-minus"></i> '
+            });
+
+            $(".act-button-expand").trigger("click");
+
+            /*Inicio: Fijar cabecera Table*/
+            goheadfixed('table.fixed');
+            function goheadfixed(classtable) {
+
+                if ($(classtable).length) {
+
+                    $(classtable).wrap('<div class="fix-inner"></div>');
+                    $('.fix-inner').wrap('<div class="fix-outer" style="position:relative; margin:auto;"></div>');
+                    $('.fix-outer').append('<div class="fix-head"></div>');
+                    $('.fix-head').prepend($('.fix-inner').html());
+                    $('.fix-head table').find('caption').remove();
+                    $('.fix-head table').css('width', '100%');
+
+                    $('.fix-outer').css('width', $('.fix-inner table').outerWidth(true) + 'px');
+                    $('.fix-head').css('width', $('.fix-inner table').outerWidth(true) + 'px');
+                    $('.fix-head').css('height', $('.fix-inner table thead').height() + 'px');
+
+                    // If exists caption, calculte his height for then remove of total
+                    var hcaption = 0;
+                    if ($('.fix-inner table caption').length != 0)
+                        hcaption = parseInt($('.fix-inner table').find('caption').height() + 'px');
+
+                    // Table's Top
+                    var hinner = parseInt($('.fix-inner').offset().top) - 45;
+
+                    // Let's remember that <caption> is the beginning of a <table>, it mean that his top of the caption is the top of the table
+                    $('.fix-head').css({ 'position': 'absolute', 'overflow': 'hidden', 'top': hcaption + 'px', 'left': 0, 'z-index': 100 });
+
+                    $(window).scroll(function () {
+                        var vscroll = $(window).scrollTop();
+
+                        if (vscroll >= hinner + hcaption)
+                            $('.fix-head').css('top', (vscroll - hinner) + 'px');
+                        else
+                            $('.fix-head').css('top', hcaption + 'px');
+                    });
+
+                    /*	If the windows resize	*/
+                    $(window).resize(goresize);
+
+                }
+            }
+
+            function goresize() {
+                $('.fix-head').css('width', $('.fix-inner table').outerWidth(true) + 'px');
+                $('.fix-head').css('height', $('.fix-inner table thead').outerHeight(true) + 'px');
+            }
+            /*Fin: Fijar cabecera Table*/
+
+
+        });
+    </script>
+    <style>
+        table thead th {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+        }
+
+        table thead td {
+            background-color: #EBEDEF;
+            color: black;
+            font-style: italic;
+            text-align: center;
+        }
+    </style>
+}

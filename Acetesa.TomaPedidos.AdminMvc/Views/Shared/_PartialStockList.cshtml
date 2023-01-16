@@ -1,0 +1,36 @@
+﻿@using System.Globalization
+@model Acetesa.TomaPedidos.AdminMvc.Models.StockViewModel
+@if (Model != null && Model.DatosSP != null && Model.DatosSP.Any())
+{
+    <table class="table table-striped table-hover" id="tblListadoStock">
+        <thead>
+            <tr>
+                @foreach (string item in Model.CabecerasSP)
+                {
+                <th>
+                    @item
+                </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Dictionary<string, object> item in Model.DatosSP)
+            {
+                var soles = Convert.ToInt32(item["Stock"]); 
+                var classAlertDanger = soles <= 0 ? "alert-danger" : "";
+                <tr class="@classAlertDanger">
+                    @foreach (string itemCab in Model.CabecerasSP)
+                    {
+                        var clase = itemCab == "PesoUni" ? "sum" : "";
+                        <td class="@clase">
+                            @item[itemCab].ToString()
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script type="text/javascript">
+        jQuery("#tblListadoStock").DataTable(DatosConfigTabla());
+    </script>
+}

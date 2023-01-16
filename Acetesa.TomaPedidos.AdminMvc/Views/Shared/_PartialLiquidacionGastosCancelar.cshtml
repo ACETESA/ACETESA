@@ -1,0 +1,40 @@
+﻿<!-- Modal-->
+<div class="modal fade" id="cancelVisitaModel" tabindex="-1" role="dialog" aria-labelledby="cancelVisitaModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#6F2727; color:white;">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Cancelar Visita al Cliente</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding:15px">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="CiudadDestino">Motivo Cancelación</label>
+                                <select class="form-control" id="SMotivoCancelacion"></select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="ObservacionPlanificacion">Observación Cancelación</label>
+                                <textarea class="form-control" rows="4" id="ObservacionCancelación"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="CancelarVisitaCliente();">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

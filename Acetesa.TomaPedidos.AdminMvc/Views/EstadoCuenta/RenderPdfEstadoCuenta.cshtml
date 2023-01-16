@@ -1,0 +1,531 @@
+﻿@model Acetesa.TomaPedidos.AdminMvc.Models.EstadoCuentaResumenViewModel
+@using System.Globalization
+@using Acetesa.TomaPedidos.Repository;
+@using System;
+
+@using Humanizer
+
+@{
+    Layout = null;
+    var imagePath = Server.MapPath("~/Content/images");
+
+    var hoy =DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+    var fechaHora = DateTime.Now.AddMinutes(0).ToString("dd'/'MM'/'yyyy HH':'mm':'ss");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Estado de Cuenta</title>
+    <style>
+        html {
+            font-family: Arial;
+        }
+
+        body, table {
+            font-size: 10px;
+        }
+
+        table {
+            border-spacing: 0px;
+            font-family: Arial;
+        }
+
+            table tr th {
+                padding: 2px;
+                text-align:center;
+            }
+
+            table tr td {
+                margin: 0px;
+                padding: 2px;
+                text-align:center;
+            }
+        #tcliente tr td {
+            padding: 4px 0px 4px 0px;
+        }
+        #tcliente {
+            border-left: 1px solid #F9F9F9;
+            border-right: 1px solid #F9F9F9;
+            border-bottom: 2px solid;
+            border-top: 1px solid #F9F9F9;
+            border-radius: 10px;
+            background-color: #F9F9F9;
+            margin-bottom: 20px;
+        }
+        #ttitulo {
+            font-family: Arial;
+            font-size: 8px;
+        }
+        #separador {
+            width: 10px;
+            background-color: white;
+        }
+        #tdetalle thead tr th {
+            border: 1px solid;
+            background-color: #F5F5F5;
+        }
+        #tnumcuentas tr td{
+            text-align: left;
+        }
+        #tdetalle {
+            margin-left: 20px auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    @if (Model.EstadoCuentaResumenModel != null)
+    {
+        var deudaDolares = Model.EstadoCuentaResumenModel.fm_deuda_dol;
+        var sDeudaDolares = deudaDolares.HasValue ? deudaDolares.Value.ToString("N2") : "0.00";
+        var deudaSoles = Model.EstadoCuentaResumenModel.fm_deuda_sol;
+        var sDeudaSoles = deudaSoles.HasValue ? deudaSoles.Value.ToString("N2") : "0.00";
+        var limiteTotal = Model.EstadoCuentaResumenModel.fm_limite_cred;
+        var sLimiteTotal = limiteTotal.HasValue ? limiteTotal.Value.ToString("N2") : "0.00";
+        var limiteSaldo = Model.EstadoCuentaResumenModel.fm_saldo_cred;
+        var sLimiteSaldo = limiteSaldo.HasValue ? limiteSaldo.Value.ToString("N2") : "0.00";
+        var deudaVdaDolares = Model.EstadoCuentaResumenModel.fm_venc_dol;
+        var sDeudaVdaDolares = deudaVdaDolares.HasValue ? deudaVdaDolares.Value.ToString("N2") : "0.00";
+        var deudaVdaSoles = Model.EstadoCuentaResumenModel.fm_venc_sol;
+        var sDeudaVdaSoles = deudaVdaSoles.HasValue ? deudaVdaSoles.Value.ToString("N2") : "0.00";
+        var deudaPorVencerDolares = Model.EstadoCuentaResumenModel.fm_por_venc_dol;
+        var sDeudaPorVencerDolares = deudaPorVencerDolares.HasValue ? deudaPorVencerDolares.Value.ToString("N2") : "0.00";
+        var deudaPorVencerSoles = Model.EstadoCuentaResumenModel.fm_por_venc_sol;
+        var sDeudaPorVencerSoles = deudaPorVencerSoles.HasValue ? deudaPorVencerSoles.Value.ToString("N2") : "0.00";
+
+        <table style="margin-bottom:20px; width:100%;">
+            @{
+                var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
+                    System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                if (sqlDB.InitialCatalog == "ZICO_ERP04")
+                {
+                    <tr>
+                        <td>
+                            <img src="@imagePath\logo-galpesa.png" height="50" />
+                        </td>
+                        <td style="vertical-align: top; padding-right:200px;">
+                            <h3>GALVANIZADORA PERUANA S.A.<br />20309525532</h3>
+                            Jr. Abraham Valdelomar Nro. 150.<br />
+                            Calleria, Coronel Portillo, Ucayali.<br />
+                            Telef: (061)575033<br />
+                        </td>
+                        <td style="text-align: right; vertical-align: top;"></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <img src="@imagePath\logo-acetesa.png" height="50" />
+                        </td>
+                        <td style="vertical-align: top;">
+                            <h3>ACEROS Y TECHOS S.A.<br />20265733515</h3>
+                            Av. la Encalada Nro. 1010 Int. 503.<br />
+                            Santiago de Surco.<br />
+                            Telef: 252-0000<br />
+                        </td>
+                        <td style="text-align: right; vertical-align: top;"></td>
+                    </tr>
+                }
+            }
+        </table>
+        <table id="ttitulo" style="width:100%;">
+            <tr>
+                <td style="text-align: center;">
+                    <h2>ESTADO DE CUENTA AL @hoy</h2>
+                </td>
+            </tr>
+        </table>
+        <table id="tcliente" style="width:100%;">
+            <tr>
+                <td style="padding-top:10px;">Señor (es)&nbsp;&nbsp;</td>
+                <td style="padding-top:10px;">:&nbsp;</td>
+                <td style="padding-top:10px; text-align:left;"><b>@Model.EstadoCuentaResumenModel.Razon_Social</b></td>
+                <td style="padding-top:10px;">RUC</td>
+                <td style="padding-top:10px;">:&nbsp;</td>
+                <td style="padding-top:10px; width:80px;"><b>@Model.EstadoCuentaResumenModel.Ruc</b></td>
+            </tr>
+            <tr>
+                <td>Dirección&nbsp;&nbsp;</td>
+                <td>:&nbsp;</td>
+                <td style="text-align:left">@Model.EstadoCuentaResumenModel.Direccion</td>
+                <td>Teléfono&nbsp;&nbsp;</td>
+                <td>:&nbsp;</td>
+                <td>@Model.EstadoCuentaResumenModel.Telefonos</td>
+            </tr>
+            <tr>
+                <td style="padding-bottom:20px;">Email</td>
+                <td style="padding-bottom:20px;">:&nbsp;</td>
+                <td style="padding-bottom:20px; text-align:left;">@Model.EstadoCuentaResumenModel.Email</td>
+            </tr>
+        </table>
+        <table id="tresumen" style="margin-bottom:15px; width:100%;">
+            <thead>
+                <tr>
+                    <th style="border: 0.5px solid;" colspan="2">LIMITE DE CREDITO @Model.EstadoCuentaResumenModel.cd_mon_cred</th>
+                    <th id="separador"></th>
+                    <th style="border: 0.5px solid;" colspan="2">DEUDA TOTAL</th>
+                    <th id="separador"></th>
+                    <th style="border: 0.5px solid;" colspan="2">DEUDA VENCIDA</th>
+                    <th id="separador"></th>
+                    <th style="border: 0.5px solid;" colspan="2">DEUDA POR VENCER</th>
+                </tr>
+                <tr>
+                    <th style="border: 0.5px solid;">TOTAL</th>
+                    <th style="border: 0.5px solid;">SALDO</th>
+                    <th id="separador"></th>
+                    <th style="border: 0.5px solid;">DOLARES</th>
+                    <th style="border: 0.5px solid;">SOLES</th>
+                    <th id="separador"></th>
+                    <th style="border: 0.5px solid;">DOLARES</th>
+                    <th style="border: 0.5px solid;">SOLES</th>
+                    <th id="separador"></th>
+                    <th style="border: 0.5px solid;">DOLARES</th>
+                    <th style="border: 0.5px solid;">SOLES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-sm-6 col-xs-6">@sLimiteTotal</td>
+                    <td class="col-sm-6 col-xs-6">@sLimiteSaldo</td>
+                    <td class="col-sm-6 col-xs-6" id="separador"></td>
+                    <td class="col-sm-6 col-xs-6">@sDeudaDolares</td>
+                    <td class="col-sm-6 col-xs-6">@sDeudaSoles</td>
+                    <td class="col-sm-6 col-xs-6" id="separador"></td>
+                    <td class="col-sm-6 col-xs-6">@sDeudaVdaDolares</td>
+                    <td class="col-sm-6 col-xs-6">@sDeudaVdaSoles</td>
+                    <td class="col-sm-6 col-xs-6" id="separador"></td>
+                    <td class="col-sm-6 col-xs-6">@sDeudaPorVencerDolares</td>
+                    <td class="col-sm-6 col-xs-6">@sDeudaPorVencerSoles</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td width="10%"></td>
+                    <td width="90%">
+                        <table id="tdetalle">
+                            <thead>
+                                <tr>
+                                    <th>TD</th>
+                                    <th>Número</th>
+                                    <th>F. Emisión</th>
+                                    <th>F. Vcto</th>
+                                    <th>Días Vcto</th>
+                                    <th>Imp. Total</th>
+                                    <th>A Cuenta</th>
+                                    <th>Saldos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.EstadoCuentaDetalleViewModel.EstadoCuentaDetalleModels)
+                                {
+                                    var fechaDocumento = item.Fecha_Documento;
+                                    var sFechaDoc = "";
+                                    if (fechaDocumento != default(DateTime))
+                                    {
+                                        sFechaDoc = fechaDocumento.ToString("ddMMMyy");
+                                    }
+                                    var fechaVcto = item.Fecha_Vencimiento;
+                                    var sFechaVcto = "";
+                                    if (fechaVcto != default(DateTime))
+                                    {
+                                        sFechaVcto = fechaVcto.ToString("ddMMMyy");
+                                    }
+
+                                    var diasVcto = item.Dias_Vcto;
+                                    var sDiasVcto = "";
+                                    if (diasVcto != default(decimal))
+                                    {
+                                        sDiasVcto = diasVcto.HasValue ? diasVcto.Value.ToString("F0") : "";
+                                    }
+
+                                    var sTotal = item.Tot_Docum.HasValue ? item.Tot_Docum.Value.ToString("N2") : "0.00";
+                                    var sAcuenta = item.Acta_Docum.HasValue ? item.Acta_Docum.Value.ToString("N2") : "0.00";
+                                    var sSaldo = item.Sal_Docum.HasValue ? item.Sal_Docum.Value.ToString("N2") : "0.00";
+
+                                    var tiposMonedas = new[] { "Total Soles", "Total Dólares" };
+                                    var isTotal = tiposMonedas.Contains(item.Mon_Docum);
+                                    if (isTotal)
+                                    {
+                                        <tr>
+                                            <td style="border-top: 1px solid;"></td>
+                                            <td style="border-top: 1px solid;"></td>
+                                            <td style="border-top: 1px solid;"></td>
+                                            <td style="border-top: 1px solid; text-align: right;" colspan="2"><b>@item.Mon_Docum</b></td>
+                                            <td style="border-top: 1px solid;"><b>@sTotal</b></td>
+                                            <td style="border-top: 1px solid;"><b>@sAcuenta</b></td>
+                                            <td style="border-top: 1px solid;"><b>@sSaldo</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                            <td><br /><br /></td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td>@item.TipoDocumento</td>
+                                            <td>@item.Nro_Documento</td>
+                                            <td>@sFechaDoc</td>
+                                            <td>@sFechaVcto</td>
+                                            <td>@sDiasVcto</td>
+                                            <td>@sTotal</td>
+                                            <td>@sAcuenta</td>
+                                            <td>@sSaldo</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table style="width:100%; margin-top:15px;">
+            <tbody>
+                <tr>
+                    <td valign="top" width="22%"></td>
+                    @{
+                        if (sqlDB.InitialCatalog == "ZICO_ERP04")
+                        {
+                            <td style="width:100%;">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <b>Cuenta Corriente</b><br />
+                                                <b>GALVANIZADORA PERUANA S.A.</b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br />
+                                <table id="tnumcuentas" style="width:100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:60px; border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-continental.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="width:110px; border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                CCI PEN:<br />
+                                                Recaud PEN:<br />
+                                                Dólares:<br />
+                                                CCI USD:<br />
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                0011-0306-0100004082<br />
+                                                011-306-000100004082-84 <br />
+                                                GALPESA / 9714 <br />
+                                                0011-0306-0100016269 <br />
+                                                011-306-000100016269-86
+                                            </td>
+
+                                            <td style="width:60px; border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-bcp.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="width:110px; border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                CCI PEN:<br />
+                                                Recaud PEN:<br />
+                                                Dólares:<br />
+                                                CCI USD:<br />
+                                                Recaud USD:
+
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                480-0003611-0-58<br />
+                                                002-480-000003611058-23 <br />
+                                                GALPESA / 08194 (AG.BCP) <br />
+                                                480-0003668-1-43<br />
+                                                002-480-000003668143-25 <br />
+                                                GALPESA / 08194 (AG.BCP)
+                                            </td>
+                                        </tr>
+                                        <tr><td><br /><br /></td></tr>
+                                        <tr>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-interbank.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                CCI PEN:<br />
+                                                Dólares:<br />
+                                                CCI USD:
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                760-3000251627<br />
+                                                003-760-003000251627-63 <br />
+                                                760-3000251588<br />
+                                                003-760-003000251588-67
+                                            </td>
+
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-scotiabank.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                CCI PEN:<br />
+                                                Recaud PEN:<br />
+                                                Dólares:<br />
+                                                CCI USD:
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                000-1174843<br />
+                                                009-322-000001174843-91<br />
+                                                GALPESA<br />
+                                                000-2541166<br />
+                                                009-322-000002541166-91<br />
+                                            </td>
+                                        </tr>
+                                        <tr><td><br /></td></tr>
+                                        <tr>
+                                            <td>
+                                                <img src="@imagePath\logo-nacion.jpg" style="width:30%;" />
+                                            </td>
+                                            <td>
+                                                Soles:<br />
+                                                CCI PEN:<br />
+                                            </td>
+                                            <td>
+                                                00-512-029043<br />
+                                                018-512-000512029043-41<br />
+                                            </td>
+                                        </tr>
+                                        <tr><td><br /></td></tr>
+                                        <tr>
+                                            <td colspan="6">
+                                                <b>*Las comisiones cobradas por el banco de la nación son asumidas por el cliente. GALPESA deberá recibir el importe total de la deuda.</b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="width:100%; padding-left:60%;">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <b>Cuenta Corriente</b><br />
+                                                <b>ACEROS Y TECHOS S.A.</b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br />
+                                <table id="tnumcuentas">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:80px; border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-continental.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                Dólares:
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                0011-0910-0100084497<br />
+                                                0011-0910-0100084489
+                                            </td>
+
+                                            <td style="width:80px;border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-bcp.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="width:110px;border-bottom: 0.5px solid gray">
+                                                Recaud S/.:<br />
+                                                Dólares:
+
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                194-1535322-0-02<br />
+                                                191-0837077-1-32
+                                            </td>
+                                        </tr>
+                                        <tr><td><br /></td></tr>
+                                        <tr>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-interbank.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                Dólares:
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                100-3000470911<br />
+                                                100-3000430927
+                                            </td>
+
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                <img src="@imagePath\logo-scotiabank.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                Soles:<br />
+                                                Dólares:
+                                            </td>
+                                            <td style="border-bottom: 0.5px solid gray">
+                                                000-033-4472<br />
+                                                000-020-4109
+                                            </td>
+                                        </tr>
+                                        <tr><td><br /></td></tr>
+                                        <tr>
+                                            <td>
+                                                <img src="@imagePath\logo-nacion.jpg" style="width:30%;" />
+                                            </td>
+                                            <td style="width:110px;">
+                                                Soles:<br />
+                                                Detracc S/.:
+                                            </td>
+                                            <td>
+                                                00-068-311047<br />
+                                                00-000-795127
+                                            </td>
+                                        </tr>
+                                        <tr><td><br /></td></tr>
+                                        <tr>
+                                            <td colspan="6">
+                                                <b>*Las comisiones cobradas por el banco de la nación son asumidas por el cliente. ACETESA deberá recibir el importe total de la deuda.</b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        }
+                    }
+
+                </tr>
+            </tbody>
+        </table>
+    }
+<table style="height:100%; width:100%;">
+    <tr>
+        <td style="height:100%; vertical-align:bottom;">
+                <table style="width:100%; border-top:1px solid;">
+                    <tr style="width:100%;">
+                        <td style="width:50%;">Para mayor información, dudas y/o consultas comunicarse con: <br />
+                                               Diana Terrazos - Administrador de Finanzas <br />
+                                               Tlf. <b>942049640</b> / <b>252-0000</b> Anex. <b>114 </b><br />
+                                               Email. <b>diana.terrazos@acetesa.com.pe</b></td>
+                        <td style="width:50%; text-align:right;"><i>Fecha y hora de emisión:<br /><b>@fechaHora</b></i></td>
+                    </tr>
+                </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿@model Acetesa.TomaPedidos.AdminMvc.Models.StockViewModel
+
+@{
+    ViewBag.Title = "Consulta de Stock";
+}
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+<h2>Consulta Stock</h2>
+
+@using (Ajax.BeginForm(new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result"
+}))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SubFamilia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SubFamilia, ViewBag.GetSubFamilias as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SubFamilia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo, ViewBag.GetTipos as SelectList, new { @class = "form-control" })
+                @*@Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div class="table-responsive" id="result">
+    @{
+        Html.RenderPartial("_PartialStockList", Model);
+    }
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+    <script src="~/Scripts/app/StockScript.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+}

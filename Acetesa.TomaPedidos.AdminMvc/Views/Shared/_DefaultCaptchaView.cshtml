@@ -1,0 +1,27 @@
+﻿@model CaptchaMvc.Models.DefaultBuildInfoModel
+
+@Html.Hidden(Model.TokenElementId, Model.TokenValue)
+
+<img id="@Model.ImageElementId" src="@Model.ImageUrl" alt="" />
+
+@Html.TextBox(Model.InputElementId,
+        null,
+        new Dictionary<string, object>
+        {
+            {"data-val", "true"},
+            {"data-val-required", "Debe ingresar el código captcha."},
+            {"data-val-length","4 caracteres"},
+            {"data-val-length-max","4" },
+            {"data-val-length-min","4"},
+            {"data-val-regex","No válido" },
+            {"data-val-regex-pattern","^[A-Za-z0-9]{4}$"},
+            {"class","form-control"},
+            {"maxlength","4"},
+            {"autocomplete","off"},
+            {"value","Captcha"},
+            {"onclick","if(this.value == 'Captcha') this.value = '';"},
+            {"onblur","if(this.value == '') this.value = 'Captcha';"},
+            {"onfocus","if(this.value == 'Captcha') this.value = '';"},
+        })
+@Html.ValidationMessage(Model.InputElementId, "", new { @class = "text-danger"})
+

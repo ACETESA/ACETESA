@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ED0C6C21-EF36-416F-BD1A-9907412B3D33}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Acetesa.TomaPedidos.Core</RootNamespace>
+    <AssemblyName>Acetesa.TomaPedidos.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>..\CustomRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Qa|AnyCPU'">
+    <OutputPath>bin\Qa\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.0\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Business\ArticuloService.cs" />
+    <Compile Include="Business\ClienteService.cs" />
+    <Compile Include="Business\CondicionesVentasService.cs" />
+    <Compile Include="Business\CotizacionDetalleService.cs" />
+    <Compile Include="Business\CotizacionService.cs" />
+    <Compile Include="Business\EstadoCuentaService.cs" />
+    <Compile Include="Business\EstadoService.cs" />
+    <Compile Include="Business\LiquidacionGastosService.cs" />
+    <Compile Include="Business\ListaPrecioService.cs" />
+    <Compile Include="Business\MonedaService.cs" />
+    <Compile Include="Business\PedidoDetalleService.cs" />
+    <Compile Include="Business\PedidoService.cs" />
+    <Compile Include="Business\PlanificacionVisitasService.cs" />
+    <Compile Include="Business\ProductoService.cs" />
+    <Compile Include="Business\SucursalClienteService.cs" />
+    <Compile Include="Business\TiendaService.cs" />
+    <Compile Include="Business\TipoCambioDiarioService.cs" />
+    <Compile Include="Business\VendedorService.cs" />
+    <Compile Include="Business\VentaService.cs" />
+    <Compile Include="IBusiness\IArticuloService.cs" />
+    <Compile Include="IBusiness\IClienteService.cs" />
+    <Compile Include="IBusiness\ICondicionesVentasService.cs" />
+    <Compile Include="IBusiness\ICotizacionDetalleService.cs" />
+    <Compile Include="IBusiness\ICotizacionService.cs" />
+    <Compile Include="IBusiness\IEstadoCuentaService.cs" />
+    <Compile Include="IBusiness\IEstadoService.cs" />
+    <Compile Include="IBusiness\ILiquidacionGastosService.cs" />
+    <Compile Include="IBusiness\IListaPrecioService.cs" />
+    <Compile Include="IBusiness\IMonedaService.cs" />
+    <Compile Include="IBusiness\IPedidoDetalleService.cs" />
+    <Compile Include="IBusiness\IPedidoService.cs" />
+    <Compile Include="IBusiness\IPlanificacionVisitasService.cs" />
+    <Compile Include="IBusiness\IProductoService.cs" />
+    <Compile Include="IBusiness\ISucursalClienteService.cs" />
+    <Compile Include="IBusiness\ITiendaService.cs" />
+    <Compile Include="IBusiness\ITipoCambioDiarioService.cs" />
+    <Compile Include="IBusiness\IVendedorService.cs" />
+    <Compile Include="IBusiness\IVentaService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Acetesa.TomaPedidos.Domain\Acetesa.TomaPedidos.Domain.csproj">
+      <Project>{86F9A03F-2783-49BF-B08E-ACC6BF74BCAA}</Project>
+      <Name>Acetesa.TomaPedidos.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Acetesa.TomaPedidos.Entity\Acetesa.TomaPedidos.Entity.csproj">
+      <Project>{79271D57-71CE-48C1-A0C1-49150E39F06C}</Project>
+      <Name>Acetesa.TomaPedidos.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Acetesa.TomaPedidos.IRepository\Acetesa.TomaPedidos.IRepository.csproj">
+      <Project>{9973AAE5-6A4B-4BC1-BAB4-BC209AEE3682}</Project>
+      <Name>Acetesa.TomaPedidos.IRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Acetesa.TomaPedidos.Repository\Acetesa.TomaPedidos.Repository.csproj">
+      <Project>{aeb4ecfe-cd4e-4803-8ac8-e65fe3bcfcd0}</Project>
+      <Name>Acetesa.TomaPedidos.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Acetesa.TomaPedidos.Transversal\Acetesa.TomaPedidos.Transversal.csproj">
+      <Project>{BF0919DE-0E92-45F1-B724-2944C3F9CCCA}</Project>
+      <Name>Acetesa.TomaPedidos.Transversal</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,255 @@
+﻿
+@{
+    ViewBag.Title = "Cartera Cliente";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Mi Cartera de Clientes</h2>
+        <hr />
+    </div>
+
+    <div class="row" style="margin-bottom:20px;">
+        <div class="col-md-3">
+            <h5 style="font-weight:bold">Cliente:</h5>
+        </div>
+        <div class="col-md-9">
+            <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom:20px;">
+        <div class="col-md-3">
+            @*<h5 style="font-weight:bold">Cliente:</h5>*@
+            <a class="btn btn-success" style="background:#1d6f42;" onclick="tableToExcel();"><i class="glyphicon glyphicon-download"></i> Excel</a>
+        </div>
+        @*<div class="col-md-9">
+            <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
+        </div>*@
+    </div>
+
+    <div class="row">
+        <div class="bs-example" data-example-id="contextual-panels">
+            <div class="panel panel-success">
+                <div class="panel-heading" style="background: #3FA758; color: #fff;">
+                    <h3 class="panel-title" id="panel-title" style="font-weight:bold;">Clientes Asignados | Clientes Disponibles para Asignar<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
+                </div>
+                <div class="panel-body" style="max-height: 550px;overflow: auto;">
+                    <table id="table-clientesAsignadosLibres" class="table table-responsive table-striped" style="font-size:12px;">
+                        <thead class="">
+                            <tr style="font-weight:bold;">
+                                <td style="text-align:center; border-right:dashed 0.2px #214820;">Asignado</td>
+                                <td style="display:none;">Asignado</td>
+                                <td style="min-width:60px; text-align:center; border-right:dashed 0.2px #214820;">#</td>
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Ruc</td>
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Razón Social</td>
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Sector</td>
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Aseguradora</td>
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Límite Crédito</td>
+                                @*<td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Deuda</td>
+        <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Crédito Disponible</td>*@
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Departamento</td>
+                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Provincia</td>
+                                <td style="min-width:120px; text-align:center;">Distrito</td>
+                            </tr>
+                        </thead>
+                        <tbody style=""></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+    <script src="~/Scripts/app/email-service.js?v=1"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script type="text/javascript">
+    urlClienteAsignadoLibre = "@Url.Action("ClientesAsignadosLibresSelect", "Cliente")";
+    urlBuscarCliente = "@Url.Action("ClientesAsignadosLibres", "Cliente")";
+    urlActualizarCartera = "@Url.Action("ActualizarAsignacionClienteVendedor", "Cliente")";
+    sClientes = $("#sClientes");
+    //LISTAR DEPARTAMENTOS
+    function clientesActivosListar() {
+        sClientes.html("");//limpiar todas las filas o rows
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlClienteAsignadoLibre,
+            data: JSON.stringify({
+            }),
+            dataType: "json",
+            success: function (result) {
+                sClientes.append("<option value=''>" + "TODOS LOS CLIENTES" + "</option>");
+                for (var i = 0; i < result.length; i++) {
+                    sClientes.append("<option value='" + result[i].ruc + "'>" + result[i].razonSocial + "</option>");
+                }
+                document.getElementById("sClientes").setAttribute("onchange", "buscarCliente();");
+                $('#sClientes').selectpicker({
+                    maxOptions: 2
+                });
+                $('#sClientes').selectpicker('refresh');
+            },
+            error: function (result) {
+                alert("Error en javascript...");
+            }
+        });
+        }
+
+
+        $(document).ready(function () {
+        clientesActivosListar();
+        $('.selectpicker').selectpicker({
+            size: 5,
+            title: 'Seleccione una opción'
+        });
+
+        buscarCliente();
+
+        });
+
+        function buscarCliente() {
+        //Limpiando la tabla
+            $("#table-clientesAsignadosLibres tbody").empty();
+
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlBuscarCliente,
+            data: JSON.stringify({
+                rucCliente: $("#sClientes option:selected").val()
+            }),
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    var fila = i + 1;
+                    if (result[i].asignado == true) {
+                        var asignado = "SI";
+                        var checkbox = '<input type="checkbox" id="checkbox-' + result[i].ruc + '" checked="checked" onclick="actualizarAsignacionCliente(' + result[i].ruc+');" />'
+                    }
+                    else {
+                        var asignado = "NO";
+                        var checkbox = '<input type="checkbox" id="checkbox-' + result[i].ruc + '" onclick="actualizarAsignacionCliente(' + result[i].ruc +');"  />'
+                    }
+
+                    //var creditoDisponible = result[i].montoTotalLimite - result[i].montoDeuda;
+                    $("#table-clientesAsignadosLibres tbody").append('<tr>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820;">' + checkbox + '</td>' +
+                        '<td style="display:none;">' + asignado + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + fila + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].ruc +'</td>' +
+                        '<td style="text-align:left; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].razonSocial + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].sector + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].aseguradora + '</td>' +
+                        '<td style="text-align:right; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].montoTotalLimite.toLocaleString() + '</td>' +
+                        //'<td style="text-align:right; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].montoDeuda.toLocaleString() + '</td>' +
+                        //'<td style="text-align:right; border-right:dashed 0.2px #214820; vertical-align:middle;">' + creditoDisponible.toLocaleString() + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].departamento + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].provincia + '</td>' +
+                        '<td style="text-align:center; vertical-align:middle;">' + result[i].distrito + '</td>' +
+                        //'<td style="text-align:center; vertical-align:middle;">' + result[i].fechaUltVenta + '</td>' +
+                        '</tr > ');
+                }
+            },
+            error: function (result) {
+                alert("Error en javascript...");
+            }
+        });
+        }
+
+        function actualizarAsignacionCliente(ruc) {
+            var confirmado = "No";
+            var checkbox = $("#checkbox-" + ruc);
+            if (checkbox.is(":checked")) {
+                var asignar = true;
+                if (confirm('¿Está seguro de agregar este cliente a su cartera?')) {
+                    confirmado = "Si";
+                } else {
+                    confirmado = "No";
+                }
+            }
+            else {
+                var asignar = false;
+                if (confirm('¿Está seguro de quitar este cliente de su cartera?')) {
+                    confirmado = "Si";
+                } else {
+                    confirmado = "No";
+                }
+            }
+
+            if (confirmado == "Si") {
+                $.ajax({
+                    destroy: true,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: urlActualizarCartera,
+                    data: JSON.stringify({
+                        rucCliente: ruc,
+                        asignar: asignar
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                        var error = result.error;
+                        var mensaje = result.mensaje;
+                        if (error == "1") {
+                            toastr.error(mensaje);
+                        }
+                        else {
+                            toastr.success(mensaje);
+                        }
+                    },
+                    error: function (result) {
+                        alert("Error en javascript...");
+                    }
+                });
+            }
+            else {
+                buscarCliente();
+            }
+        }
+
+
+        function tableToExcel() {
+            var table = "table-clientesAsignadosLibres"
+            var sheetName = "Clientes"
+            var fileName = "Mi Cartera de Clientes.xls";
+
+            fileName = fileName;
+
+            var uri = 'data:application/vnd.ms-excel;base64,',
+                templateData = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>',
+                base64Conversion = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },
+                formatExcelData = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+
+            $("tbody > tr[data-level='0']").show();
+
+            if (!table.nodeType)
+                table = document.getElementById(table)
+
+            var ctx = { worksheet: sheetName || 'Worksheet', table: table.innerHTML }
+
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:application/vnd.ms-excel;base64,' + base64Conversion(formatExcelData(templateData, ctx)));
+            element.setAttribute('download', fileName);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+    </script>
+}

@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "Listado";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Liquidación de Gastos</h2>
+        <hr />
+    </div>
+
+    <div class="row">
+        <div class="bs-example" data-example-id="contextual-panels">
+
+            <div class="panel">
+                <div class="panel-heading" style="background-color:#272323; color:white;">
+                    <h3 class="panel-title" id="panel-title">Listado de Liquidación de Gastos Creadas<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="FechaInicio">Fecha Inicio</label>
+                        <div class="col-md-10">
+                            <input class="form-control hasDatepicker" data-val="true" id="FechaInicio" name="FechaInicio" type="date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="FechaInicio">Fecha Fin</label>
+                        <div class="col-md-10">
+                            <input class="form-control hasDatepicker" data-val="true" id="FechaFin" name="FechaFin" type="date">
+                        </div>
+                    </div>
+                    @*<table>
+                            <tr></tr>
+                            <tr>
+                                <td><h5 style="font-weight:bold">Fecha de asignación</h5></td>
+                                <td><h5 style="font-weight:bold">&emsp;:&emsp;</h5></td>
+                                <td><h5 id="fechaAsignacion"></h5></td>
+                            </tr>
+                        </table>*@
+                </div>
+                <div class="panel-footer">
+                    <a class="btn btn-danger"><i class="glyphicon glyphicon-search"></i> Buscar</a>
+                    <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="glyphicon glyphicon-plus-sign"></i> Nuevo</a>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="bs-example" data-example-id="contextual-panels">
+        <div class="panel panel-primary">
+            @*<div class="panel-heading">
+                    <h3 class="panel-title" id="panel-title">Vendedor Asignado<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
+                </div>*@
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <!--Table-->
+                    <table class="table table-striped">
+
+                        <!--Table head-->
+                        <thead>
+                            <tr>
+                                <th>LiquidacionGastosID</th>
+                                <th>ID</th>
+                                <th>Asunto</th>
+                                <th>Destino</th>
+                                <th>Fecha Viaje</th>
+                                <th>Gasto Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <!--Table head-->
+                        <!--Table body-->
+                        <tbody>
+                            @*<tr>
+                                    <th scope="row">1</th>
+                                    <td>Kate</td>
+                                    <td>Moss</td>
+                                    <td>USA / The United Kingdom / China / Russia </td>
+                                    <td>New York City / Warsaw / Lodz / Amsterdam / London / Chicago</td>
+                                    <td>Web Designer /UX designer / Ul designer / JavaScript Developer</td>
+                                    <td>23</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Anna</td>
+                                    <td>Wintour</td>
+                                    <td>USA / The United Kingdom / China / Russia </td>
+                                    <td>New York City / Warsaw / Lodz / Amsterdam / London / Chicago</td>
+                                    <td>Web Designer /UX designer / Ul designer / JavaScript Developer</td>
+                                    <td>36</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4</th>
+                                    <td>Jerry</td>
+                                    <td>Horwitz</td>
+                                    <td>USA / The United Kingdom / China / Russia </td>
+                                    <td>New York City / Warsaw / Lodz / Amsterdam / London / Chicago</td>
+                                    <td>Web Designer /UX designer / Ul designer / JavaScript Developer</td>
+                                    <td>41</td>
+                                </tr>*@
+                        </tbody>
+                        <!--Table body-->
+                    </table>
+                    <!--Table-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*</div>*@
+
+
+@{Html.RenderPartial("_PartialLiquidacionGastosNuevo");}
+
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+    <script src="~/Scripts/app/email-service.js?v=1"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script type="text/javascript">
+    @*urlClienteListado = "@Url.Action("ClientesActivos", "Cliente")";
+    urlBuscarVendedorPorCliente = "@Url.Action("ListaVendedorCliente", "Cliente")";
+    sClientes = $("#sClientes");
+    //LISTAR DEPARTAMENTOS
+    function clientesActivosListar() {
+        sClientes.html("");//limpiar todas las filas o rows
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlClienteListado,
+            data: JSON.stringify({
+            }),
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                        sClientes.append("<option value='" + result[i].cc_analis + "'>" + result[i].cd_razsoc + "</option>");
+                }
+                document.getElementById("sClientes").setAttribute("onchange", "buscarVendedorPorCliente();");
+                $('#sClientes').selectpicker({
+                    maxOptions: 2
+                });
+                $('#sClientes').selectpicker('refresh');
+            },
+            error: function (result) {
+                alert("Error en javascript...");
+            }
+        });
+    }
+    $(document).ready(function () {
+        clientesActivosListar();
+        $('.selectpicker').selectpicker({
+            size: 5,
+            title: 'Seleccione una opción'
+        });
+        });
+
+    function buscarVendedorPorCliente() {
+        var vendedor = document.getElementById("vendedor");
+        var fechaAsignacion = document.getElementById("fechaAsignacion");
+        vendedor.innerText="";//limpiar todas las filas o rows
+        fechaAsignacion.innerText="";//limpiar todas las filas o rows
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlBuscarVendedorPorCliente,
+            data: JSON.stringify({
+                ClienteID: sClientes.val()
+            }),
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    vendedor.innerText = result[i].vendedor;
+                    fechaAsignacion.innerText = result[i].fechaAsignacion;
+                }
+            },
+            error: function (result) {
+                alert("Error en javascript...");
+            }
+        });
+    }*@
+    </script>
+}

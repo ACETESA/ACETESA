@@ -1,0 +1,86 @@
+﻿@model Acetesa.TomaPedidos.AdminMvc.Models.PedidoFindViewModel
+@{
+    ViewBag.Title = "Listado de Pedidos";
+}
+
+<h2>Listado de Pedidos</h2>
+@Html.ActionLink("Nuevo", "Nuevo", "Pedido", null, new { @class = "btn btn-default" })
+@using (Ajax.BeginForm(new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccess",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("page")
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="ui-widget">
+                    @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, ViewBag.GetEstados as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Buscar" id="btnEnviar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div class="table-responsive" id="result">
+    @if (Model != null && Model.PagedListListaEntity != null && Model.PagedListListaEntity.Any())
+    {
+        Html.RenderPartial("_PartialPedidoList", Model);
+    }
+</div>
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+    <script>
+        _baseUrl = "@ViewBag.BaseUrl";
+    </script>
+   <script src="~/Scripts/app/PedidoFindScript.js?v=3"></script>
+    <script>
+        urlRegistrarDocumentoOC = '@Url.Action("RegistrarDocumentoOC", "Pedido")'
+    </script>
+}

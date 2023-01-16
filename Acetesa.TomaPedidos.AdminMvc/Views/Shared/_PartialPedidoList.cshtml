@@ -1,0 +1,254 @@
+﻿@using Acetesa.TomaPedidos.Transversal.Enums
+@model Acetesa.TomaPedidos.AdminMvc.Models.PedidoFindViewModel
+@if (Model != null && Model.PagedListListaEntity != null && Model.PagedListListaEntity.Any())
+{
+    <style type="text/css">
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+    </style>
+    <div class="col-xs-12 col-sm-12">Total: @Model.PagedListListaEntity.Count()</div>
+    <table class="table table-responsive" id="table-cotizaciones">
+        <thead>
+            <tr>
+                <th></th>
+                <th style="text-align: left">Nro. Pedido</th>
+                <th style="text-align: left">Nro. Proforma</th>
+                <th style="text-align: left">Cliente</th>
+                <th style="text-align: left">Fecha</th>
+                <th style="text-align: left">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PagedListListaEntity)
+            {
+                var estado = item.cb_estado;
+                var estadoEmitido = EstadoPedidoTypes.Emitido.ToString().ToUpper();
+                var estadoEnviado = EstadoPedidoTypes.Enviado.ToString().ToUpper();
+                var estadoRechazado = EstadoPedidoTypes.Rechazado.ToString().ToUpper();
+                var estadoAnulado = EstadoPedidoTypes.Anulado.ToString().ToUpper();
+                var estadoConfirmado = EstadoPedidoTypes.Confirmado_Total.ToString().ToUpper();
+                var classEstado = "";
+                var esAnulable = false;
+                var esEnviable = false;
+                var RegistradoOC = item.archivoOC;
+                if (estado == estadoEnviado)
+                {
+                    classEstado = "alert-info";
+                }
+                if (estado == estadoRechazado || estado == estadoAnulado)
+                {
+                    classEstado = "alert-danger";
+                }
+                if (estado == estadoConfirmado)
+                {
+                    classEstado = "alert-success";
+                }
+                if (estado == estadoEmitido || estado == estadoEnviado)
+                {
+                    esAnulable = true;
+                    esEnviable = true;
+                }
+
+                var dfEmision = item.df_emision.ToShortDateString();
+                <tr class="@classEstado">
+                    <td>
+                        @Html.ActionLink(" ", "Descargar", new { cn_pedido = item.cn_pedido }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-download-alt", @title = "Descargar" })
+                        @Html.ActionLink(" ", "Editar", new { id = item.cn_pedido }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-pencil", @title = "Editar" })
+                        @if (esAnulable)
+                        {
+                            @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_pedido }, new AjaxOptions
+                            {
+                                Url = Url.Action("Anulado", "Pedido", new { id = item.cn_pedido }),
+                                HttpMethod = "POST",
+                                OnBegin = "OnBeginAnular",
+                                OnComplete = "OnCompleteAnular",
+                                OnSuccess = "OnSuccessAnular",
+                                OnFailure = "OnFailureAnular",
+                                Confirm = "¿Está seguro de anular el pedido seleccionado?"
+                            }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-minus-sign", @title = "Anular", @id = "btnAnular" + item.cn_pedido })
+                        }
+                        @if (esEnviable)
+                        {
+                            <a href="#" id="@item.cn_pedido" idcliente="@item.cc_analis" class="btn btn-default btn-sm glyphicon glyphicon-envelope send-email" title="Enviar mail"></a>
+                        }
+                        @if (RegistradoOC == "1")
+                        {
+                            <input type="file" id="upload" style="display:none;" onchange="uploadFiles('upload','@item.cn_pedido');" />
+                            <label for="upload"><i class="btn btn-default btn-sm glyphicon glyphicon-open" title="Subir O.C" style="color:white; background-color: seagreen;"></i></label>
+                        }
+                        else
+                        {
+                            <input type="file" id="upload" style="display:none;" onchange="uploadFiles('upload','@item.cn_pedido');" />
+                            <label for="upload"><i class="btn btn-default btn-sm glyphicon glyphicon-open" title="Subir O.C"></i></label>
+                        }
+
+                    </td>
+                    <td style="text-align: left">
+                        @Html.DisplayFor(modelItem => item.cn_pedido)
+                    </td>
+                    <td style="text-align: left">
+                        @Html.DisplayFor(modelItem => item.cn_proforma)
+                    </td>
+                    <td style="text-align: left">
+                        @Html.DisplayFor(modelItem => item.cd_razsoc)
+                    </td>
+                    <td style="text-align: left">@Html.DisplayFor(modelItem => dfEmision)</td>
+                    <td style="text-align: left">
+                        @{
+                            var estadoFormato = item.cb_estado.Replace("Confirmado_Total", "Confirmado");
+                        }
+                        @Html.DisplayFor(modelItem => item.cb_estado)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    Html.RenderPartial("_PartialPedidoListPag", Model.PagedListListaEntity);
+    Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
+}
+<script>
+    //function uploadFiles(inputId) {
+
+    //    //Get file from your input element
+    //    let myFile = document.getElementById(inputId).files[0];
+
+    //    //Wait for the file to be converted to a byteArray
+    //    let byteArray = await fileToByteArray(myFile);
+
+    //    //Do something with the byteArray
+    //    console.log(byteArray);
+
+    //    $.ajax({
+    //        destroy: true,
+    //        type: "POST",
+    //        contentType: "application/json; charset=utf-8",
+    //        url: urlRegistrarDocumentoOC,
+    //        data: JSON.stringify({
+    //            idPedido: '001',
+    //            documento: byteArray
+    //        }),
+    //        dataType: "json",
+    //        success: function (result) {
+
+    //            alert("hola");
+    //        },
+    //        error: function (result) {
+    //            alert("Error en javascript...");
+    //        }
+    //    });
+
+    //}
+
+
+
+    //async function uploadFiles(inputId) {
+    //    //Get file from your input element
+    //    let myFile = document.getElementById(inputId).files[0];
+
+    //    //Wait for the file to be converted to a byteArray
+    //    let byteArray = await fileToByteArray(myFile);
+
+    //    //Do something with the byteArray
+    //    console.log(byteArray);
+
+    //    $.ajax({
+    //        destroy: true,
+    //        type: "POST",
+    //        contentType: "application/json; charset=utf-8",
+    //        url: urlRegistrarDocumentoOC,
+    //        data: JSON.stringify({
+    //            idPedido: '001',
+    //            documento: byteArray
+    //        }),
+    //        dataType: "json",
+    //        success: function (result) {
+
+    //            alert("hola");
+    //        },
+    //        error: function (result) {
+    //            alert("Error en javascript...");
+    //        }
+    //    });
+
+    //}
+
+
+
+
+    //function fileToByteArray(file) {
+    //    return new Promise((resolve, reject) => {
+    //        try {
+    //            let reader = new FileReader();
+    //            let fileByteArray = [];
+    //            reader.readAsArrayBuffer(file);
+    //            reader.onloadend = (evt) => {
+    //                if (evt.target.readyState == FileReader.DONE) {
+    //                    let arrayBuffer = evt.target.result,
+    //                        array = new Uint8Array(arrayBuffer);
+    //                    for (byte of array) {
+    //                        fileByteArray.push(byte);
+    //                    }
+    //                }
+    //                resolve(fileByteArray);
+    //            }
+    //        }
+    //        catch (e) {
+    //            reject(e);
+    //        }
+    //    })
+    //}
+
+    //function uploadFiles(inputId) {
+    //    $.ajax({
+    //        destroy: true,
+    //        type: "POST",
+    //        contentType: "application/json; charset=utf-8",
+    //        url: urlRegistrarDocumentoOC,
+    //        data: JSON.stringify({
+    //            idPedido: '001',
+    //            documento: formData,
+    //        }),
+    //        dataType: "json",
+    //        success: function (result) {
+
+    //            alert("hola");
+    //        },
+    //        error: function (result) {
+    //            alert("Error en javascript...");
+    //        }
+    //    });
+    //}
+
+
+    function uploadFiles(inputId, pedidoId) {
+
+        var file = $('#upload')[0].files;
+        var formData = new FormData();
+        formData.append("idPedido", pedidoId);
+        formData.append("myFile", file[0]);
+
+
+        $.ajax({
+            type: "POST",
+            url: urlRegistrarDocumentoOC,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (result) {
+                if (result.id == "1") {
+                    toastr.success(result.mensaje);
+                }
+                else {
+                    toastr.error(result.mensaje);
+                }
+            },
+            error: function () {
+                alert("there was an error");
+            }
+        });
+    }
+
+
+
+    </script>

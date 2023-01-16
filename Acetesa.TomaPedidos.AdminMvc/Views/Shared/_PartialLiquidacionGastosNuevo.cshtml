@@ -1,0 +1,122 @@
+﻿<!-- Modal-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#9aa78f; color:white;">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">NUEVA LIQUIDACIÓN DE GASTOS</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding:15px">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="CiudadDestino">Ciudad Destino</label>
+                                <select class="form-control" id="CiudadDestino">
+                                    <option id="Lima">Lima</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="FechaInicio">Fecha Inicio</label>
+                                <input class="form-control hasDatepicker" data-val="true" id="FechaInicio" name="FechaInicio" type="date">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="FechaFin">Fecha Fin</label>
+                                <input class="form-control hasDatepicker" data-val="true" id="FechaFin" name="FechaFin" type="date">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="Asunto">Asunto</label>
+                                <textarea class="form-control" rows="4" id="Asunto"></textarea>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ViaticosEntregados">Viaticos Entregados</label>
+                                <input class="form-control" data-val="true" id="ViaticosEntregados" name="ViaticosEntregados" type="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <p class="mt-2" style="font-weight:bold">Facturas</p>
+                <hr class="mt-0 mb-3" />
+
+                <div class="row" style="padding:15px">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="NumeroFactura">Nro. Factura</label>
+                                <input class="form-control" data-val="true" id="NumeroFactura" name="NumeroFactura" type="text">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="FechaFactura">Fecha Factura</label>
+                                <input class="form-control hasDatepicker" data-val="true" id="FechaFactura" name="FechaFactura" type="date">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="TipoGasto">Tipo Gasto</label>
+                                <select class="form-control" id="TipoGasto">
+                                    <option id="Alimentación">Alimentación</option>
+                                    <option id="Alojamiento">Alojamiento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="Ruc">RUC</label>
+                                <input class="form-control" data-val="true" id="Ruc" name="Ruc" type="text">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="RazonSocial">Razón Social</label>
+                                <input class="form-control" data-val="true" id="RazonSocial" name="RazonSocial" type="text">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Monto">Monto</label>
+                                <input class="form-control" data-val="true" id="Monto" name="Monto" type="text">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="Descripción">Descripción</label>
+                                <textarea class="form-control" rows="3" id="Descripción"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row" style="padding:15px;">
+                    <div class="col-lg-12">
+                        <a class="btn btn-danger"><i class="glyphicon glyphicon-plus"></i> Adicionar</a>
+
+                    </div>
+                </div>
+                <div class="row" id="divTable">
+                    <table class="table table-striped">
+
+                        <!--Table head-->
+                        <thead>
+                            <tr>
+                                <th>Nro. Factura</th>
+                                <th>Fecha</th>
+                                <th>Tipo Gasto</th>
+                                <th>RUC</th>
+                                <th>Razón Social</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <!--Table head-->
+                        <!--Table body-->
+                        <tbody></tbody>
+                        <!--Table body-->
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>

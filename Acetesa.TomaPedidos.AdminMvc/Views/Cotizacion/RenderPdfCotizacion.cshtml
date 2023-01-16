@@ -1,0 +1,787 @@
+﻿@using System.Globalization
+@using Acetesa.TomaPedidos.Repository;
+@using Acetesa.TomaPedidos.Transversal;
+
+@using Humanizer
+@model Acetesa.TomaPedidos.AdminMvc.Models.CotizacionClienteViewModel
+@{
+    Layout = null;
+    var imagePath = Server.MapPath("~/Content/images");
+
+    var idProforma = Model.Cotizacion.cn_proforma;
+    var imprimirPrecioTN = Model.Adicional.imprimirPrecioTN;
+    var observacion = Model.Adicional.observacion;
+    var razonSocial = Model.Cotizacion.cd_razsoc;
+    var ruc = Model.Cotizacion.cc_analis;
+    var nombreContacto = Model.Adicional.nombreContacto;
+    var direccion = Model.Cotizacion.MCLIENTE.cd_direc;
+    var telefonoContacto = Model.Adicional.telefonoContacto;
+    var emailContacto = Model.Adicional.emailContacto;
+    var formaPago = Model.Cotizacion.TCONDVTA.cd_vta;
+    var fecha = Model.Cotizacion.df_emision.ToString("dd") + " de " + System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+    ToTitleCase(Model.Cotizacion.df_emision.ToString("MMMM").ToLower()) + " del " + Model.Cotizacion.df_emision.ToString("yyyy");
+    var igv_bo = Model.Adicional.igv_bo;
+    Acetesa.TomaPedidos.Entity.MVENDEDOR oVendedor = VendedorRepository.getVendedorCotizacion(Model.Cotizacion);
+    var idMoneda = Model.Cotizacion.cc_moneda;
+    var moneda = "";
+    var monedaSon = "";
+    var esSoles = false;
+    var esDolares = false;
+    var tipoCambio = (decimal)0.0;
+    var totalSoles = (decimal)0.0;
+    var sTotalSoles = "";
+    var zonaLiberada = Model.Adicional.zonaLiberada;
+    var mostrarIGV = zonaLiberada == 1 ? 0 : 1;
+    switch (idMoneda)
+    {
+        case "01":
+            moneda = "";
+            monedaSon = "NUEVOS SOLES";
+            esSoles = true;
+            break;
+        case "02":
+            moneda = "$";
+            monedaSon = "DÓLARES AMERICANOS";
+            esDolares = false;
+            tipoCambio = Model.Cotizacion.fm_tipcam;
+            if (tipoCambio > 0)
+            {
+                totalSoles = Model.Cotizacion.fm_totvta * tipoCambio;
+                sTotalSoles = totalSoles.ToString("N3");
+            }
+            else
+            {
+                esDolares = false;
+            }
+            break;
+    }
+
+    var montoLetras = Conversores.NumeroALetras(Model.Cotizacion.fm_totvta);
+    var totalSon = "Son " + montoLetras + " " + monedaSon;
+
+    var pesoTotal = 0m;
+    var precioTON = 0m;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Cotización</title>
+    <style>
+        html {
+            font-family: Arial;
+        }
+
+        body, table {
+            font-size: 10px;
+        }
+
+        table {
+            border-spacing: 0px;
+            font-family: Arial;
+        }
+
+            table tr th {
+                background-color: gray;
+                color: white;
+                padding: 2px;
+            }
+
+            table tr td {
+                margin: 0px;
+                padding: 2px;
+            }
+    </style>
+</head>
+<body>
+    <table style="width:100%">
+        @{
+            var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
+                System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            if (sqlDB.InitialCatalog == "ZICO_ERP04")
+            {
+                <tr>
+                    <td style="width:30%;">
+                        <img src="@imagePath\logo-galpesa.png" height="50" />
+                    </td>
+                    <td style="vertical-align: top; width:40%; text-align:center;">
+                        <h3>
+                            GALVANIZADORA PERUANA S.A.<br />
+                            20309525532
+                        </h3>
+                        Jr. Abraham Valdelomar Nro. 150.<br />
+                        Calleria, Coronel Portillo, Ucayali.<br />
+                        Telef: (061)575033<br />
+                    </td>
+                    <td style="text-align: right; vertical-align: top; width:30%;"></td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td style="width:30%;">
+                        <img src="@imagePath\logo-acetesa.png" height="50" />
+                    </td>
+                    <td style="vertical-align: top; width:40%; text-align:center;">
+                        <h3>
+                            ACEROS Y TECHOS S.A.<br />
+                            20265733515
+                        </h3>
+                        Av. la Encalada Nro. 1010 Int. 503.<br />
+                        Santiago de Surco.<br />
+                        Telef: 252-0000<br />
+                    </td>
+                    <td style="text-align: right; vertical-align: top; width:30%;"></td>
+                </tr>
+            }
+        }
+    </table>
+    <table style="margin-top: 10px; width:100%;">
+        <tr>
+            <td style="text-align: center;">
+                <h2>COTIZACION N° @idProforma</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">
+                <h4>T.C: @tipoCambio.ToString("N3")</h4>
+            </td>
+        </tr>
+    </table>
+    <table style="width:100%; border: 1px solid gray; border-radius: 10px;background-color: #c2c2c2; padding: 5px;">
+        <tr>
+            <td>Señor (es)&nbsp;&nbsp;</td>
+            <td>:&nbsp;</td>
+            <td style="border-bottom: 1px solid #000000;"><b>@razonSocial</b></td>
+            <td>RUC</td>
+            <td>:&nbsp;</td>
+            <td style="border-bottom: 1px solid #000000;"><b>@ruc</b></td>
+        </tr>
+        <tr>
+            <td>Atención</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@nombreContacto</td>
+            <td>Correo</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@emailContacto</td>
+        </tr>
+        <tr>
+            <td>Dirección</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@direccion</td>
+            <td>Teléfono</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@telefonoContacto</td>
+        </tr>
+        <tr>
+            <td>Forma de pago</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@formaPago</td>
+            <td>Fecha</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@fecha</td>
+        </tr>
+    </table>
+    @{
+        if (imprimirPrecioTN == 1)
+        {
+            @*INICIO: TABLA ARTICULOS 1*@
+            <table width="100%" style="margin-top: 20px;">
+                <tr>
+                    <th style="text-align: center; width: 15px;">N°</th>
+                    <th style="text-align: left; width:50px;">Código</th>
+                    <th style="text-align: left">Descripción</th>
+                    <th style="text-align: left">UM</th>
+                    <th style="text-align: right">Cantidad</th>
+                    <th style="text-align: right">Peso</th>
+                    <th style="text-align: right">Precio Unit</th>
+                    <th style="text-align: right">Precio TON</th>
+                    <th style="text-align: right">Total</th>
+                </tr>
+                @foreach (var item in Model.Cotizacion.LDPROF_WEB)
+                {
+
+                    pesoTotal += item.fq_peso;
+                    precioTON = (item.fm_precio_fin * 1000) / (item.fq_peso / item.fq_cantidad);
+                    <tr>
+                        <td style="text-align: center">@Convert.ToInt16(item.cn_item)</td>
+                        <td>@item.MARTICUL.cc_artic</td>
+                        <td>@item.MARTICUL.cd_artic</td>
+                        <td>@item.MARTICUL.cc_unmed</td>
+                        <td style="text-align: right">@item.fq_cantidad.ToString("N2")</td>
+                        <td style="text-align: right">@item.fq_peso.ToString("N2")</td>
+                        <td style="text-align: right">@item.fm_precio_fin.ToString("N4")</td>
+                        <td style="text-align: right">@precioTON.ToString("N2")</td>
+                        <td style="text-align: right">@(moneda + item.fm_total.ToString("N2"))</td>
+                    </tr>
+                }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @{
+                    if (sqlDB.InitialCatalog == "ZICO_ERP04")
+                    {
+                    <tr>
+                        <td colspan="3" style="padding: 5px;">
+                            @totalSon
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                        <td></td>
+                        <td style="text-align: right">
+                            TOTAL
+                        </td>
+                        <td style="text-align: right">
+                            <b>@(moneda + Model.Cotizacion.fm_totvta.ToString("N2"))</b>
+                        </td>
+                    </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" style="padding: 5px;">
+                                @totalSon
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                            <td></td>
+                            <td style="text-align: right">
+                                Sub Total
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_valvta.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right">
+                                IGV
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_igv.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right">
+                                TOTAL
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_totvta.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                @if (esDolares)
+                {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: right">
+                            T/C Soles
+                        </td>
+                        <td style="text-align: right">
+                            <b>@tipoCambio.ToString("N3")</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: right">
+                            TOTAL S/.
+                        </td>
+                        <td style="text-align: right">
+                            <b>@sTotalSoles</b>
+                        </td>
+                    </tr>
+                }
+            </table>
+            @*FIN: TABLA ARTICULOS 1*@
+        }
+        else
+        {
+            @*INICIO: TABLA ARTICULOS 2*@
+            <table width="100%" style="margin-top: 20px;">
+                <tr>
+                    <th style="text-align: center; width: 15px;">N°</th>
+                    <th style="text-align: left; width:50px;">Código</th>
+                    <th style="text-align: left">Descripción</th>
+                    <th style="text-align: left">UM</th>
+                    <th style="text-align: right">Cantidad</th>
+                    <th style="text-align: right">Peso</th>
+                    <th style="text-align: right">Precio Unit</th>
+                    @*<th style="text-align: right">Precio TON</th>*@
+                    <th style="text-align: right">Total</th>
+                </tr>
+                @foreach (var item in Model.Cotizacion.LDPROF_WEB)
+                {
+
+                    pesoTotal += item.fq_peso;
+                    //precioTON = item.fm_precio_fin/item.fq_peso;
+                    <tr>
+                        <td style="text-align: center">@Convert.ToInt16(item.cn_item)</td>
+                        <td>@item.MARTICUL.cc_artic</td>
+                        <td>@item.MARTICUL.cd_artic</td>
+                        <td>@item.MARTICUL.cc_unmed</td>
+                        <td style="text-align: right">@item.fq_cantidad.ToString("N2")</td>
+                        <td style="text-align: right">@item.fq_peso.ToString("N2")</td>
+                        <td style="text-align: right">@item.fm_precio_fin.ToString("N4")</td>
+                        @*<td style="text-align: right">@precioTON.ToString("N2")</td>*@
+                        <td style="text-align: right">@(moneda + item.fm_total.ToString("N2"))</td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @*<td></td>*@
+                    <td></td>
+                </tr>
+                @{
+                    //if (sqlDB.InitialCatalog == "ZICO_ERP04")
+                    if (mostrarIGV == 0)
+                        {
+                        <tr>
+                            <td colspan="3" style="padding: 5px;">
+                                @totalSon
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                            @*<td></td>*@
+                            <td style="text-align: right">
+                                TOTAL
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_totvta.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" style="padding: 5px;">
+                                @totalSon
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                            @*<td></td>*@
+                            <td style="text-align: right">
+                                Sub Total
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_valvta.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            @*<td></td>*@
+                            <td style="text-align: right">
+                                IGV
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_igv.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            @*<td></td>*@
+                            <td style="text-align: right">
+                                TOTAL
+                            </td>
+                            <td style="text-align: right">
+                                <b>@(moneda + Model.Cotizacion.fm_totvta.ToString("N2"))</b>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                @if (esDolares)
+                {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        @*<td></td>*@
+                        <td style="text-align: right">
+                            T/C Soles
+                        </td>
+                        <td style="text-align: right">
+                            <b>@tipoCambio.ToString("N3")</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        @*<td></td>*@
+                        <td style="text-align: right">
+                            TOTAL S/.
+                        </td>
+                        <td style="text-align: right">
+                            <b>@sTotalSoles</b>
+                        </td>
+                    </tr>
+                }
+            </table>
+            @*FIN: TABLA ARTICULOS 2*@
+
+        }
+    }
+    <br />
+    <br />
+    <p>@observacion</p>
+    <br />
+    <br />
+
+    @{
+        if (sqlDB.InitialCatalog == "ZICO_ERP01")
+        {
+            if (igv_bo == 1)
+            {
+                <h2>Los precios incluyen IGV.</h2>
+            }
+            else
+            {
+                <h2>Los precios no incluyen IGV.</h2>
+            }
+        }
+    }
+    <h4>Condiciones de Venta</h4>
+    @if (sqlDB.InitialCatalog == "ZICO_ERP01")
+    {
+        <p>
+            1. Una vez recibida la O/C debidamente firmada, se programará el despacho, el cual será entre 24 y 48 horas de recibida la O/C<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;salvo que esta indique fecha diferente.<br />
+            2. Toda operación al contado será despachada a las 24 horas de confirmado el abono.<br />
+            3. No se aceptará cambios después de haber despachado el producto.<br />
+            4. El cliente es responsable de la descarga en destino. Es su responsabilidad contar con los equipos necesarios.<br />
+            5. El transporte se incluye solamente en el ámbito de Lima Metropolitana y Callao.<br />
+            6. Las Cotizaciones no separan stock y este puede variar entre una cotización y la recepción de la O/C.<br />
+            7. Los horarios de atención para recojo en nuestro almacén son de lunes a viernes de 8 am a 3 pm, sábado de 8 am a 11 am<br />
+        </p>
+    }
+    else
+    {
+        <p>
+            1. Una vez recibida la O/C debidamente firmada, se programará el despacho, el cual será entre 24 y 48 horas de recibida la O/C<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;salvo que esta indique fecha diferente.<br />
+            2. Toda operación al contado será despachada a las 24 horas de confirmado el abono.<br />
+            3. No se aceptará cambios después de haber despachado el producto.<br />
+            4. El cliente es responsable de la descarga en destino. Es su responsabilidad contar con los equipos necesarios.<br />
+            5. El transporte se incluye solamente en el ámbito de los distritos de Calleria, Manantay y Yarinacocha.<br />
+            6. Las Cotizaciones no separan stock y este puede variar entre una cotización y la recepción de la O/C.<br />
+            7. Los horarios de atención para recojo en nuestro almacén son de lunes a viernes de 8 am a 3 pm, sábado de 8 am a 11 am<br />
+        </p>
+    }
+    <p>VIGENCIA DE COTIZACIÓN <b>03</b> DÍAS CALENDARIOS.</p>
+    <br />
+    <table>
+        <tbody>
+            <tr>
+                <td valign="top" width="50%"></td>
+                @{
+                    if (sqlDB.InitialCatalog == "ZICO_ERP04")
+                    {
+                        <td>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:center;">
+                                            <b>Cuenta Corriente</b><br />
+                                            <b>GALVANIZADORA PERUANA S.A.</b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <table style="border:solid 1px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-continental.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Cta Cte Soles:<br />
+                                            CCI Soles:<br />
+                                            Recaudo Soles:<br />
+                                            CTA CTE Dólares:<br />
+                                            CCI Dólares:<br />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            0011-0306-0100004082<br />
+                                            011-306-000100004082-84 <br />
+                                            GALPESA / 9714 <br />
+                                            0011-0306-0100016269 <br />
+                                            011-306-000100016269-86
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-bcp.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Cta Cte Soles:<br />
+                                            CCI Soles:<br />
+                                            Recaudo Soles:<br />
+                                            Cta Cte Dólares:<br />
+                                            CCI Dólares:<br />
+                                            Recaudo Dólares:
+
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            480-0003611-0-58<br />
+                                            002-480-000003611058-23 <br />
+                                            GALPESA / 08194 (AG.BCP) <br />
+                                            480-0003668-1-43<br />
+                                            002-480-000003668143-25 <br />
+                                            GALPESA / 08194 (AG.BCP)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-interbank.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Cta Cte Soles:<br />
+                                            CCI Soles:<br />
+                                            Cta Cte Dólares:<br />
+                                            CCI Dólares:
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            760-3000251627<br />
+                                            003-760-003000251627-63 <br />
+                                            760-3000251588<br />
+                                            003-760-003000251588-67
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-scotiabank.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Cta Cte Soles:<br />
+                                            CCI Soles:<br />
+                                            Recaudo Soles:<br />
+                                            Cta Cte Dólares:<br />
+                                            CCI Dólares:
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            000-1174843<br />
+                                            009-322-000001174843-91<br />
+                                            GALPESA<br />
+                                            000-2541166<br />
+                                            009-322-000002541166-91<br />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="@imagePath\logo-nacion.jpg" />
+                                        </td>
+                                        <td>
+                                            Cta Cte Soles:<br />
+                                            CCI Soles:<br />
+                                        </td>
+                                        <td>
+                                            00-512-029043<br />
+                                            018-512-000512029043-41<br />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:center;">
+                                            <b>Cuenta Corriente</b><br />
+                                            <b>ACEROS Y TECHOS S.A.</b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <table style="border:solid 1px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-continental.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Soles:<br />
+                                            Dólares:
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            0011-0910-0100084497<br />
+                                            0011-0910-0100084489
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-bcp.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Recaud S/.:<br />
+                                            Dólares:
+
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            194-1535322-0-02<br />
+                                            191-0837077-1-32
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-interbank.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Soles:<br />
+                                            Dólares:
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            100-3000470911<br />
+                                            100-3000430927
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom:solid 1px;">
+                                            <img src="@imagePath\logo-scotiabank.jpg" />
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            Soles:<br />
+                                            Dólares:
+                                        </td>
+                                        <td style="border-bottom:solid 1px;">
+                                            000-033-4472<br />
+                                            000-020-4109
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="@imagePath\logo-nacion.jpg" />
+                                        </td>
+                                        <td>
+                                            Soles:<br />
+                                            Detracc S/.:
+                                        </td>
+                                        <td>
+                                            00-068-311047<br />
+                                            00-000-795127
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    }
+                }
+
+            </tr>
+        </tbody>
+    </table>
+    <p>Sin otro particular y en espera de sus prontas noticias, quedo de Ud.</p>
+    <p>Atentamente.</p>
+    <table style="margin-top: 20px; width:100%;">
+        <tr>
+            <td width="30%"></td>
+            <td width="20%">
+                <table>
+                    <tr>
+                        <td>Ejecutivo de Ventas</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono</td>
+                    </tr>
+                    <tr>
+                        <td>Correo</td>
+                    </tr>
+                </table>
+            </td>
+            <td width="5%">
+                <table>
+                    <tr>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>:</td>
+                    </tr>
+                </table>
+            </td>
+            <td width="45%">
+                <table>
+                    <tr>
+                        <td style="text-align: center; border-bottom: 1px solid #000000;">@oVendedor.ct_nombreCompleto</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; border-bottom: 1px solid #000000;">@oVendedor.cn_telf</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; border-bottom: 1px solid #000000;">@oVendedor.ct_email</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+    </html>

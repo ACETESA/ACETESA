@@ -1,0 +1,85 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/*autocomplete*/
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+}
+
+.custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+}
+/*autocomplete*/
+
+/*custom*/
+.table-responsive h5, .table-ec th, .table-ec td, .table-ec h3 {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .table-ec {
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+
+/*consulta de precios*/
+#table-precios td:nth-child(5),td:nth-child(6),th:nth-child(5),th:nth-child(6){
+    text-align: right;
+}
+/*consulta de precios*/
+/*Estado de Cuenta*/
+#table-ec-detalle td:nth-child(5),td:nth-child(6),td:nth-child(7),td:nth-child(8),th:nth-child(5),th:nth-child(6),th:nth-child(7),th:nth-child(8) {
+    text-align: right;
+}
+/*Estado de Cuenta*/
+/*custom*/
+
+/*cotizacion new*/
+/*div#articulo input,select,textarea {
+    max-width: 885px;
+}*/
+/*cotizacion new*/
+
+h2 {
+    word-wrap: break-word;
+}
+.clickeable{
+    cursor:pointer;
+}
+
+tr.group {
+    color: #fff !important;
+    background-color: #337ab7 !important;
+}
+.group-number{
+    text-align:right !important;
+}
+.group-margen{
+    text-align:center !important;
+}

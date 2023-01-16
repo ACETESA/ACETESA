@@ -1,0 +1,232 @@
+﻿@model Acetesa.TomaPedidos.AdminMvc.Models.CotizacionFindViewModel
+@{
+    ViewBag.Title = "Listado de Cotizaciones";
+}
+
+<h2>Listado de Cotizaciones</h2>
+
+@{
+    @*if (TempData["message"] != null)
+    {
+        <span style="color: red;">
+            @TempData["message"].ToString();
+        </span>
+        <br/>
+    }*@
+
+}
+
+
+@Html.ActionLink("Nuevo", "Nuevo", "Cotizacion", null, new { @class = "btn btn-default" })
+@using (Ajax.BeginForm(new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccess",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result"
+}))
+
+
+
+
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("page")
+<div class="form-horizontal" id="formListado">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="ui-widget">
+                @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*Estado*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Estado, ViewBag.GetEstados as SelectList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Buscar" id="btnEnviar" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+}
+<script>
+
+    var cnProformaSeleccionada = "";
+    var cerrarProformaBo = 0;
+</script>
+@{
+    Html.RenderPartial("_PartialCotizacionRechazo", Model);
+}
+
+<div class="table-responsive" id="result">
+    @if (Model != null && Model.PagedListListaEntity != null && Model.PagedListListaEntity.Any())
+    {
+        Html.RenderPartial("_PartialCotizacionList", Model);
+    }
+</div>
+
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=9"></script>
+    <script>
+        _baseUrl = "@ViewBag.BaseUrl";
+        var urlValidaProductosCotizacion = '@Url.Action("ValidaProductosCotizacion", "Pedido")';
+        var urlMotivosRechazoCotizacion = '@Url.Action("ListaMotivosRechazoCotizacion", "Cotizacion")';
+        var urlRegistrarRechazoCotizacion = '@Url.Action("RegistarRechazoCotizacion", "Cotizacion")';
+        var urlRegistrarCierreCotizacionParcial = '@Url.Action("RegistarCierreCotizacionParcial", "Cotizacion")';
+
+    </script>
+    <script src="~/Scripts/app/CotizacionFindScript.js?v=9"></script>
+
+    <script>
+        //Carga el select del modal de Rechazar Cotizacion
+        sMotivo = $("#motivoRechazoSelect");
+        function LlenarMotivoSelect() {
+            $.ajax({
+                destroy: true,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: urlMotivosRechazoCotizacion,
+                data: JSON.stringify({
+                }),
+                dataType: "json",
+                success: function (result) {
+                    var sOption = "<option value=''>Seleccione una opción</option>";
+                    for (var i = 0; i < result.length; i++) {
+                        sOption += "<option value='" + result[i].idMotivo + "'>" + result[i].descripcion + "</option>";
+                    }
+                    sMotivo.html(sOption);
+                },
+                error: function (result) {
+                    alert("Error en javascript...");
+                }
+            });
+        }
+
+        //Se ejecuta cuando la ventana ha cargado
+        window.onload = function () {
+            LlenarMotivoSelect();
+        }
+
+        //Guardar los datos de Rechazar Cotizacion
+        document.getElementById("rechazarCotizacionButton").onclick = function () {
+            var idMotivo = $('#motivoRechazoSelect option:selected').val();
+
+            if (idMotivo == "") {
+                toastr.error("Debe seleccionar un motivo");
+                return;
+            }
+            var mensajeRechazo = $("#mensajeTextArea").val();
+
+            if (cerrarProformaBo == 1) {
+                //Pasar a Parcial Cerrado
+                $.ajax({
+                    destroy: true,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: urlRegistrarCierreCotizacionParcial,
+                    data: JSON.stringify({
+                        cn_proforma: cnProformaSeleccionada,
+                        idMotivo: idMotivo,
+                        mensajeRechazo: mensajeRechazo
+
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                        var id = result.idMensaje;
+                        var mensaje = result.mensaje;
+
+                        if (id == '1') {
+                            toastr.success(mensaje);
+                        }
+                        else {
+                            toastr.error(mensaje);
+                        }
+                        $('#rechazoCotizacionModal').modal('toggle');
+
+                        //
+                        $("#btnEnviar").click();
+                    },
+                    error: function (result) {
+                        alert("Error en javascript...");
+                    }
+                });
+            } else {
+                //Rechazar cotizacion
+                $.ajax({
+                    destroy: true,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: urlRegistrarRechazoCotizacion,
+                    data: JSON.stringify({
+                        cn_proforma: cnProformaSeleccionada,
+                        idMotivo: idMotivo,
+                        mensajeRechazo: mensajeRechazo
+
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                        var id = result.idMensaje;
+                        var mensaje = result.mensaje;
+
+                        if (id == '1') {
+                            toastr.success(mensaje);
+                        }
+                        else {
+                            toastr.error(mensaje);
+                        }
+                        $('#rechazoCotizacionModal').modal('toggle');
+
+                        //
+                        $("#btnEnviar").click();
+                    },
+                    error: function (result) {
+                        alert("Error en javascript...");
+                    }
+                });
+            }
+
+        }
+
+        //Reiniciar el modal cuando se cierra
+        $('#rechazoCotizacionModal').on('hidden.bs.modal', function (e) {
+            $('#motivoRechazoSelect').prop('selectedIndex', 0);
+            $("#mensajeTextArea").val("");
+        });
+    </script>
+}

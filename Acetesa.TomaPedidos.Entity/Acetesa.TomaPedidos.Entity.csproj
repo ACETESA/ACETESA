@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{79271D57-71CE-48C1-A0C1-49150E39F06C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Acetesa.TomaPedidos.Entity</RootNamespace>
+    <AssemblyName>Acetesa.TomaPedidos.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Qa|AnyCPU'">
+    <OutputPath>bin\Qa\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.0\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ALM_CIERREMES.cs" />
+    <Compile Include="CarteraCliente.cs" />
+    <Compile Include="Consultas\Cliente.cs" />
+    <Compile Include="Consultas\Contacto.cs" />
+    <Compile Include="Consultas\DetalleCotizacion.cs" />
+    <Compile Include="Consultas\Sucursal.cs" />
+    <Compile Include="Consultas\Usuario.cs" />
+    <Compile Include="CotizacionMotivoRechazo.cs" />
+    <Compile Include="DetalleLiquidacionGastos.cs" />
+    <Compile Include="LCPEDIDOADICIONAL_WEB.cs" />
+    <Compile Include="LCPEDIDO_WEB.cs" />
+    <Compile Include="LCPROFADICIONAL_WEB.cs" />
+    <Compile Include="LCPROF_WEB.cs" />
+    <Compile Include="LDPEDIDO_WEB.cs" />
+    <Compile Include="LDPROF_WEB.cs" />
+    <Compile Include="LiquidacionGastos.cs" />
+    <Compile Include="LKARDEX.cs" />
+    <Compile Include="MARTICUL.cs" />
+    <Compile Include="MCLIENTE.cs" />
+    <Compile Include="MVENDEDOR.cs" />
+    <Compile Include="PlanificacionVisita.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SARTICXALMACEN.cs" />
+    <Compile Include="TALMACEN.cs" />
+    <Compile Include="TCONDVTA.cs" />
+    <Compile Include="TCONTACLIE.cs" />
+    <Compile Include="TESTADO.cs" />
+    <Compile Include="TFAMIART.cs" />
+    <Compile Include="TLISTAPREC.cs" />
+    <Compile Include="TGRUARTEC.cs" />
+    <Compile Include="TGRUARTECDUF.cs" />
+    <Compile Include="tipo_cambio_diario.cs" />
+    <Compile Include="TLISTAPRECIO.cs" />
+    <Compile Include="TLUGCLIE.cs" />
+    <Compile Include="TMARCA.cs" />
+    <Compile Include="TMODELO.cs" />
+    <Compile Include="TMONEDA.cs" />
+    <Compile Include="TSECTOR.cs" />
+    <Compile Include="TSUBGRUARTEC.cs" />
+    <Compile Include="TSUBGRUARTECDUF.cs" />
+    <Compile Include="TSUCCLIE.cs" />
+    <Compile Include="TTIENDA.cs" />
+    <Compile Include="TTIPOARTIC.cs" />
+    <Compile Include="TTRASPORTE.cs" />
+    <Compile Include="UBIGEO.cs" />
+    <Compile Include="USUARIO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

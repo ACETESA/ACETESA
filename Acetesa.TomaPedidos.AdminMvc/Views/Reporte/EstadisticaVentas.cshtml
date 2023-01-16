@@ -1,0 +1,95 @@
+﻿@model Acetesa.TomaPedidos.AdminMvc.Models.EstadisticaVentasViewModel
+@{
+    ViewBag.Title = "Estadistica de Ventas";
+}
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+<h2>Estadistica de Ventas</h2>
+@using (Ajax.BeginForm(new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("page")
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Empresa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Empresa, ViewBag.GetEmpresas as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Empresa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Buscar" id="btnEnviar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover" id="tblListado">
+            <tfoot align="right">
+                <tr>
+                    <th colspan="2"></th>
+                    <th class="Monto"></th>
+                    <th class="Monto"></th>
+                    <th class="Monto"></th>
+                    <th class="Monto"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+
+        @section CssTop{
+            @Styles.Render("~/Content/ui")
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+            <style>
+                .Monto {
+                    text-align: right;
+                }
+
+                td.details-control {
+                    background: url('../Content/images/details_open.png') no-repeat center center;
+                    cursor: pointer;
+                }
+
+                tr.shown td.details-control {
+                    background: url('../Content/images/details_close.png') no-repeat center center;
+                }
+
+                tr.fa-plus-circle {
+                    color: green;
+                }
+            </style>
+        }
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/jqueryui")
+            <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+            <script src="~/Scripts/toastr.min.js"></script>
+            <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+            <script src="~/Scripts/jquery.dataTables.min.js"></script>
+            <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+            <script src="~/Scripts/app/EstadisticaVentas.js?v=6"></script>
+        }

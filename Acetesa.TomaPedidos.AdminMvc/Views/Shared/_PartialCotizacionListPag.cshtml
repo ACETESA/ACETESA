@@ -1,0 +1,12 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Acetesa.TomaPedidos.Domain.CotizacionListadoModel>
+
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Listado","Cotizacion", new { page }), new PagedListRenderOptions
+{
+    LinkToFirstPageFormat = "<< Primera",
+    LinkToPreviousPageFormat = "< Anterior",
+    LinkToNextPageFormat = "Siguiente >",
+    LinkToLastPageFormat = "Ultima >>",
+    MaximumPageNumbersToDisplay = 10
+})
