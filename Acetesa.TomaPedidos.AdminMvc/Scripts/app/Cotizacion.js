@@ -1,4 +1,4 @@
-﻿$(".mostrar-grilla-contactoEntregaDirecta").on("click", btnMostrarGrillaContactoEntregaDirecta_click);
+﻿$("#mostrar-grilla-contactoEntregaDirecta").on("click", btnMostrarGrillaContactoEntregaDirecta_click);
 $("#btnCerrarContactoEntregaDirecta").on("click", btnCerrarContactoEntregaDirecta_click);
 $("#btnNuevoContactoEntregaDirecta").on("click", btnNuevoContactoEntregaDirecta_click);
 $("#btnGrabarContactoEntregaDirecta").on("click", btnGrabarContactoEntregaDirecta_click);
@@ -119,7 +119,7 @@ function btnMostrarGrillaContactoEntregaDirecta_click() {
                         //.click(seleccionarContactoEntregaDirecta)
                         .end();
                     $('#tblContactoEntregaDirecta').find('tr').each(function (i) {
-                        $(this).find('td').eq(1).after('<td><a onclick="SeleccionarContactoAEditar('+i+');">Editar</a></td>');
+                        $(this).find('td').eq(1).after('<td><button class="btn btn-outline-primary fa fa-pencil-square-o" onclick="SeleccionarContactoAEditar(' + i +');"></button></td>');
                         var celdaNombres = document.getElementById("tblContactoEntregaDirecta").rows[i].cells[1];
                         if (typeof (celdaNombres) != 'undefined' && celdaNombres != null) {
                             // Exists.
@@ -205,11 +205,11 @@ function LlenaSeleccionaContactoSelect(cn_contacto, cn_suc) {
 }
 
 function btnCerrarContactoEntregaDirecta_click() {
-    $('#PopupGrillaContactoEntregaDirecta').modal("hide");
+    //$('#PopupGrillaContactoEntregaDirecta').modal("toggle");
 }
 
 function btnNuevoContactoEntregaDirecta_click() {
-    $('#PopupGrillaContactoEntregaDirecta').modal("hide");
+    $('#PopupGrillaContactoEntregaDirecta').modal("toggle");
     $('#PopupNuevoContactoEntregaDirecta').modal('show');
     $('#ContactoEntregaDirectaForm')[0].reset();
     $("#EnvioDocumento0").attr("checked", true);

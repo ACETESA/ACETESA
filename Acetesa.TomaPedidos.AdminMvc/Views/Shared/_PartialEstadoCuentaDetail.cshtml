@@ -2,9 +2,9 @@
 
 @if (Model.EstadoCuentaDetalleModels != null && Model.EstadoCuentaDetalleModels.Any())
 {
-    <div class="table-responsive">
-        <table class="table" id="table-ec-detalle" style="max-width:99.9%">
-            <thead>
+    <div class="card table-responsive">
+        <table class="table table-striped table-hover w-100" id="table-ec-detalle">
+            <thead class="table-dark">
                 <tr>
                     <th>TD</th>
                     <th>Número</th>
@@ -85,3 +85,5 @@
         </table>
     </div>
 }
+
+

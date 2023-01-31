@@ -1,5 +1,105 @@
-﻿<!-- Modal-->
-<div class="modal fade" id="newVisitaModel" tabindex="-1" role="dialog" aria-labelledby="newVisitaModelLabel" aria-hidden="true">
+﻿<!-- Modal -->
+<div class="modal fade" id="newVisitaModel" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"   >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Nueva Visita Clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="CiudadDestino">Visita Planificada</label>
+                                <select class="form-control" id="EsVisitaPlanificada">
+                                    <option value="0">No</option>
+                                    <option value="1">Si</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="sNroPlanificacionNew" id="labelNroPlanificacion">Planificación</label>
+                                <select class="form-control" id="sNroPlanificacionNew"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="ViaticosEntregados">Fecha Planeación Visita</label>
+                                <input class="form-control hasDatepicker" data-val="true" id="FechaPlaneacionVisita" name="FechaPlaneacionVisita" type="datetime-local" required="true">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="sDepartamento">Departamento</label>
+                                <select class="form-control" id="sDepartamento"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="sProvincia">Provincia</label>
+                                <select class="form-control" id="sProvincia"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="sDistrito">Distrito</label>
+                                <select class="form-control" id="sDistrito"></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="ViaticosEntregados">Razón Social</label>
+                                <select id="sClientesNew" name="sClientesNew" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="Contacto">Contacto</label>
+                                <select class="form-control" id="sContactoCliente" name="sContactoCliente"></select>
+                            </div>
+                            <div class="col-4">
+                                <label for="MotivoVisita">Motivo</label>
+                                <select class="form-control" id="MotivoVisita"></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="ObservacionPlanificacion">Observación Planificación</label>
+                                <textarea class="form-control" rows="4" id="ObservacionPlanificacion"></textarea>
+                            </div>
+                        </div>
+
+
+                        <p class="mt-2" style="font-weight:bold">Datos únicamente en ubicación</p>
+                        <hr class="mt-0 mb-3" />
+
+                        <div class="row">
+                            <div class="col-12">
+                                <input class="form-check-input" type="checkbox" id="checkEnUbicacion" name="EnUbicacion" value="1">
+                                <label class="form-check-label" style="color:red;">Seleccionar únicamente si se encuentra ubicado en el punto</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="FechaHora">Fecha y Hora Real</label>
+                                <input class="form-control" data-val="true" id="FechaHora" name="FechaHora" type="text" disabled>
+                            </div>
+                            <div class="col-6">
+                                <label for="ubicacion">Ubicación</label>
+                                <input class="form-control" data-val="true" id="ubicacion" name="ubicacion" type="text" value="No considerado" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="ObservacionVisita">Observación Visita</label>
+                                <textarea class="form-control" rows="4" id="ObservacionVisita"></textarea>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="accionBotonFormularioVisitaClientes();">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal-->
+@*<div class="modal fade" id="newVisitaModel" tabindex="-1" role="dialog" aria-labelledby="newVisitaModelLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#9aa78f; color:white;">
@@ -99,7 +199,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 
 

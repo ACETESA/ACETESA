@@ -1,5 +1,46 @@
 ﻿@model Acetesa.TomaPedidos.AdminMvc.Models.EnviarMailViewModel
-<form id="enviarMailForm" novalidate>
+
+<div class="modal fade" id="modal-send-mail" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="staticBackdropLabel">Nuevo Mensaje</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-warning bg-opacity-25">
+                <form id="enviarMailForm" novalidate>
+                    <row>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Asunto, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Asunto, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Para, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Para, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.ConCopia, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.ConCopia, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ConCopia, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Mensaje, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Mensaje, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Mensaje, "", new { @class = "text-danger" })
+                        </div>
+                    </row>
+                </form>
+            </div>
+            <div class="modal-footer bg-warning bg-opacity-25 border-top-0">
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="btnCloseModal">Cerrar</button>
+                <button type="button" class="btn btn-warning" id="btnSendMailModal">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<form id="enviarMailForm" novalidate>
     <div class="modal fade" id="modal-send-mail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -34,4 +75,4 @@
             </div>
         </div>
     </div>
-</form>
+</form>*@

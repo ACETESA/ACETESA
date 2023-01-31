@@ -686,6 +686,7 @@ function OnFailure(data) {
             return false;
         } else if ($sCcAnalis.val() == '') {
             toastr.warning("Debe seleccionar un cliente.");
+            
             return false;
         } else if ($sCcMoneda.val() == '') {
             toastr.warning("Debe seleccionar una moneda.");
@@ -1143,22 +1144,18 @@ function LlenarContactoSelect() {
 }
 
 function OcultarMostrarSucursal(filas) {
-    var lblCnSuc = document.getElementById("lblCnSuc");
     var ddlCnSuc = document.getElementById("ddlCnSuc");
-    var lblCnContacto = document.getElementById("lblCnContacto");
     var ddlCnContacto = document.getElementById("ddlCnContacto");
     if (filas > 2) {
         //Visibilidad (si)
-        lblCnSuc.setAttribute("style", "display:normal;");
         ddlCnSuc.setAttribute("style", "display:normal;");
         //Tamaño
-        ddlCnContacto.setAttribute("class", "col-md-2");
+        ddlCnContacto.setAttribute("class", "col-lg-4 mb-3");
     } else {
         //Visibilidad (no)
-        lblCnSuc.setAttribute("style", "display:none;");
         ddlCnSuc.setAttribute("style", "display:none;");
         //Tamaño
-        ddlCnContacto.setAttribute("class", "col-md-6");
+        ddlCnContacto.setAttribute("class", "col-lg-12 mb-3");
         //Autoseleccionar
         $('#cn_suc :nth-child(2)').prop('selected', true);
         $('#cn_suc').trigger('change');

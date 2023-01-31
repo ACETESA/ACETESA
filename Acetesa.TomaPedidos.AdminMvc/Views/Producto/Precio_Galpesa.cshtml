@@ -4,101 +4,97 @@
     ViewBag.Title = "Consulta de Precio";
 }
 
-<h2>Consulta Precio Galpesa</h2>
-
-@using (Ajax.BeginForm(new AjaxOptions
-{
-    HttpMethod = "POST",
-    OnBegin = "OnBegin",
-    OnComplete = "OnComplete",
-    OnFailure = "OnFailure",
-    UpdateTargetId = "result"
-}))
-{
-    @Html.AntiForgeryToken()
+<div class="container">
 
 
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.ListaPrecios, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.ListaPrecios, ViewBag.GetListaPrecios as SelectList, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ListaPrecios, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    @using (Ajax.BeginForm(new AjaxOptions
+    {
+        HttpMethod = "POST",
+        OnBegin = "OnBegin",
+        OnComplete = "OnComplete",
+        OnFailure = "OnFailure",
+        UpdateTargetId = "result"
+    }))
+    {
+        @Html.AntiForgeryToken()
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.SubFamilia, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.SubFamilia, ViewBag.GetSubFamilias as SelectList, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.SubFamilia, "", new { @class = "text-danger" })
-        </div>
-    </div>
+        <form>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="card mb-1">
+                <div class="card-header bg-success text-white">
+                    <h3>
+                        Consulta de Precios de <b>Galpesa</b>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="col-12 mb-3">
+                        @Html.LabelFor(model => model.ListaPrecios, htmlAttributes: new { @class = "form-label" })
+                        @Html.DropDownListFor(model => model.ListaPrecios, ViewBag.GetListaPrecios as SelectList, new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.ListaPrecios, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-12 mb-3">
+                        @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "form-label" })
+                        @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-12 mb-3">
+                        @Html.LabelFor(model => model.SubFamilia, htmlAttributes: new { @class = "form-label" })
+                        @Html.DropDownListFor(model => model.SubFamilia, ViewBag.GetSubFamilias as SelectList, new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.SubFamilia, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-12 mb-3">
+                        @Html.LabelFor(model => model.Stocks, htmlAttributes: new { @class = "form-label" })
+                        @Html.DropDownListFor(model => model.Stocks, ViewBag.GetStocks as SelectList, new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.Stocks, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <input type="submit" value="Buscar" class="btn btn-dark" />
+                </div>
+            </div>
+        </form>
+    }
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Stocks, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.Stocks, ViewBag.GetStocks as SelectList, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Stocks, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    @section CssTop{
+        <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    }
+    @section Scripts {
+        @Styles.Render("~/Content/ui")
+        @Scripts.Render("~/bundles/jqueryval")
+        <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+        <script src="~/Scripts/app/PrecioScript.js"></script>
+        <script src="~/Scripts/jquery.fileDownload.js?v=1"></script>
+        <script src="~/Scripts/toastr.min.js"></script>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Buscar" class="btn btn-primary" />
-        </div>
-    </div>
-</div>
-}
+        <script type="text/javascript">
 
-@section CssTop{
-    <link href="~/Content/toastr.min.css" rel="stylesheet" />
-}
-@section Scripts {
-    @Styles.Render("~/Content/ui")
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/lib/Ajax.js?v=1"></script>
-    <script src="~/Scripts/app/PrecioScript.js"></script>
-    <script src="~/Scripts/jquery.fileDownload.js?v=1"></script>
-    <script src="~/Scripts/toastr.min.js"></script>
-
-    <script type="text/javascript">
-
-        var $Familia = $("#Familia");
-        var $SubFamilia = $("#SubFamilia");
-        $Familia.change(function () {
-            var request = new Ajax("");
-            var params = {
-                empresa="galpesa",
-                codFamilia: $(this).val()
-            };
-            $SubFamilia.html("");
-            request.JsonPost("GetSubFamilias", params, function (data) {
-                $.each(data, function (index, item) {
-                    var html = "<option value='" + item.Value + "'>";
-                    html += item.Text;
-                    html += "</option>";
-                    $SubFamilia.append(html);
+            var $Familia = $("#Familia");
+            var $SubFamilia = $("#SubFamilia");
+            $Familia.change(function () {
+                var request = new Ajax("");
+                var params = {
+                    empresa="galpesa",
+                    codFamilia: $(this).val()
+                };
+                $SubFamilia.html("");
+                request.JsonPost("GetSubFamilias", params, function (data) {
+                    $.each(data, function (index, item) {
+                        var html = "<option value='" + item.Value + "'>";
+                        html += item.Text;
+                        html += "</option>";
+                        $SubFamilia.append(html);
+                    });
                 });
             });
-        });
 
-    </script>
-}
-
-<div class="table-responsive" id="result">
-    @{
-        Html.RenderPartial("_PartialPrecioList_Galpesa", Model);
+        </script>
     }
+
+    <div class="table-responsive" id="result">
+        @{
+            Html.RenderPartial("_PartialPrecioList_Galpesa", Model);
+        }
+    </div>
+
 </div>

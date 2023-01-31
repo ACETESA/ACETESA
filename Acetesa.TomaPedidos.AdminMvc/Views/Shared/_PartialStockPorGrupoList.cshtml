@@ -16,20 +16,20 @@
                 var nivel4 = 1;
             }
             <thead>
-                <tr>
-                    <th id="thDescripcion" rowspan="2" colspan="3">Descripción</th>
-                    <th  id="thPU" rowspan="2">PU</th>
-                    <th colspan="2">Stk Real</th>
-                    <th colspan="3">Stk En UN</th>
+                <tr class="bg-success">
+                    <td id="thDescripcion" rowspan="2" colspan="3">Descripción</td>
+                    <td  id="thPU" rowspan="2">PU</td>
+                    <td colspan="2">Stk Real</td>
+                    <td colspan="3">Stk En UN</td>
                 </tr>
-                <tr>
-                    <th id="thUN">UN</th>
-                    <th id="thTN">TN</th>
-                    <th id="thTotal">Total</th>
-                    <th id="thReser">Reser</th>
-                    <th id="thDispo">Dispo</th>
+                <tr class="bg-success">
+                    <td id="thUN">UN</td>
+                    <td id="thTN">TN</td>
+                    <td id="thTotal">Total</td>
+                    <td id="thReser">Reser</td>
+                    <td id="thDispo">Dispo</td>
                 </tr>
-                <tr class="excluir-excel" id="cabeceraNP">
+                <tr class="excluir-excel bg-secondary" id="cabeceraNP">
                     <td id="C_NP">NP</td>
                     <td id="C_Fec">Fec</td>
                     <td id="C_Cli">Cli</td>
@@ -158,8 +158,8 @@
             $('#collaptable').aCollapTable({
                 startCollapsed: true,
                 addColumn: false,
-                plusButton: '<i class="glyphicon glyphicon-plus"></i> ',
-                minusButton: '<i class="glyphicon glyphicon-minus"></i> '
+                plusButton: '<i class="fa fa-plus-circle text-dark"></i> ',
+                minusButton: '<i class="fa fa-minus-circle text-dark"></i> '
             });
 
             $(".act-button-expand").trigger("click");

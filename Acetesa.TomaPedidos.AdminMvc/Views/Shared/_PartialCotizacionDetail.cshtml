@@ -6,27 +6,27 @@
     <table class="table table-striped table-hover" id="table-detail-cotizaciones">
         <thead>
             <tr>
-                <th></th>
-                <th></th>
-                <th style="text-align: right;">Item</th>
-                <th>Código</th>
-                <th>Descripción</th>
-                <th style="text-align: left;">U.M.</th>
-                <th style="text-align: right;">Cant. Ped</th>
-                <th style="text-align: right;">Peso TM</th>
-                <th style="text-align: right;">Precio Lista</th>
+                <td></td>
+                <td></td>
+                <td style="text-align: right;">Item</td>
+                <td>Código</td>
+                <td>Descripción</td>
+                <td style="text-align: left;">U.M.</td>
+                <td style="text-align: right;">Cant. Ped</td>
+                <td style="text-align: right;">Peso TM</td>
+                <td style="text-align: right;">Precio Lista</td>
                 @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
                     if (sqlDB3.InitialCatalog == "ZICO_ERP01")
                     {
-                        <th style="text-align: right;">Precio Lista 2</th>
+                        <td style="text-align: right;">Precio Lista 2</td>
                     }
                     else
                     {
-                        <th></th>
+                        <td></td>
                     }
                 }
-                <th style="text-align: right;">Precio Final</th>
-                <th style="text-align: right;">Total</th>
+                <td style="text-align: right;">Precio Final</td>
+                <td style="text-align: right;">Total</td>
             </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
                 var PesoTotal = Convert.ToDecimal(sfqPesoTM.Replace(",", "")) * Convert.ToDecimal(sfqCantidad.Replace(",", ""));
 
             <tr>
-                <td><a title="Editar" class="editar-grilla" href="#" onclick="cargarDatosParaEditarArticulo('@item.cc_artic','@descArticulo','@sfqCantidad','@precioTM','@pesoUnit','@sfmPrecio','@sfmPrecio2','@sfmPrecioFin');"><i class="glyphicon glyphicon-edit"></i></a></td>
+                <td><a title="Editar" class="btn btn-primary fa fa-pencil-square-o btn-sm editar-grilla" href="#" onclick="cargarDatosParaEditarArticulo('@item.cc_artic','@descArticulo','@sfqCantidad','@precioTM','@pesoUnit','@sfmPrecio','@sfmPrecio2','@sfmPrecioFin');"></a></td>
                 <td>
                     @Ajax.ActionLink(" ", "EliminarFila",
 new { id = item.cc_artic.Trim() },
@@ -66,7 +66,7 @@ new AjaxOptions
     OnComplete = "OnComplete",
     OnFailure = "OnFailure",
     UpdateTargetId = "result"
-}, new { @id = "btnEliminarFila" + item.cc_artic.Trim(), @class = "glyphicon glyphicon-trash elimina-grilla", @style = "color:#B06251;", @title = "Eliminar", @onclick = "btnEliminar_click()" })
+}, new { @id = "btnEliminarFila" + item.cc_artic.Trim(), @class = "btn btn-danger btn-sm fa fa-times-circle", @title = "Eliminar", @onclick = "btnEliminar_click()" })
                 </td>
                 <td class="indexTR" style="text-align: right;">@Html.DisplayFor(modelItem => item.cn_item)</td>
                 <td>@Html.DisplayFor(modelItem => item.cc_artic)</td>

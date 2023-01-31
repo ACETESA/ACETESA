@@ -1,24 +1,22 @@
 ﻿<!-- Modal-->
-<div class="modal fade" id="cancelVisitaModel" tabindex="-1" role="dialog" aria-labelledby="cancelVisitaModelLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#6F2727; color:white;">
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Cancelar Visita al Cliente</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row" style="padding:15px">
+
+<div class="modal fade" id="cancelVisitaModel" tabindex="-1" aria-labelledby="cancelVisitaModelLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Cancelar Visita Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                     <form>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="CiudadDestino">Motivo Cancelación</label>
                                 <select class="form-control" id="SMotivoCancelacion"></select>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="ObservacionPlanificacion">Observación Cancelación</label>
                                 <textarea class="form-control" rows="4" id="ObservacionCancelación"></textarea>
                             </div>
@@ -26,15 +24,13 @@
 
                     </form>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="CancelarVisitaCliente();">Guardar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" onclick="CancelarVisitaCliente();">Guardar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 

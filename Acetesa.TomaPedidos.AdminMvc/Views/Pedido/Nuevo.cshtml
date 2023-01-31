@@ -8,8 +8,12 @@
     ViewBag.Title = "Nueva Pedido";
     EnviarMailViewModel emailModel = ViewBag.EmailModel;
 }
-<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
-<h3>Nuevo Pedido</h3>
+
+<div class="card">
+    <div class="card-header bg-success text-bg-secondary">
+        <h3>Nuevo Pedido</h3>
+    </div>
+</div>
 
 @using (Ajax.BeginForm("NuevoDetalle", "Pedido", new AjaxOptions
 {
@@ -25,268 +29,232 @@
     @Html.Hidden("sessionType", SessionTypes.Nuevo)
     @Html.HiddenFor(model => model.cd_razsoc)
     @Html.HiddenFor(model => model.PedidoDetailViewModel.cd_artic)
-    <div class="form-horizontal">
+    <div class="row ms-1 me-1">
         <hr />
-        <div id="containerPedido">
-            <div class="form-group">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger", @id = "msgeCliente" })
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.FechaEntrega, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.FechaEntrega, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FechaEntrega, "", new { @class = "text-danger", @id = "msgeCliente" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div class="col-md-2">
-                    @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.zonaLiberada_bo, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div class="col-md-2">
-                    @Html.DropDownListFor(model => model.zonaLiberada_bo, ViewBag.GetZonaLiberada as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.zonaLiberada_bo, "", new { @class = "text-danger" })
+        <div class="col-9 col-lg-5 mb-3">
+            @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>
+        <div class="col-3 col-lg-1 align-self-end mb-3">
+            <button type="button" class="btn btn-secondary" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>
+        </div>
+        <div class="col-12 col-lg-3 mb-3">
+            @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>
+        <div class="col-12 col-lg-3 mb-3">
+            @Html.LabelFor(model => model.FechaEntrega, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.FechaEntrega, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FechaEntrega, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>
+
+
+        <div class="col-12 col-lg-4 mb-3">
+            @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-12 col-lg-4 mb-3">
+            @Html.LabelFor(model => model.igv_bo, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.igv_bo, ViewBag.GetIgv as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.igv_bo, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-12 col-lg-4 mb-3">
+            @Html.LabelFor(model => model.zonaLiberada_bo, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.zonaLiberada_bo, ViewBag.GetZonaLiberada as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.zonaLiberada_bo, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div class="col-12 col-lg-4 mb-3" style="display:none;">
+            @Html.LabelFor(model => model.mostrarIGV_bo, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.mostrarIGV_bo, ViewBag.GetMostrarIGV as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.mostrarIGV_bo, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div class="col-12  mb-3">
+            @Html.LabelFor(model => model.cb_recojo, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.cb_recojo, ViewBag.GetRecojo as SelectList, new { @class = "form-select" })
+        </div>
+
+        <div class="bg-warning rounded-3 bg-opacity-25">
+            <div class="col-12 mb-3" id="pnl_Cn_lug">
+                @Html.LabelFor(model => model.Cn_lug, htmlAttributes: new { @class = "form-label" })
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.Cn_lug, ViewBag.GetLugarEntrega as SelectList, new { @class = "form-control" })
+                    <div class="input-group-addon mostrar-grilla-lugarEntrega" id="">
+                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.igv_bo, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div class="col-md-2">
-                    @Html.DropDownListFor(model => model.igv_bo, ViewBag.GetIgv as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.igv_bo, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2" style="display:none;">
-                    @Html.LabelFor(model => model.mostrarIGV_bo, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div class="col-md-2" style="display: none;">
-                    @Html.DropDownListFor(model => model.mostrarIGV_bo, ViewBag.GetMostrarIGV as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.mostrarIGV_bo, "", new { @class = "text-danger" })
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-9">
-                    <div class="ui-widget">
-                        @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
+            <div class="col-12 mb-3" id="pnl_cb_contactoEntregaDirecta">
+                @Html.LabelFor(model => model.IdContactoEntregaDirecta, htmlAttributes: new { @class = "form-label" })
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.IdContactoEntregaDirecta, ViewBag.GetContactoEntregaDirecta as SelectList, new { @class = "form-select" })
+                    <div class="input-group-addon mostrar-grilla-contactoEntregaDirecta" id="">
+                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
                     </div>
-                    @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
-                </div>
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-default" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.cb_recojo, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.cb_recojo, ViewBag.GetRecojo as SelectList, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group" id="pnl_Cn_lug">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.Cn_lug, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-10">
-                    <div class="input-group">
-                        @Html.DropDownListFor(model => model.Cn_lug, ViewBag.GetLugarEntrega as SelectList, new { @class = "form-control" })
-                        <div class="input-group-addon mostrar-grilla-lugarEntrega" style="cursor: pointer;">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group" id="pnl_cb_contactoEntregaDirecta">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.IdContactoEntregaDirecta, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-10">
-                    <div class="input-group">
-                        @Html.DropDownListFor(model => model.IdContactoEntregaDirecta, ViewBag.GetContactoEntregaDirecta as SelectList, new { @class = "form-control" })
-                        <div class="input-group-addon mostrar-grilla-contactoEntregaDirecta" style="cursor: pointer;">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group pnl_CC_transp">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.CC_transp, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-10">
-                    <div class="input-group">
-                        @Html.DropDownListFor(model => model.CC_transp, ViewBag.GetTransporte as SelectList, new { @class = "form-control" })
-                        <div class="input-group-addon mostrar-grilla-transporte" style="cursor: pointer;">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group pnl_CC_transp">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.ContactoTransporte, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-10">
-                    <div class="input-group">
-                        @Html.DropDownListFor(model => model.ContactoTransporte, ViewBag.GetContactoTransporte as SelectList, new { @class = "form-control" })
-                        <div class="input-group-addon mostrar-grilla-contacto-transporte" style="cursor: pointer;">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.cc_moneda, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-3">
-                    @Html.DropDownListFor(model => model.cc_moneda, ViewBag.GetMonedas as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.cc_moneda, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.n_i_paralelo_venta, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-1">
-                    @Html.TextBoxFor(model => model.n_i_paralelo_venta, new { @class = "form-control", @readonly = "readonly" })
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.cc_vta, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-2">
-                    @Html.DropDownListFor(model => model.cc_vta, ViewBag.GetCondicionesVentas as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.cc_vta, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8">
-
-                </div>
-                <div class="col-sm-2">
-                    @Html.LabelFor(model => model.cn_ocompra, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-sm-2">
-                    @Html.EditorFor(model => model.cn_ocompra, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.cn_ocompra, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.Vt_observacion, htmlAttributes: new { @class = "control-label" })
-                </div>
-                <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.Vt_observacion, new { maxlength = 250, @class = "form-control" })
                 </div>
             </div>
         </div>
-        <div id="containerArticulo">
-            @*@if (Model != null && !Model.EsProforma)
-                {*@
-            <h5>Agregar Artículos</h5>
-            <hr />
-            <div id="articulo">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.cc_grupo, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_grupo, ViewBag.GetGrupo as SelectList, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_grupo, "", new { @class = "text-danger" })
+
+
+        <div class="bg-warning rounded-3 bg-opacity-25">
+
+            <div class="col-12 mb-3 pnl_CC_transp">
+                @Html.LabelFor(model => model.CC_transp, htmlAttributes: new { @class = "form-label" })
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.CC_transp, ViewBag.GetTransporte as SelectList, new { @class = "form-select" })
+                    <div class="input-group-addon mostrar-grilla-transporte" id="">
+                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.cc_subgrupo, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_subgrupo, ViewBag.GetSubGrupo as SelectList, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="col-12 mb-3 pnl_CC_transp">
+                @Html.LabelFor(model => model.ContactoTransporte, htmlAttributes: new { @class = "form-label" })
+                <div class="input-group">
+                    @Html.DropDownListFor(model => model.ContactoTransporte, ViewBag.GetContactoTransporte as SelectList, new { @class = "form-select" })
+                    <div class="input-group-addon mostrar-grilla-contacto-transporte" id="">
+                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
-                    </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-3  mb-3">
+            @Html.LabelFor(model => model.cc_moneda, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.cc_moneda, ViewBag.GetMonedas as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.cc_moneda, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-12 col-lg-2  mb-3">
+            @Html.LabelFor(model => model.n_i_paralelo_venta, htmlAttributes: new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.n_i_paralelo_venta, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+        <div class="col-12 col-lg-4  mb-3">
+            @Html.LabelFor(model => model.cc_vta, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.cc_vta, ViewBag.GetCondicionesVentas as SelectList, new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.cc_vta, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-12 col-lg-3  mb-3">
+            @Html.LabelFor(model => model.cn_ocompra, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.cn_ocompra, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.cn_ocompra, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div class="col-12  mb-3">
+            @Html.LabelFor(model => model.Vt_observacion, htmlAttributes: new { @class = "form-label" })
+            @Html.TextAreaFor(model => model.Vt_observacion, new { maxlength = 250, @class = "form-control" })
+        </div>
+
+
+
+        <div id="containerArticulo" class="col-12">
+
+            <div class="card">
+                <div class="card-header bg-dark text-bg-secondary opacity-75">
+                    Agregar Artículos
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.fq_cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.PedidoDetailViewModel.fq_cantidad, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_cantidad, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-sm-2">
-                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-default" id="btnClienteNew" title="Recalcular Precio Final" onclick="calcularPrecioFinalPrecioTM(0);"><i class="glyphicon glyphicon-refresh"></i> </button>
-                    </div>
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.fq_peso_teorico, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-sm-2">
-                        @Html.EditorFor(model => model.PedidoDetailViewModel.fq_peso_teorico, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_peso_teorico, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                    if (sqlDB3.InitialCatalog == "ZICO_ERP01")
-                    {
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
+                <div class="card-body">
+                    <div id="articulo">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_grupo, htmlAttributes: new { @class = "form-label" })
+                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_grupo, ViewBag.GetGrupo as SelectList, new { @class = "form-select" })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_grupo, "", new { @class = "text-danger" })
+                            </div>
+
+
+                            <div class="col-12 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_subgrupo, htmlAttributes: new { @class = "form-label" })
+                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_subgrupo, ViewBag.GetSubGrupo as SelectList, new { @class = "form-select" })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
+                            </div>
+
+
+                            <div class="col-12 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label" })
+                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "form-select" })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+                            </div>
+
+
+                            <div class="col-12 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.fq_cantidad, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.PedidoDetailViewModel.fq_cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_cantidad, "", new { @class = "text-danger" })
+                            </div>
+
+
+                            <div class="col-12 col-lg-6 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, htmlAttributes: new { @class = "form-label" })
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, "", new { @class = "text-danger" })
+                                    <div class="input-group-addon">
+                                        <button type="button" class="btn btn-secondary fa fa-refresh h-100" id="btnClienteNew" title="Recalcular Precio Final" onclick="calcularPrecioFinalPrecioTM(0);"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.fq_peso_teorico, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.PedidoDetailViewModel.fq_peso_teorico, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_peso_teorico, "", new { @class = "text-danger" })
+                            </div>
+
+
+
+
+
+                            @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                                if (sqlDB3.InitialCatalog == "ZICO_ERP01")
+                                {
+                                    <div class="col-12 col-lg-6 mb-3">
+                                        @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio, htmlAttributes: new { @class = "form-label" })
+                                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-12 col-lg-6 mb-3">
+                                        @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
+                                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-12 mb-3">
+                                        @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
+                                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
+                                    </div>
+                                }
+                            }
+
+
+                            <div class="col-12 mb-3">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_fin, htmlAttributes: new { @class = "form-label" })
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_fin, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_fin, "", new { @class = "text-danger" })
+                                    <div class="input-group-addon">
+                                        <button type="button" class="btn btn-secondary fa fa-refresh h-100" id="btnClienteNew" title="Recalcular Precio TM" onclick="calcularPrecioFinalPrecioTM(1);"></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    }
-                }
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_fin, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-9">
-                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_fin, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_fin, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-default" id="btnClienteNew" title="Recalcular Precio TM" onclick="calcularPrecioFinalPrecioTM(1);"><i class="glyphicon glyphicon-refresh"></i> </button>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Agregar" class="btn btn-default" id="btnAdd" />
-
+                <div class="card-footer">
+                    <input type="submit" value="Agregar" class="btn btn-dark opacity-75" id="btnAdd" />
                 </div>
             </div>
-            @*} *@
         </div>
     </div>
 }
@@ -336,10 +304,10 @@
     @Html.Hidden("sCn_ocompra", "")
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Guardar" class="btn btn-primary" id="btnSave" />
-                <input type="button" value="Guardar y enviar" class="btn btn-default" id="btnSaveAndSend" />
+        <div class="row">
+            <div class="col-offset-2 col-10">
+                <input type="submit" value="Guardar" class="btn btn-success" id="btnSave" />
+                <input type="button" value="Guardar y enviar" class="btn btn-outline-success" id="btnSaveAndSend" />
             </div>
         </div>
     </div>
@@ -593,10 +561,10 @@
         </script>
     }
 
-        <script src="~/Scripts/app/PedidoNewScript.js?v=9"></script>
-        <script src="~/Scripts/app/Pedido.js?v=9"></script>
+    <script src="~/Scripts/app/PedidoNewScript.js?v=9"></script>
+    <script src="~/Scripts/app/Pedido.js?v=9"></script>
 
-        <script>
+    <script>
         var cn_pedido = $("#cn_pedido").val(); //Setting value to pedido
         var messageValidation = "@ViewBag.MessageValidation";
         if ($.trim(messageValidation).length > 0) {
@@ -643,43 +611,43 @@
             //alert("No es proforma");
             //document.getElementById("igv_bo").value = "1";
         }
-        </script>
-    }
+    </script>
+}
 
-    @{var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
+@{var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
 
-    @if (sqlDB.InitialCatalog == "ZICO_ERP01")
-    {
-        <script type='text/javascript'>
-                            //var cc_analis = document.getElementById('cc_analis').value;
-                            //if (cc_analis.length === 0) {
-                            //    runScript();
-                            //    function runScript() {
-                            //        if (window.$) {
-                            //            var igv_bo = $("#igv_bo");
-                            //            igv_bo.val("1");
-                            //        } else {
-                            //            window.setTimeout(runScript, 50);
-                            //        }
-                            //    }
-                            //}
+@if (sqlDB.InitialCatalog == "ZICO_ERP01")
+{
+    <script type='text/javascript'>
+                                                                //var cc_analis = document.getElementById('cc_analis').value;
+                                                                //if (cc_analis.length === 0) {
+                                                                //    runScript();
+                                                                //    function runScript() {
+                                                                //        if (window.$) {
+                                                                //            var igv_bo = $("#igv_bo");
+                                                                //            igv_bo.val("1");
+                                                                //        } else {
+                                                                //            window.setTimeout(runScript, 50);
+                                                                //        }
+                                                                //    }
+                                                                //}
 
-        </script>
-    }
-    else
-    {
-        <script type='text/javascript'>
+    </script>
+}
+else
+{
+    <script type='text/javascript'>
 
-                            //runScript();
+                                                                //runScript();
 
-                            //function runScript() {
-                            //    if (window.$) {
-                            //        var igv_bo = $("#igv_bo");
-                            //        igv_bo.val("0");
-                            //    } else {
-                            //        window.setTimeout(runScript, 50);
-                            //    }
-                            //}
+                                                                //function runScript() {
+                                                                //    if (window.$) {
+                                                                //        var igv_bo = $("#igv_bo");
+                                                                //        igv_bo.val("0");
+                                                                //    } else {
+                                                                //        window.setTimeout(runScript, 50);
+                                                                //    }
+                                                                //}
 
-        </script>
-    }
+    </script>
+}

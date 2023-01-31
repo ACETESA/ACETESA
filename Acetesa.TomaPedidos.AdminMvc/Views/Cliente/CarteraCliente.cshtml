@@ -4,37 +4,31 @@
 }
 
 <div class="container">
-    <div class="row">
-        <h2>Mi Cartera de Clientes</h2>
-        <hr />
-    </div>
 
-    <div class="row" style="margin-bottom:20px;">
-        <div class="col-md-3">
-            <h5 style="font-weight:bold">Cliente:</h5>
+    <div class="card m-1">
+        <div class="card-header bg-dark bg-opacity-75 text-bg-secondary">
+            <h3>
+                Mi cartera de clientes
+            </h3>
         </div>
-        <div class="col-md-9">
+        <div class="card-body">
+            <label>Cliente:</label>
             <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
-        </div>
-    </div>
 
-    <div class="row" style="margin-bottom:20px;">
-        <div class="col-md-3">
-            @*<h5 style="font-weight:bold">Cliente:</h5>*@
-            <a class="btn btn-success" style="background:#1d6f42;" onclick="tableToExcel();"><i class="glyphicon glyphicon-download"></i> Excel</a>
         </div>
-        @*<div class="col-md-9">
-            <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
-        </div>*@
+        <div class="card-footer">
+            <a class="btn btn-success" onclick="tableToExcel();"><i class="fa fa-file-excel-o"></i> Excel</a>
+        </div>
+            
     </div>
 
     <div class="row">
         <div class="bs-example" data-example-id="contextual-panels">
-            <div class="panel panel-success">
-                <div class="panel-heading" style="background: #3FA758; color: #fff;">
-                    <h3 class="panel-title" id="panel-title" style="font-weight:bold;">Clientes Asignados | Clientes Disponibles para Asignar<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
+            <div class="card">
+                <div class="card-header bg-success text-bg-secondary">
+                    Clientes Asignados | Clientes Disponibles para Asignar
                 </div>
-                <div class="panel-body" style="max-height: 550px;overflow: auto;">
+                <div class="card-body" style="max-height: 550px;overflow: auto;">
                     <table id="table-clientesAsignadosLibres" class="table table-responsive table-striped" style="font-size:12px;">
                         <thead class="">
                             <tr style="font-weight:bold;">

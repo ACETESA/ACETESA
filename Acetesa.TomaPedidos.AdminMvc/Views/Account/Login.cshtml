@@ -5,85 +5,99 @@
     ViewBag.Title = "Acceso al Sistema";
 }
 
-<div class="row">
-    <div class="col-xs-12 col-sm-6"><h2>@ViewBag.Title.</h2></div>
-    <div class="col-xs-12 col-sm-6" style='text-align: right; margin-top:8px;'>
-        @{
-            var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
-                System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-            if (sqlDB.InitialCatalog == "ZICO_ERP04")
-            {
-                <img src='@Url.Content("~/Content/Images/logo-galpesa.png")' />
-            }
-            else
-            {
-                <img src='@Url.Content("~/Content/Images/logo-acetesa.png")' />
-            }
-        }
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Ingrese su cuenta local.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="InputElementId" class="col-md-2 control-label">Captcha</label>
-                    <div class="col-md-10">
-                        @Html.Captcha(4, "_DefaultCaptchaView")
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe, new { @style = "padding-left:0;" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Acceder" class="btn btn-primary"/>
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Registrarse como nuevo usuario", "Register")
-                </p>
-                @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
-    </div>
-</div>
-<script>
-    //function ValidacionesTipoVendedor() {
-
-    //}
-</script>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@{
+    Layout = null;
 }
 
+@using System.Configuration;
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>@ViewBag.Title - Toma Pedidos</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body class="bg-light">
+
+
+    <div class="container-sm body-content bg-white p-4 col-sm-10 col-md-5 col-lg-5 col-xl-3">
+            <div class="back">
+                <div class="div-center">
+                    <div class="content">
+                        <div class="row">
+                            <a class="navbar-brand m-0 p-0" href="#" style="text-align:center;">
+                                @{
+                                    var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
+                                        System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                                    if (sqlDB.InitialCatalog == "ZICO_ERP04")
+                                    {
+                                        <img src='@Url.Content("~/Content/Images/GALPESA LOGO.png")' style='width: 50%; height: 50%;' />
+                                    }
+                                    else
+                                    {
+                                        <img src='@Url.Content("~/Content/Images/ACETESA LOGO.png")' style=' width: 50%; height: 100%;' />
+                                    }
+                                }
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="content">
+
+
+                                <h3 style="text-align:center;">Iniciar Sesión</h3>
+                                <hr />
+                                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group mb-3">
+                                        @Html.LabelFor(m => m.Email, new { @for = "Email" })
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        @Html.LabelFor(m => m.Password, new { @for = "Password" })
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="InputElementId">Captcha</label>
+                                        <div class="col-md-12">
+                                            @Html.Captcha(4, "_DefaultCaptchaView")
+                                        </div>
+                                    </div>
+                                    <input type="submit" value="Acceder" class="btn btn-success w-100" />
+                                    <hr />
+
+                                    <p style="text-align:right">
+                                        @Html.ActionLink("Registrarse", "Register")
+                                    </p>
+                                }
+
+                            </div>
+                        </div>
+                        <span></span>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/popper.js"></script>
+    <script src="~/Scripts/app/GlobalScript.js?v=4"></script>
+
+</body>
+</html>

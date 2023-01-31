@@ -389,7 +389,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         public ActionResult GetColumnasContactoEntregaDirecta()
         {
             var aColumnas = new List<jsDataTableHelper.ConfigColumna>();
-            aColumnas.Add(new jsDataTableHelper.ConfigColumna("Sucursal", "idSucursal",true,true,false,false,"cn_suc",false));
+            aColumnas.Add(new jsDataTableHelper.ConfigColumna("Sucursal", "idSucursal", true, true, false, false, "cn_suc", false));
             aColumnas.Add(new jsDataTableHelper.ConfigColumna("Apellidos y Nombres", "nombreContacto") { Clase = "clickeable" });
             //aColumnas.Add(new jsDataTableHelper.ConfigColumna("", "", false, true, true, false,"") { Clase = "btn btn-default btn-sm glyphicon glyphicon-pencil" });
 
@@ -630,7 +630,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 ClienteNewViewModel = new ClienteNewViewModel(),
                 EnviarMailViewModel = new EnviarMailViewModel(),
                 LugarEntregaNewViewModel = new LugarEntregaNewViewModel(),
-                    ContactoEntregaDirectaNewViewModel = new ContactoEntregaDirectaNewViewModel(),
+                ContactoEntregaDirectaNewViewModel = new ContactoEntregaDirectaNewViewModel(),
                 TransportistaNewViewModel = new TransportistaNewViewModel(),
                 ContactoTransporteNewModel = new ContactoTransporteNewModel()
             };
@@ -675,7 +675,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 Cn_lug = _Cn_lug,
                 CC_transp = _CC_transp,
                 Vt_observacion = _Vt_observacion,
-                cn_ocompra =_cn_ocompra,
+                cn_ocompra = _cn_ocompra,
                 cb_recojo = _cbRecojo,
                 Tienda = _Tienda,
                 igv_bo = _Igv_bo,
@@ -1230,7 +1230,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             }
             try
             {
-                var cliente = ClienteService.GetEmailByCodigo(tipoMail, id,"","");
+                var cliente = ClienteService.GetEmailByCodigo(tipoMail, id, "", "");
                 var email = new
                 {
                     asunto = "Pedido " + (string.IsNullOrEmpty(Nro) ? "[Nro]" : Nro) + " - " + cliente.cd_razsoc,
@@ -1513,7 +1513,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             entity.CargoLaboral = model.CargoLaboral;
             entity.EnvioDocs = model.EnvioDocs;
 
-        string codigo = "0";
+            string codigo = "0";
             try
             {
                 codigo = ClienteRepository.addContactoEntregaDirecta(entity);
@@ -1624,7 +1624,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         {
             try
             {
-                if (subGrupo == "" || subGrupo== "Ninguno")
+                if (subGrupo == "" || subGrupo == "Ninguno")
                 {
                     subGrupo = "%";
                 }
@@ -2293,7 +2293,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             {
                 resultado = "{\"error\":\"No se pudo validar el Nro de RUC.\"}";
             }
-            
+
             return Json(resultado, JsonRequestBehavior.AllowGet);
         }
 
@@ -2634,7 +2634,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 {
                     return JsonError(exce.Message);
                 }
-                
+
                 var tempDetalle = Session[SessionDetalleEditar];
                 var tempDetalleCast = ((tempDetalle) as IList<PedidoDetailViewModel>);
                 if (tempDetalleCast == null || tempDetalleCast.Count == 0)
@@ -2674,7 +2674,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 }).ToList();
 
                 PedidoService.PedidoDetalleServices = pedidoDetalleList;
-                PedidoService.Guardar(entityMaster, model.igv_bo, EmpresaSegunBD(),model.zonaLiberada_bo);
+                PedidoService.Guardar(entityMaster, model.igv_bo, EmpresaSegunBD(), model.zonaLiberada_bo);
                 switch (model.cb_recojo)
                 {
                     case "1":
@@ -2692,7 +2692,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         model.IdContactoEntregaDirecta = "";
                         break;
                 }
-                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(),model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
                 TempData["Guardado"] = true;
 
                 return JsonSuccess(1);
@@ -2744,7 +2744,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             //}
             //else
             //{
-                listaVacia = new List<SelectListItem> {
+            listaVacia = new List<SelectListItem> {
                     new SelectListItem {
                         Text = "Con IGV",
                         Value = "1"
@@ -2753,7 +2753,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         Text = "Sin IGV",
                         Value = "0",
                     }
-                    
+
                 };
             //}
 
@@ -2880,7 +2880,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             //}
 
             string usuarioRegistro = User.Identity.Name;
-            var resultado = PedidoService.RegistrarDocumentoOCPorPedido(idPedido,usuarioRegistro, binData);
+            var resultado = PedidoService.RegistrarDocumentoOCPorPedido(idPedido, usuarioRegistro, binData);
             //    return JsonSuccess(resultado);
 
             //save fileName and fileBytes into database

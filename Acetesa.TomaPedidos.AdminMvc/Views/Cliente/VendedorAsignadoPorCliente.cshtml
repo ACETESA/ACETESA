@@ -3,40 +3,26 @@
 }
 
 <div class="container">
-    <div class="row">
-        <h2>Vendedor Asignado</h2>
-        <hr />
-    </div>
-
-    <div class="row" style="margin-bottom:20px;">
-        <div class="col-md-3">
-            <h5 style="font-weight:bold">Cliente:</h5>
+    <div class="card mb-1">
+        <div class="card-header bg-dark bg-opacity-75 text-bg-primary">
+            <h3>
+                Vendedor asignado al Cliente
+            </h3>
         </div>
-        <div class="col-md-9">
+        <div class="card-body">
+            <label>Cliente: </label>
             <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="bs-example" data-example-id="contextual-panels">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title" id="panel-title">Vendedor Asignado<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
-                </div>
-                <div class="panel-body">
-                    <table>
-                        <tr>
-                            <td><h5 style="font-weight:bold">Vendedor</h5></td>
-                            <td><h5 style="font-weight:bold">&emsp;:&emsp;</h5></td>
-                            <td><h5 id="vendedor"></h5></td>
-                        </tr>
-                        <tr>
-                            <td><h5 style="font-weight:bold">Fecha de asignación</h5></td>
-                            <td><h5 style="font-weight:bold">&emsp;:&emsp;</h5></td>
-                            <td><h5 id="fechaAsignacion"></h5></td>
-                        </tr>
-                    </table>
-                </div>
+        <div class="card-footer bg-white">
+            <div class="row">
+                <div class="col-3">Vendedor</div>
+                <div class="col-3">&emsp;:&emsp;</div>
+                <div class="col-6" id="vendedor"></div>
+            </div>
+            <div class="row">
+                <div class="col-3">Asignado el</div>
+                <div class="col-3">&emsp;:&emsp;</div>    
+                <div class="col-6" id="fechaAsignacion"></div>
             </div>
         </div>
     </div>

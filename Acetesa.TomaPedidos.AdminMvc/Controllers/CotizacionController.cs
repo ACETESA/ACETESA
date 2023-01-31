@@ -304,7 +304,15 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             var VisitaClienteID = Session[SessionVisitaClienteIDNuevo];
             var cnContacto = (string)Session[SessionCnContactoNuevo];
             var CNTienda = (string)Session[SessionTiendaNuevo];
-            var CNIgv_bo = (string)Session[SessionIgv_boNuevo];
+            var CNIgv_bo = "";
+            try
+            {
+                CNIgv_bo = (string)Session[SessionIgv_boNuevo];
+            }
+            catch
+            {
+                CNIgv_bo = "";
+            }
             var CNZonaLiberada = (string)Session[SessionZonaLiberadaNuevo];
             var CNimprimirPrecioTN = (string)Session[SessionImprimirPrecioTNNuevo];
             var CNobservacion = (string)Session[SessionObservacionNuevo];

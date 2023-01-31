@@ -13,7 +13,7 @@ var gs_accion;
 var sPlanificacionFilter = $("#sPlanificacionFilter");
 function LlenarSelectPlanificacionFilter() {
     sPlanificacionFilter.html("");//limpiar todas las filas o rows
-
+    
     //Opcion todos primero
     sPlanificacionFilter.append("<option value='%'>Todos</option>");
     $('#sPlanificacionFilter option[value="%"]').attr("selected", "selected");
@@ -84,8 +84,8 @@ function buscarVisitasMain() {
                     + "<td style='text-align:left'>" + result[i].fechaVisita + "</td>"
                    // + "<td style='text-align:left'>" + result[i].estado + "</td>" +
                     + HTML_celdaEstados +
-                    "<td style='text-align:center'><a class='btn btn-sm btn-warning' style='margin-right:5px;' onclick='recuperarEditarVisitaCliente(" + result[i].visitaClienteID + ")'><i class='glyphicon glyphicon-pencil'></i> </a>" +
-                    "<a class='btn btn-sm btn-danger' onclick='Set_GSVisitaClienteID(" + result[i].visitaClienteID + "," + EstadoID + ")'><i class='glyphicon glyphicon-remove'></i> </a></td>" +
+                    "<td style='text-align:center'><button type='button' class='btn btn-outline-warning' onclick='recuperarEditarVisitaCliente(" + result[i].visitaClienteID + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Editar</button>" +
+                    "<button type='button' class='btn btn-outline-danger ms-2' onclick='Set_GSVisitaClienteID(" + result[i].visitaClienteID + "," + EstadoID + ")'><i class='fa fa-times' aria-hidden='true'></i> Anular</button>" +
                     "</tr>");
             }
         },
@@ -189,7 +189,7 @@ $(document).ready(function () {
 });
 
 
-document.addEventListener("DOMContentLoaded", buscarVisitasMain);
+//document.addEventListener("DOMContentLoaded", buscarVisitasMain);
 
 
 function cargarVariableAccion(x, VisitaID) {

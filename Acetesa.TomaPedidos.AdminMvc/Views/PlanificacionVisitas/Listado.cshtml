@@ -4,19 +4,19 @@
 }
 
 <div class="container">
-    <div class="row">
-        <h2>Planificación Visitas</h2>
-        <hr />
-    </div>
+    @*<div class="row">
+            <h2>Planificación Visitas</h2>
+            <hr />
+        </div>*@
 
     <div class="row">
         <div class="bs-example" data-example-id="contextual-panels">
 
-            <div class="panel">
-                <div class="panel-heading" style="background-color:#272323; color:white;">
+            <div class="card card-primary">
+                <div class="card-header">
                     <h3 class="panel-title" id="panel-title">Planificación Visitas Clientes<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="form-group">
                         <label class="control-label col-md-2" for="selectpicker">Cliente</label>
                         <div class="col-md-12">
@@ -25,11 +25,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2" for="FechaInicio">Fecha Inicio</label>
-                        <div class="col-md-12">
-                            <input class="form-control hasDatepicker" data-val="true" id="FechaInicio" name="FechaInicio" type="date">
-                        </div>
+                        <label>Fecha Inicio</label>
+                        <input class="form-control hasDatepicker" data-val="true" id="FechaInicio" name="FechaInicio" type="date">
                     </div>
+
+
+
+
+
+
 
                     <div class="form-group">
                         <label class="control-label col-md-2" for="FechaInicio">Fecha Fin</label>
@@ -55,9 +59,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a id="btnBuscarVisitas" onclick="buscarVisitasMain();" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Buscar</a>
-                    <a class="btn btn-success" data-toggle="modal" data-target="#newVisitaModel" onclick="cargarVariableAccion(1,null);"><i class="glyphicon glyphicon-plus-sign"></i> Nuevo</a>
+                <div class="card-footer">
+                    @*<a id="btnBuscarVisitas" onclick="buscarVisitasMain();" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Buscar</a>*@
+                    <button id="btnBuscarVisitas" onclick="buscarVisitasMain();" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+                    @*<a class="btn btn-success" data-toggle="modal" data-target="#newVisitaModel" onclick="cargarVariableAccion(1,null);"><i class="glyphicon glyphicon-plus-sign"></i> Nuevo</a>*@
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newVisitaModel" onclick="cargarVariableAccion(1,null);"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nuevo</button>
                 </div>
             </div>
         </div>
@@ -128,6 +134,12 @@
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=1"></script>
     <script src="~/Scripts/app/email-service.js?v=1"></script>
+
+
+    
+    
+
+
     <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script type="text/javascript">
 

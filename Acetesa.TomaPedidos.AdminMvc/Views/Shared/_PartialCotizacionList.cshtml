@@ -31,38 +31,39 @@
                 var estadoCompraTotalCerrada = EstadoCotizacionTypes.Compra_Total_Cerrada.ToString().ToUpper();
                 var estadoAnulado = EstadoCotizacionTypes.Anulado.ToString().ToUpper();
                 var estadoCompraParcialCerrada = EstadoCotizacionTypes.Compra_Parcial_Cerrada.ToString().ToUpper();
-                var classEstado = "";
+                var classEstado = "badge bg-light text-dark";
                 var esGenerable = false;
                 var esCompraParcial = false;
                 var esAnulable = false;
                 var esRechazable = false;
-                string cnCotizacionEliminar = "C"+item.cn_proforma.ToString();
+                string cnCotizacionEliminar = "C" + item.cn_proforma.ToString();
+
                 if (estado == estadoEnviado)
                 {
-                    classEstado = "alert-info";
+                    classEstado = "badge bg-warning text-dark";
                     esGenerable = true;
                 }
                 if (estado == estadoRechazado)
                 {
-                    classEstado = "alert-danger";
+                    classEstado = "badge bg-danger";
                 }
                 if (estado == estadoCompraTotalCerrada)
                 {
-                    classEstado = "alert-success";
+                    classEstado = "badge bg-success";
                 }
                 if (estado == estadoCompraParcial)
                 {
-                    classEstado = "alert-warning";
+                    classEstado = "badge bg-secondary";
                     esGenerable = true;
                     esCompraParcial = true;
                 }
                 if (estado == estadoCompraParcialCerrada)
                 {
-                    classEstado = "alert-success";
+                    classEstado = "badge bg-success";
                 }
                 if (estado == estadoAnulado)
                 {
-                    classEstado = "alert-danger";
+                    classEstado = "badge bg-danger";
                 }
                 if (estado == estadoEmitido || estado == estadoEnviado)
                 {
@@ -72,106 +73,100 @@
                 {
                     esRechazable = true;
                 }
-                //if (string.IsNullOrEmpty(item.cn_pedido) && string.IsNullOrWhiteSpace(item.cn_pedido) && estado == estadoEnviado)
-                //{
-                //    esGenerable = true;
-                //}
-                var dfEmision = item.df_emision.ToShortDateString();
-            <tr class="@classEstado">
-                <td>
-                    @Html.ActionLink(" ", "Descargar", new { cn_cotizacion = item.cn_proforma }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-download-alt", @title = "Descargar" })
-                    @Html.ActionLink(" ", "Editar", new { id = item.cn_proforma }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-pencil", @title = "Editar" })
-                    @if (esAnulable)
-                    {
-                        @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
-                   {
-                       Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
-                       HttpMethod = "POST",
-                       OnBegin = "OnBeginAnular",
-                       OnComplete = "OnCompleteAnular",
-                       OnSuccess = "OnSuccessAnular",
-                       OnFailure = "OnFailureAnular",
-                       Confirm = "¿Está seguro de anular la cotización seleccionada?"
 
-                   }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-minus-sign", @title = "Anular", @id = "btnAnular" + item.cn_proforma })
-                    }
-                    else//Restablecer
-                    {
-                        if (estado == estadoAnulado || estado == estadoRechazado)
+                var dfEmision = item.df_emision.ToShortDateString();
+                <tr role="alert">
+                    <td>
+                        @Html.ActionLink(" ", "Descargar", new { cn_cotizacion = item.cn_proforma }, new { @class = "btn btn-outline-secondary btn-sm fa fa-download", @title = "Descargar" })
+                        @Html.ActionLink(" ", "Editar", new { id = item.cn_proforma }, new { @class = "btn btn-success btn-sm fa fa-pencil-square-o", @title = "Editar" })
+                        @if (esAnulable)
                         {
                             @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
-                                                     {
-                                                         Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
-                                                         HttpMethod = "POST",
-                                                         OnBegin = "OnBeginAnular",
-                                                         OnComplete = "OnCompleteAnular",
-                                                         OnSuccess = "OnSuccessAnular",
-                                                         OnFailure = "OnFailureAnular"
-                                                     }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-plus-sign", @title = "Restablecer", @id = "btnAnular" + item.cn_proforma })
+                       {
+                           Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
+                           HttpMethod = "POST",
+                           OnBegin = "OnBeginAnular",
+                           OnComplete = "OnCompleteAnular",
+                           OnSuccess = "OnSuccessAnular",
+                           OnFailure = "OnFailureAnular",
+                           Confirm = "¿Está seguro de anular la cotización seleccionada?"
+
+                       }, new { @class = "btn btn-outline-danger btn-sm fa fa-minus-square-o", @title = "Anular", @id = "btnAnular" + item.cn_proforma })
                         }
-                    }
-                    @if (esRechazable)
-                    {
-                        @*@Ajax.ActionLink(" ", "Rechazado", new { id = item.cn_proforma }, new AjaxOptions
-                {
-                    Url = Url.Action("Rechazado", "Cotizacion", new { id = item.cn_proforma }),
-                    HttpMethod = "POST",
-                    OnBegin = "OnBeginRechazar",
-                    OnComplete = "OnCompleteRechazar",
-                    OnSuccess = "OnSuccessRechazar",
-                    OnFailure = "OnFailureRechazar",
-                    Confirm = "¿Está seguro de rechazar la cotización seleccionada?"
-                }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-remove-sign", @title = "Rechazar", @id = "btnRechazar" + item.cn_proforma })*@
-                        <button type="button" class="btn btn-default btn-sm glyphicon glyphicon-remove-sign" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',0);"></button>
-                    }
+                        else//Restablecer
+                        {
+                            if (estado == estadoAnulado || estado == estadoRechazado)
+                            {
+                                @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
+                                                         {
+                                                             Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
+                                                             HttpMethod = "POST",
+                                                             OnBegin = "OnBeginAnular",
+                                                             OnComplete = "OnCompleteAnular",
+                                                             OnSuccess = "OnSuccessAnular",
+                                                             OnFailure = "OnFailureAnular"
+                                                         }, new { @class = "btn btn-outline-primary btn-sm fa fa-plus-square-o", @title = "Restablecer", @id = "btnAnular" + item.cn_proforma })
+                            }
+                        }
+                        @if (esRechazable)
+                        {
 
-                    @if (esCompraParcial)
-                    {
-                        <button type="button" class="btn btn-default btn-sm glyphicon glyphicon-check" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',1);"></button>
-                    }
-                </td>
-                <td style="text-align: left; word-wrap:break-word; max-width:100px; width:100px;">
-                    @if (esGenerable)
-                    {
-                        @Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-circle-arrow-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });
-                    }
-                    else
-                    {
-                        <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
-                    }
+                            <button class="btn btn-danger btn-sm fa fa-times" data-bs-toggle="modal" data-bs-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',0);"></button>
+                        }
 
-                    @if (esCompraParcial)
-                    {
+                        @if (esCompraParcial)
+                        {
+                            <button type="button" class="btn btn-warning btn-sm fa fa-check-square-o" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',1);"></button>
+                        }
+                    </td>
+                    <td style="text-align: left; word-wrap:break-word; max-width:100px; width:100px;">
+                        @if (esGenerable)
+                        {
+                            @*@Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });*@
+                            string IDbtn = "btnGenerar" + item.cn_proforma;
+                            <button class="btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido" onclick="location.href='/Pedido/Nuevo/@item.cn_proforma'" id="@IDbtn" title="Generar pedido" disabled> </button>
+                        }
+                        else
+                        {
+                            <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
+                        }
 
-                        <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
+                        @if (esCompraParcial)
+                        {
+
+                            <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
+                        }
+                    </td>
+                    <td style="text-align: left;">
+                        @Html.DisplayFor(modelItem => item.cn_proforma)
+                    </td>
+                    <td style="text-align: left;">
+                        @Html.DisplayFor(modelItem => item.cd_razsoc)
+                    </td>
+                    @{
+                        var estadoFormato = item.cb_estado.Replace("_", " ");
                     }
-                </td>
-                <td style="text-align: left;">
-                    @Html.DisplayFor(modelItem => item.cn_proforma)
-                </td>
-                <td style="text-align: left;">
-                    @Html.DisplayFor(modelItem => item.cd_razsoc)
-                </td>
-                @{
-                    var estadoFormato = item.cb_estado.Replace("_", " ");
-                }
-                <td style="text-align: left;">@Html.DisplayFor(modelItem => dfEmision)</td>
-                <td style="text-align: right;">
-                    @Html.DisplayFor(modelItem => item.fm_totvta)
-                </td>
-                <td style="text-align: left;">@Html.DisplayFor(modelItem => estadoFormato)</td>
-            </tr>
+                    <td style="text-align: left;">@Html.DisplayFor(modelItem => dfEmision)</td>
+                    <td style="text-align: right;">
+                        @Html.DisplayFor(modelItem => item.fm_totvta)
+                    </td>
+                    <td style="text-align: left;">
+                        <small class="@classEstado">
+                            @Html.DisplayFor(modelItem => estadoFormato)
+                        </small>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
     Html.RenderPartial("_PartialCotizacionListPag", Model.PagedListListaEntity);
 }
 <script>
-        window.addEventListener('load', function () {
+    //alert("asdsada1111s");
+    document.addEventListener('DOMContentLoaded', function () {
             $(".GenerarPedido").each(function () {
                 var cnProforma = $(this).attr('id');
                 cnProforma = cnProforma.substring(10, cnProforma.length);
-                //btnGenerar = $("#" + $(this).attr('id'));
                 var btnGenerar = document.getElementById($(this).attr('id'));
                  $.ajax({
                     destroy: true,
@@ -182,8 +177,9 @@
                         cnProforma: cnProforma
                     }),
                     dataType: "json",
-                    success: function (result) {
-                        id = result.id;
+                     success: function (result) {
+                         id = result.id;
+
                         if (id == "0") {
                             btnGenerar.setAttribute("onclick", "toastr.error('"+ result.mensaje +"'); event.preventDefault();");
                         }
@@ -195,7 +191,43 @@
                 });
 
             });
-    })
+    }, false);
+
+
+</script>
+<script>
+
+    @*window.onload = function () {
+
+            $(".GenerarPedido").each(function () {
+                var cnProforma = $(this).attr('id');
+                cnProforma = cnProforma.substring(10, cnProforma.length);
+                var btnGenerar = document.getElementById($(this).attr('id'));
+                alert("asdsadas");
+                 $.ajax({
+                    destroy: true,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: '@Url.Action("ValidaProductosCotizacion", "Pedido")',
+                    data: JSON.stringify({
+                        cnProforma: cnProforma
+                    }),
+                    dataType: "json",
+                     success: function (result) {
+                         id = result.id;
+
+                        if (id == "0") {
+                            btnGenerar.setAttribute("onclick", "toastr.error('"+ result.mensaje +"'); event.preventDefault();");
+                        }
+                        btnGenerar.removeAttribute("disabled");
+                    },
+                    error: function (result) {
+                        alert("Error en javascript...");
+                    }
+                });
+
+            });
+    };*@
 
     function obtenerNumeroProforma(cnProforma, cerrarProforma) {
         cnProformaSeleccionada = cnProforma;
@@ -203,7 +235,7 @@
         if (cerrarProforma ==1) {
             $("#tituloModalRechazo").text("Cierre de Cotización");
             $("#rechazarCotizacionButton").text("Confirmar cierre");
-            
+
         } else {
             $("#tituloModalRechazo").text("Rechazo de Cotización");
             $("#rechazarCotizacionButton").text("Rechazar");

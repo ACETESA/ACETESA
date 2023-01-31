@@ -28,21 +28,26 @@
                 var estadoRechazado = EstadoPedidoTypes.Rechazado.ToString().ToUpper();
                 var estadoAnulado = EstadoPedidoTypes.Anulado.ToString().ToUpper();
                 var estadoConfirmado = EstadoPedidoTypes.Confirmado_Total.ToString().ToUpper();
+                var estadoProcesado = EstadoPedidoTypes.Procesado.ToString().ToUpper();
                 var classEstado = "";
                 var esAnulable = false;
                 var esEnviable = false;
                 var RegistradoOC = item.archivoOC;
                 if (estado == estadoEnviado)
                 {
-                    classEstado = "alert-info";
+                    classEstado = " badge bg-warning text-dark";
+                }
+                if (estado == estadoEmitido)
+                {
+                    classEstado = "badge bg-light text-dark";
                 }
                 if (estado == estadoRechazado || estado == estadoAnulado)
                 {
-                    classEstado = "alert-danger";
+                    classEstado = "badge bg-danger";
                 }
-                if (estado == estadoConfirmado)
+                if (estado == estadoConfirmado || estado == estadoProcesado)
                 {
-                    classEstado = "alert-success";
+                    classEstado = "badge bg-success";
                 }
                 if (estado == estadoEmitido || estado == estadoEnviado)
                 {
@@ -51,10 +56,10 @@
                 }
 
                 var dfEmision = item.df_emision.ToShortDateString();
-                <tr class="@classEstado">
+                <tr>
                     <td>
-                        @Html.ActionLink(" ", "Descargar", new { cn_pedido = item.cn_pedido }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-download-alt", @title = "Descargar" })
-                        @Html.ActionLink(" ", "Editar", new { id = item.cn_pedido }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-pencil", @title = "Editar" })
+                        @Html.ActionLink(" ", "Descargar", new { cn_pedido = item.cn_pedido }, new { @class = "btn btn-outline-secondary btn-sm fa fa-download", @title = "Descargar" })
+                        @Html.ActionLink(" ", "Editar", new { id = item.cn_pedido }, new { @class = "btn btn-success btn-sm fa fa-pencil-square-o", @title = "Editar" })
                         @if (esAnulable)
                         {
                             @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_pedido }, new AjaxOptions
@@ -66,21 +71,21 @@
                                 OnSuccess = "OnSuccessAnular",
                                 OnFailure = "OnFailureAnular",
                                 Confirm = "¿Está seguro de anular el pedido seleccionado?"
-                            }, new { @class = "btn btn-default btn-sm glyphicon glyphicon-minus-sign", @title = "Anular", @id = "btnAnular" + item.cn_pedido })
+                            }, new { @class = "btn btn-outline-danger btn-sm fa fa-minus-square-o", @title = "Anular", @id = "btnAnular" + item.cn_pedido })
                         }
                         @if (esEnviable)
                         {
-                            <a href="#" id="@item.cn_pedido" idcliente="@item.cc_analis" class="btn btn-default btn-sm glyphicon glyphicon-envelope send-email" title="Enviar mail"></a>
+                            <a href="#" id="@item.cn_pedido" idcliente="@item.cc_analis" class="btn btn-outline-warning btn-sm fa fa-envelope-o send-email" title="Enviar mail"></a>
                         }
                         @if (RegistradoOC == "1")
                         {
                             <input type="file" id="upload" style="display:none;" onchange="uploadFiles('upload','@item.cn_pedido');" />
-                            <label for="upload"><i class="btn btn-default btn-sm glyphicon glyphicon-open" title="Subir O.C" style="color:white; background-color: seagreen;"></i></label>
+                            <label for="upload"><i class="btn btn-outline-success btn-sm fa fa-upload" title="Subir O.C"></i></label>
                         }
                         else
                         {
                             <input type="file" id="upload" style="display:none;" onchange="uploadFiles('upload','@item.cn_pedido');" />
-                            <label for="upload"><i class="btn btn-default btn-sm glyphicon glyphicon-open" title="Subir O.C"></i></label>
+                            <label for="upload"><i class="btn btn-outline-secondary btn-sm fa fa-upload" title="Subir O.C"></i></label>
                         }
 
                     </td>
@@ -98,7 +103,11 @@
                         @{
                             var estadoFormato = item.cb_estado.Replace("Confirmado_Total", "Confirmado");
                         }
-                        @Html.DisplayFor(modelItem => item.cb_estado)
+                        @*@Html.DisplayFor(modelItem => item.cb_estado)*@
+
+                        <small class="@classEstado">
+                            @Html.DisplayFor(modelItem => estadoFormato)
+                        </small>
                     </td>
                 </tr>
             }

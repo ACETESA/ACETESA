@@ -9,98 +9,21 @@
     @RenderSection("CssTop", false)
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @*Styles for Datatable*@
+    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="~/Content/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    @*<link href="~/Content/datatables.min.css" rel="stylesheet" />*@
+
+
 </head>
-<body>
+<body style="padding-top:100px;">
     @Html.Hidden("VALIDA_RUC", ConfigurationManager.AppSettings["HABILITA_CONSULTA_RUC"])
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @{
-                        var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
-                            System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                        if (sqlDB.InitialCatalog == "ZICO_ERP04")
-                        {
-                            <img src='@Url.Content("~/Content/Images/logo-letra-galpesa.png")' style='margin-top:7px; width: 32px; height: 32px;' />
-                        }
-                        else
-                        {
-                            <img src='@Url.Content("~/Content/Images/logo-letra.png")' style='margin-top:7px; width: 32px; height: 32px;' />
-                        }
-                    }
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Consulta
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Precio - Acetesa", "Precio", "Producto")</li>
-                                <li>@Html.ActionLink("Precio - Galpesa", "Precio", "Producto")</li>
-                                <li>@Html.ActionLink("Venta", "Venta", "Venta")</li>
-                                <li>@Html.ActionLink("Stock Por Grupo - Acetesa", "StockPorGrupo_Acetesa", "Producto")</li>
-                                <li>@Html.ActionLink("Stock Por Grupo - Galpesa", "StockPorGrupo_Galpesa", "Producto")</li>
-
-                                <li>@Html.ActionLink("Vendedor Por Cliente", "VendedorAsignadoPorCliente", "Cliente")</li>
-                                <li>@Html.ActionLink("Cartera de Clientes", "CarteraCliente", "Cliente")</li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Estado Cuenta", "Index", "EstadoCuenta")</li>
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Cotización
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Listado", "Listado", "Cotizacion")</li>
-                                <li>@Html.ActionLink("Nuevo", "Nuevo", "Cotizacion", new { reset = 1 }, null)</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Pedido
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Listado", "Listado", "Pedido")</li>
-                                <li>@Html.ActionLink("Nuevo", "Nuevo", "Pedido", new { id = "", reset = 1 }, null)</li>
-                            </ul>
-                        </li>
-                        <li id="liReporteEstadisticasVentas">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Reportes
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Estadistica de Ventas", "EstadisticaVentas", "Reporte")</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>*@
-
-
-
-
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#" style="background-color:#b8b8b8; vertical-align:middle;">
-
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark p-0">
+        <div class="container-fluid p-0 pb-1">
+            <a class="navbar-brand m-0 p-0" href="#">
                 @{
                     var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
                         System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
@@ -110,131 +33,126 @@
                     }
                     else
                     {
-                        <img src='@Url.Content("~/Content/Images/ACETESA LOGO.png")' style=' width: 110px; height: 32px;' />
+                        <img src='@Url.Content("~/Content/Images/ACETESA LOGO.png")' style=' width: 100%; height: 100%;' />
                     }
                 }
             </a>
-        </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                <li class="root">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consulta <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Precios</a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    @Html.ActionLink("Acetesa", "Precio_Acetesa", "Producto")
-                                </li>
-                                <li>
-                                    @Html.ActionLink("Galpesa", "Precio_Galpesa", "Producto")
-                                </li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Venta", "Venta", "Venta")</li>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">Stock</a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    @Html.ActionLink("Acetesa", "StockPorGrupo_Acetesa", "Producto")
-                                </li>
-                                <li>
-                                    @Html.ActionLink("Galpesa", "StockPorGrupo_Galpesa", "Producto")
-                                </li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Vendedor Por Cliente", "VendedorAsignadoPorCliente", "Cliente")</li>
-                        <li>@Html.ActionLink("Cartera de Clientes", "CarteraCliente", "Cliente")</li>
-                    </ul>
-                </li>
-                <li class="active">
-                    @Html.ActionLink("Estado Cuenta", "Index", "EstadoCuenta")
-                </li>
-                <li class="root">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cotización <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Nuevo", "Nuevo", "Cotizacion", new { reset = 1 }, null)</li>
-                        <li>@Html.ActionLink("Listado", "Listado", "Cotizacion")</li>
-                    </ul>
-                </li>
-                <li class="root">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pedido <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Nuevo", "Nuevo", "Pedido", new { id = "", reset = 1 }, null)</li>
-                        <li>@Html.ActionLink("Listado", "Listado", "Pedido")</li>
-                    </ul>
-                </li>
-                @*<li class="root">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Liquidación Gastos<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li>@Html.ActionLink("Listado", "Listado", "LiquidacionGastos")</li>
-            </ul>
-        </li>*@
-                @{
-                    var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(
-                        System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                    if (sqlDB2.InitialCatalog == "ZICO_ERP01")
-                    {
-                        <li class="root">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Visitas Clientes<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Listado", "Listado", "PlanificacionVisitas")</li>
-                            </ul>
-                        </li>
+            <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item dropdown root">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Consulta
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#" class="dropdown-item">Precios</a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        @Html.ActionLink("Acetesa", "Precio_Acetesa", "Producto", null, new { @class = "dropdown-item" })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("Galpesa", "Precio_Galpesa", "Producto", null, new { @class = "dropdown-item" })
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                @Html.ActionLink("Venta", "Venta", "Venta", null, new { @class = "dropdown-item" })
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#" class="dropdown-item">Stock</a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        @Html.ActionLink("Acetesa", "StockPorGrupo_Acetesa", "Producto", null, new { @class = "dropdown-item" })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("Galpesa", "StockPorGrupo_Galpesa", "Producto", null, new { @class = "dropdown-item" })
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                @Html.ActionLink("Vendedor Por Cliente", "VendedorAsignadoPorCliente", "Cliente", null, new { @class = "dropdown-item" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Cartera de Clientes", "CarteraCliente", "Cliente", null, new { @class = "dropdown-item" })
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "nav-link mx-2" })
+                    </li>
+                    <li class="nav-item dropdown root">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Cotizaciones
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                @Html.ActionLink("Nuevo", "Nuevo", "Cotizacion", new { reset = 1 }, new { @class = "dropdown-item" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Listado", "Listado", "Cotizacion", null, new { @class = "dropdown-item" })
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown root">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Pedidos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                @Html.ActionLink("Nuevo", "Nuevo", "Pedido", new { id = "", reset = 1 }, new { @class = "dropdown-item" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Listado", "Listado", "Pedido", null, new { @class = "dropdown-item" })
+                            </li>
+                        </ul>
+                    </li>
+                    @{
+                        var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(
+                            System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                        if (sqlDB2.InitialCatalog == "ZICO_ERP01")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Planificación de Visitas", "Listado", "PlanificacionVisitas", null, new { @class = "nav-link mx-2" })
+                            </li>
+                        }
                     }
-                }
-
-            </ul>
-            <ul class="nav navbar-right" style="margin-right:50px;">
+                </ul>
                 @Html.Partial("_LoginPartial")
-            </ul>
-        </div><!-- /.navbar-collapse -->
+            </div>
+        </div>
     </nav>
 
 
 
+    <section class="content">
+        <div class="container body-content p-0">
+            @RenderBody()
+
+        </div>
+    </section>
 
 
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - TomaPedidosApp</p>
-        </footer>
-    </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/popper.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/app/GlobalScript.js?v=4"></script>
+
+
+    @*Scripts for Datatable*@
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap5.min.js"></script>
+    @*<script src="~/Scripts/dataTables.select.min.js"></script>*@
+
+
+
     <script>
         localStorage.setItem('LSI_HABILITAR_SUNAT', '@ConfigurationManager.AppSettings["HABILITA_CONSULTA_RUC"]');
     </script>
-    @*<script title="ValidarVendedorJefe">
-            $.ajax({
-                destroy: true,
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "@Url.Action("ValidarVendedorJefe", "Account")",
-                data: JSON.stringify({
-                }),
-                dataType: "json",
-                success: function (result) {
-                    var li = document.getElementById("liReporteEstadisticasVentas");
-                    var resultado = result.resultado;
-                    if (resultado == "1") {
-                        li.setAttribute("style", "display:normal");
-                    } else {
-                        li.setAttribute("style", "display:none");
-                    }
-                },
-                error: function (result) {
-                    //alert("Error en javascript...");
-                }
-            });
-    </script>*@
 
     <style>
 
@@ -291,6 +209,32 @@
         }
     </style>
 
+    <style title="Sticky Footer">
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            margin-bottom: 60px; /* Margin bottom by footer height */
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px; /* Set the fixed height of the footer here */
+            line-height: 60px; /* Vertically center the text there */
+        }
+    </style>
+
     @RenderSection("scripts", required: false)
+
+    <footer class="footer bg-dark">
+        <div class="container">
+            <span class="text-light">&copy; @DateTime.Now.Year - TomaPedidosApp</span>
+        </div>
+    </footer>
 </body>
+
 </html>
