@@ -169,10 +169,8 @@ new AjaxOptions
     <a hidden id="aIgvVta">@IgvVta.ToString("N2")</a>
     <a hidden id="aTotVta">@TotVta.ToString("N2")</a>
 
-}
 
-
-<script type="text/javascript">
+    <script type="text/javascript">
     function btnEliminar_click() {
         var filas = @Model.Count();
         if ((filas - 1) === 0) {
@@ -230,4 +228,8 @@ new AjaxOptions
     }, 3000);
     //}, false);
 
-</script>
+    </script>
+
+}
+
+

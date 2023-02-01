@@ -9,7 +9,7 @@
         <span class="badge bg-light text-dark position-absolute end-0 bottom-0 me-2 mb-2"><b>Registros:</b>: @Model.PrecioModels.Count()</span>
     </div>
 
-    <div class="card table-responsive" >
+    <div class="card table-responsive" id="tableSector">
         <div class="card-header bg-white">
             <table class="table table-striped table-hover w-100" id="table-precios">
                 <thead>
@@ -75,7 +75,29 @@
         </div>
     </div>
 
+    <script>
+        var ListaPreciosAux = null;
+        var FamiliaAux = null;
+        var SubFamiliaAux = null;
+        var StocksAux = null;
 
+        function ExportarExcelPrecio() {
+            var sUrl = "descargarExcelPrecio";
+
+            $.fileDownload(sUrl, {
+                httpMethod: "POST",
+                data: {
+                    ListaPrecios: ListaPreciosAux,
+                    Familia: FamiliaAux,
+                    SubFamilia: SubFamiliaAux,
+                    Stocks: StocksAux,
+                    empresa: "Acetesa"
+                },
+                failMessageHtml: "There was a problem generating your report, please try again."
+            });
+        }
+        $('#table-precios').DataTable();
+    </script>
 }
 <style type="text/css">
     table thead tr th {
@@ -103,28 +125,3 @@
     }
 }
 
-<script>
-    var ListaPreciosAux = null;
-    var FamiliaAux = null;
-    var SubFamiliaAux = null;
-    var StocksAux = null;
-
-    function ExportarExcelPrecio() {
-        var sUrl = "descargarExcelPrecio";
-
-        $.fileDownload(sUrl, {
-            httpMethod: "POST",
-            data: {
-                ListaPrecios: ListaPreciosAux,
-                Familia: FamiliaAux,
-                SubFamilia: SubFamiliaAux,
-                Stocks: StocksAux,
-                empresa: "Acetesa"
-            },
-            failMessageHtml: "There was a problem generating your report, please try again."
-        });
-    }
-
-
-    $('#table-precios').DataTable();
-</script>

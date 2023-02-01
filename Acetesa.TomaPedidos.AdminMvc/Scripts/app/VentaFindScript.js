@@ -1,9 +1,4 @@
-﻿/// <reference path="GlobalScript.js" />
-/// <reference path="~/Scripts/jquery-ui-1.11.4.js" />
-/// <reference path="~/Scripts/jquery.validate-vsdoc.js" />
-/// <reference path="~/Scripts/toastr.js" />
-/// <reference path="~/Scripts/jquery-2.1.3.intellisense.js" />
-
+﻿
 $(document).on("click", "#btnSendMailModal", function (e) {
     e.preventDefault();
     e.stopPropagation();

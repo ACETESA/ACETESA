@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="card mb-1">
-        <div class="card-header bg-dark bg-opacity-75 text-bg-primary">
+        <div class="card-header bg-success text-white">
             <h3>
                 Vendedor asignado al Cliente
             </h3>
@@ -15,14 +15,19 @@
         </div>
         <div class="card-footer bg-white">
             <div class="row">
-                <div class="col-3">Vendedor</div>
-                <div class="col-3">&emsp;:&emsp;</div>
-                <div class="col-6" id="vendedor"></div>
-            </div>
-            <div class="row">
-                <div class="col-3">Asignado el</div>
-                <div class="col-3">&emsp;:&emsp;</div>    
-                <div class="col-6" id="fechaAsignacion"></div>
+                <div class="col-sm-12 col-md-3 col-lg-4">
+
+                </div>
+                <div class="card text-bg-secondary col-sm-12 col-md-6 col-lg-4" >
+                    <div class="card-body position-relative" style="min-height:150px;">
+                        <div class="col-8 mt-4 fw-bold" id="vendedor"></div>
+                        <div class="col-6 m-3" id="fechaAsignacion"></div>
+                        <div class="position-absolute top-50 end-0 translate-middle">
+                            <i class="fa fa-user-circle fa-5x"></i>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -72,12 +77,12 @@
             }
         });
     }
-    $(document).ready(function () {
-        clientesActivosListar();
-        $('.selectpicker').selectpicker({
-            size: 5,
-            title: 'Seleccione una opción'
-        });
+        $(document).ready(function () {
+            clientesActivosListar();
+            $('.selectpicker').selectpicker({
+                size: 5,
+                title: 'Seleccione una opción'
+            });
         });
 
     function buscarVendedorPorCliente() {

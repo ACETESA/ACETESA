@@ -5,53 +5,36 @@
 
 <div class="container">
 
-    <div class="card m-1">
-        <div class="card-header bg-dark bg-opacity-75 text-bg-secondary">
+    <div class="card mb-3">
+        <div class="card-header bg-success text-white">
             <h3>
-                Mi cartera de clientes
+                Gestión de Cartera de Clientes
             </h3>
         </div>
-        <div class="card-body">
-            <label>Cliente:</label>
-            <select id="sClientes" class="selectpicker" data-show-subtext="true" data-live-search="true" size="10"></select>
-
-        </div>
-        <div class="card-footer">
+        <div class="card-body bg-light">
             <a class="btn btn-success" onclick="tableToExcel();"><i class="fa fa-file-excel-o"></i> Excel</a>
         </div>
-            
     </div>
 
-    <div class="row">
-        <div class="bs-example" data-example-id="contextual-panels">
-            <div class="card">
-                <div class="card-header bg-success text-bg-secondary">
-                    Clientes Asignados | Clientes Disponibles para Asignar
-                </div>
-                <div class="card-body" style="max-height: 550px;overflow: auto;">
-                    <table id="table-clientesAsignadosLibres" class="table table-responsive table-striped" style="font-size:12px;">
-                        <thead class="">
-                            <tr style="font-weight:bold;">
-                                <td style="text-align:center; border-right:dashed 0.2px #214820;">Asignado</td>
-                                <td style="display:none;">Asignado</td>
-                                <td style="min-width:60px; text-align:center; border-right:dashed 0.2px #214820;">#</td>
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Ruc</td>
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Razón Social</td>
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Sector</td>
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Aseguradora</td>
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Límite Crédito</td>
-                                @*<td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Deuda</td>
-        <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Crédito Disponible</td>*@
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Departamento</td>
-                                <td style="min-width:120px; text-align:center; border-right:dashed 0.2px #214820;">Provincia</td>
-                                <td style="min-width:120px; text-align:center;">Distrito</td>
-                            </tr>
-                        </thead>
-                        <tbody style=""></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="table-responsive">
+        <table id="table-clientesAsignadosLibres" class="table table-striped w-100">
+            <thead class="table-dark">
+                <tr style="font-weight:bold;">
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Asignado</td>
+                    <td style="display:none;">Asignado</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">#</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Ruc</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Razón Social</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Sector</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Aseguradora</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Límite</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Departamento</td>
+                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Provincia</td>
+                    <td style="text-align:center;">Distrito</td>
+                </tr>
+            </thead>
+            <tbody style=""></tbody>
+        </table>
     </div>
 </div>
 
@@ -59,57 +42,59 @@
 @section CssTop{
     @Styles.Render("~/Content/ui")
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    @*<link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />*@
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
-    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    @*<script src="~/Scripts/jquery.dataTables.min.js"></script>*@
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=1"></script>
     <script src="~/Scripts/app/email-service.js?v=1"></script>
-    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    @*<script src="~/Scripts/bootstrap-select.min.js"></script>*@
     <script type="text/javascript">
     urlClienteAsignadoLibre = "@Url.Action("ClientesAsignadosLibresSelect", "Cliente")";
     urlBuscarCliente = "@Url.Action("ClientesAsignadosLibres", "Cliente")";
-    urlActualizarCartera = "@Url.Action("ActualizarAsignacionClienteVendedor", "Cliente")";
-    sClientes = $("#sClientes");
+        urlActualizarCartera = "@Url.Action("ActualizarAsignacionClienteVendedor", "Cliente")";
+        var ls_table;
+    //sClientes = $("#sClientes");
     //LISTAR DEPARTAMENTOS
-    function clientesActivosListar() {
-        sClientes.html("");//limpiar todas las filas o rows
-        $.ajax({
-            destroy: true,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: urlClienteAsignadoLibre,
-            data: JSON.stringify({
-            }),
-            dataType: "json",
-            success: function (result) {
-                sClientes.append("<option value=''>" + "TODOS LOS CLIENTES" + "</option>");
-                for (var i = 0; i < result.length; i++) {
-                    sClientes.append("<option value='" + result[i].ruc + "'>" + result[i].razonSocial + "</option>");
-                }
-                document.getElementById("sClientes").setAttribute("onchange", "buscarCliente();");
-                $('#sClientes').selectpicker({
-                    maxOptions: 2
-                });
-                $('#sClientes').selectpicker('refresh');
-            },
-            error: function (result) {
-                alert("Error en javascript...");
-            }
-        });
-        }
+    //function clientesActivosListar() {
+    //    sClientes.html("");//limpiar todas las filas o rows
+    //    $.ajax({
+    //        destroy: true,
+    //        type: "POST",
+    //        contentType: "application/json; charset=utf-8",
+    //        url: urlClienteAsignadoLibre,
+    //        data: JSON.stringify({
+    //        }),
+    //        dataType: "json",
+    //        success: function (result) {
+    //            sClientes.append("<option value=''>" + "TODOS LOS CLIENTES" + "</option>");
+    //            for (var i = 0; i < result.length; i++) {
+    //                sClientes.append("<option value='" + result[i].ruc + "'>" + result[i].razonSocial + "</option>");
+    //            }
+    //            //document.getElementById("sClientes").setAttribute("onchange", "buscarCliente();");
+    //            $('#sClientes').selectpicker({
+    //                maxOptions: 2
+    //            });
+    //            $('#sClientes').selectpicker('refresh');
+    //        },
+    //        error: function (result) {
+    //            alert("Error en javascript...");
+    //        }
+    //    });
+    //    }
 
 
         $(document).ready(function () {
-        clientesActivosListar();
-        $('.selectpicker').selectpicker({
-            size: 5,
-            title: 'Seleccione una opción'
-        });
+        //clientesActivosListar();
+        //$('.selectpicker').selectpicker({
+        //    size: 5,
+        //    title: 'Seleccione una opción'
+        //});
 
         buscarCliente();
 
@@ -125,7 +110,7 @@
             contentType: "application/json; charset=utf-8",
             url: urlBuscarCliente,
             data: JSON.stringify({
-                rucCliente: $("#sClientes option:selected").val()
+                rucCliente: ""//$("#sClientes option:selected").val()
             }),
             dataType: "json",
             success: function (result) {
@@ -158,6 +143,18 @@
                         //'<td style="text-align:center; vertical-align:middle;">' + result[i].fechaUltVenta + '</td>' +
                         '</tr > ');
                 }
+                ls_table = $('#table-clientesAsignadosLibres').DataTable();
+
+
+                //$('#table-clientesAsignadosLibres').DataTable({
+                //    columnDefs: [
+                //        {
+                //            target: 0,
+                //            visible: false,
+                //            searchable: false,
+                //        }
+                //    ],
+                //});
             },
             error: function (result) {
                 alert("Error en javascript...");
@@ -218,6 +215,12 @@
 
 
         function tableToExcel() {
+            // Get the column API object
+            var column = ls_table.column(0);
+
+            // Toggle the visibility
+            column.visible(!column.visible());
+
             var table = "table-clientesAsignadosLibres"
             var sheetName = "Clientes"
             var fileName = "Mi Cartera de Clientes.xls";
@@ -243,7 +246,9 @@
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
-        }
 
+            //Revert action
+            column.visible(!column.visible());
+        }
     </script>
 }

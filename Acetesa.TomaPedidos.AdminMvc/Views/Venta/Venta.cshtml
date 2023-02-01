@@ -29,20 +29,29 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <div class="col-12 mb-3">
-                        @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label" })
-                        @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
-                        @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
-                    </div>
-                    <div class="col-12 mb-3">
-                        @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "form-label" })
-                        @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @type = "date" })
-                        @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-12 mb-3">
-                        @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "form-label" })
-                        @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control", @type = "date" })
-                        @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label" })
+                            <div class="input-group">
+                                @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
+                                @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+                                <script>
+                                    $('#Cliente').attr('data-show-subtext', 'true');
+                                    $('#Cliente').attr('data-live-search', 'true');
+                                </script>
+                            </div>
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @type = "date" })
+                            @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-6 mb-3">
+                            @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control", @type = "date" })
+                            @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer bg-white">
@@ -50,8 +59,6 @@
                 </div>
             </div>
         </form>
-
-
     }
 
     @{
@@ -62,6 +69,7 @@
         @Styles.Render("~/Content/ui")
         <link href="~/Content/toastr.min.css" rel="stylesheet" />
         <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
     }
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
@@ -69,20 +77,18 @@
         <script src="~/Scripts/jquery.maskedinput.min.js"></script>
         <script src="~/Scripts/toastr.min.js"></script>
         <script src="~/Scripts/lib/Ajax.js"></script>
-        @*<script src="~/Scripts/jquery.dataTables.min.js"></script>*@
-        @*<script src="~/Scripts/dataTables.bootstrap.min.js"></script>*@
         <script src="~/Scripts/jquery.fileDownload.js"></script>
         <script src="~/Scripts/app/email-service.js?v=1"></script>
-        <script>
-        _baseUrl = "@ViewBag.BaseUrl";
-        </script>
-        <script>
-        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Venta")";
-        </script>
+        <script src="~/Scripts/bootstrap-select.min.js"></script>
         <script src="~/Scripts/app/VentaScript.js?v=1"></script>
         <script src="~/Scripts/app/VentaFindScript.js?v=1"></script>
-    }
 
+        <script title="URLs">
+        _baseUrl = "@ViewBag.BaseUrl";
+        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Venta")";
+        urlClienteListado = "@Url.Action("ClientesActivos", "Cliente")";
+        </script>
+    }
 
     <div class="table-responsive" id="result">
         @{
@@ -92,24 +98,45 @@
 
 </div>
 
-
 <script>
-    window.addEventListener("DOMContentLoaded", function () {
-        // code here
-        ////var date = new Date();
-        //var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    Cliente = $("#Cliente");
 
-        //////Set DatePicker to October 3, 2008
-        ////$('#FechaInicio').value = firstDay;
-        ////$('#FechaFinal').value = date.getDate();
+    function clientesActivosListar() {
+        Cliente.html("");
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlClienteListado,
+            data: JSON.stringify({
+            }),
+            dataType: "json",
+            success: function (result) {
+                Cliente.append("<option class='fw-bold' value=''>VENTAS EN GENERAL</option>");
+                for (var i = 0; i < result.length; i++) {
+                    Cliente.append("<option value='" + result[i].cc_analis + "'>" + result[i].cd_razsoc + "</option>");
+                }
 
-        ////Set datetime-local input value
-        //const [date, time] = formatDate(new Date()).split(' ');
-        //console.log(date); // 👉️ 2021-12-31
-        //console.log(time); // 👉️ 09:43
+                $('#Cliente').selectpicker('refresh');
+            },
+            error: function (result) {
+                alert("Error en javascript...");
+            }
+        });
+    }
+</script>
 
-        //// ✅ Set Date input Value
-        //const dateInput = document.getElementById('FechaInicio');
-        //dateInput.value = date;
+
+<script type="text/javascript">
+    $(function () {
+        $('#datepicker').datepicker();
+    });
+
+    $(document).ready(function () {
+        clientesActivosListar();
+        $('.selectpicker').selectpicker({
+            size: 5,
+            title: 'Seleccione una opción'
+        });
     });
 </script>

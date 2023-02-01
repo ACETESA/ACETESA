@@ -35,7 +35,7 @@ function OnSuccess(data) {
             $("#CotizacionDetailViewModel_fm_precio_fin").val("");
             $("#CotizacionDetailViewModel_fm_precio_tonelada").val("");
             $("#CotizacionDetailViewModel_fq_peso_teorico").val("");
-            scrollToScreen("#articulo", 1000);
+        //scrollToScreen("#result", 1000);
     }
     //Bloqueamos cada que se añade detalle
     $("#Tienda option:not(:selected)").prop("disabled", true);

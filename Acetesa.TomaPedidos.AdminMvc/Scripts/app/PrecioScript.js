@@ -13,7 +13,10 @@ function OnFailure(data) {
     }
 }
 function OnComplete() {
-    scrollToScreen("#result", 1000);
+    //scrollToScreen("#tableSector", 1000);
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $("#tableSector").offset().top
+    }, 2000);
 
     ListaPreciosAux = $("#ListaPrecios").val();
     FamiliaAux = $("#Familia").val();
