@@ -164,7 +164,7 @@
         </div>
 
         <div class="col-12">
-            <div class="card">
+            <div class="card" id="AgregarArticulos">
                 <div class="card-header bg-dark text-bg-secondary opacity-75">
                     Agregar Artículos
                 </div>
@@ -184,21 +184,15 @@
                                 @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
                             </div>
 
-
-                            @*<div class="col-12 mb-3">
-            @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
-        </div>*@
-
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label" })
+                            <div class="col-12 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
+                                @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
                                 <div class="input-group">
-                                    @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
+                                    @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker"})
                                     @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
                                     <script>
                                         $('#CotizacionDetailViewModel_cc_artic').attr('data-show-subtext', 'true');
                                         $('#CotizacionDetailViewModel_cc_artic').attr('data-live-search', 'true');
+                                        $('#CotizacionDetailViewModel_cc_artic').attr('data-width', '100%');
                                     </script>
                                 </div>
                             </div>
@@ -285,7 +279,6 @@
 @{
     Html.RenderPartial("_PartialClienteNew", Model.ClienteNewViewModel);
     Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
-    //Html.RenderPartial("_PartialContactoEntregaDirecta", Model.ContactoEntregaDirectaNewViewModel);
     Html.RenderPartial("_PartialContactoEntregaDirecta", Model.ContactoEntregaDirectaNewViewModel);
 
 }
@@ -324,8 +317,7 @@
 
 @section CssTop{
     @Styles.Render("~/Content/ui")
-    @*<link href="~/Content/toastr.min.css" rel="stylesheet" />*@
-    @*<link href="~/Content/toastr.css" rel="stylesheet" />*@
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
 }
 
 @section Scripts {
@@ -333,13 +325,12 @@
     @Scripts.Render("~/bundles/jqueryui")
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
-    @*<script src="~/Scripts/toastr.min.js"></script>*@
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script src="~/Scripts/toastr.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=9"></script>
     <script src="~/Scripts/app/email-service.js?v=9"></script>
     <script type="text/javascript">
         urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
-        //urlTiendaSegunVendedor = "@Url.Action("TiendaSegunVendedor", "Cotizacion")";
         urlListarSectores = "@Url.Action("Sectores", "Cotizacion")";
         urlListarDepartamentos = "@Url.Action("Departamentos", "Cotizacion")";
         urlListarProvincias = "@Url.Action("Provincias", "Cotizacion")";
@@ -365,12 +356,9 @@
         urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
         urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
         urlGetVisitasClientesJson ="@Url.Action("GetVisitasClientesJson", "Cotizacion")";
-
-        //urlStockSegunArticulo = "Url.Action("StockSegunArticulo", "Pedido")";
-
+        urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Cotizacion")";
     </script>
     <script>
-        //var gl_stock;
         _baseUrl = "@ViewBag.BaseUrl";
         var emailModel = @Html.Json(emailModel);
         if (emailModel != null) {
@@ -418,7 +406,6 @@
     <script>
         var slcchange = document.getElementById("zonaLiberada_bo");
         slcchange.addEventListener("change", function () {
-            //alert(this.value);
             if (this.value == "1") {
                 document.getElementById("igv_bo").value = "0";
                 document.getElementById("mostrarIGV_bo").value = "0";
@@ -443,7 +430,7 @@
             var ccAnalis = $Ruc.val();
             $.ajax({
                 destroy: true,
-                url: urlValidarExistenciaClienteRUC,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                url: urlValidarExistenciaClienteRUC,
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({
@@ -457,9 +444,6 @@
                     var mensaje = data.mensaje;
                     if (error === "True") {//Si hay error
                         $('#clienteForm').trigger("reset");
-                        //$("#Ruc").val("");
-                        //$("#RazonSocial").val("");
-                        //$("#Domicilio").val("");
                         $("#btnSendClienteNew").prop("disabled", true);
                         toastr.error(mensaje);
                     }
@@ -485,7 +469,7 @@
                 var ccAnalis = $Ruc;
                 $.ajax({
                     destroy: true,
-                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    url: urlValidarClienteEnZonaLiberada,
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
@@ -508,10 +492,8 @@
 
 
                         if (zonaLiberada == "1") {
-                            //document.getElementById("igv_bo").value = "0";
                             document.getElementById("mostrarIGV_bo").value = "0";
                         } else {
-                            //document.getElementById("igv_bo").value = "1";
                             document.getElementById("mostrarIGV_bo").value = "1";
                         }
 
@@ -537,7 +519,7 @@
                 var ccAnalis = $Ruc;
                 $.ajax({
                     destroy: true,
-                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    url: urlValidarClienteEnZonaLiberada,
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
@@ -581,14 +563,13 @@
         </script>
     }
 
-    <script src="~/Scripts/app/GlobalScript.js?v=9"></script>
-    <script src="~/Scripts/app/CotizacionNewScript.js?v=9"></script>
-    <script src="~/Scripts/app/Cotizacion.js?v=9"></script>
+    <script src="~/Scripts/app/GlobalScript.js?v=10"></script>
+    <script src="~/Scripts/app/CotizacionNewScript.js?v=10"></script>
+    <script src="~/Scripts/app/Cotizacion.js?v=10"></script>
     <script>
         var messageValidation = "@ViewBag.MessageValidation";
         if ($.trim(messageValidation).length > 0) {
             toastr.warning(messageValidation);
-            scrollToScreen("#articulo", 1000);
         }
         var info = "@ViewBag.Info";
         if ($.trim(info).length > 0) {
@@ -599,36 +580,4 @@
             toastr.success(success);
         }
     </script>
-}
-@{var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
-
-@if (sqlDB.InitialCatalog == "ZICO_ERP01")
-{
-    @*<script type='text/javascript'>
-            runScript();
-
-            function runScript() {
-                if (window.$) {
-                    var igv_bo = $("#igv_bo");
-                    igv_bo.val("1");
-                } else {
-                    window.setTimeout(runScript, 50);
-                }
-            }
-        </script>*@
-}
-else
-{
-    @*<script type='text/javascript'>
-            runScript();
-
-            function runScript() {
-                if (window.$) {
-                    var igv_bo = $("#igv_bo");
-                    igv_bo.val("0");
-                } else {
-                    window.setTimeout(runScript, 50);
-                }
-            }
-        </script>*@
 }

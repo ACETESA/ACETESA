@@ -1,80 +1,94 @@
 ﻿@model Acetesa.TomaPedidos.AdminMvc.Models.LugarEntregaNewViewModel
-
-<div id="PopupGrillaLugarEntrega" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Seleccionar Lugar de Entrega</h4>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table id="tblLugarEntrega" class="table table-striped table-bordered display table-hover"></table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="btnNuevoLugarEntrega">Nuevo</button>
-                <button type="button" class="btn btn-default" id="btnCerrarLugarEntrega">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<form id="LugarEntregaForm" novalidate>
-    <div id="PopupNuevoLugarEntrega" class="modal fade" tabindex="-1" role="dialog" style="z-index:1050">
-        <div class="modal-dialog">
+<div class="modal fade" id="PopupGrillaLugarEntrega" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Nuevo Lugar de Entrega</h4>
+                    <h5 id="titleModalListaContacto" class="modal-title">Seleccionar Lugar de Entrega</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                            @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label" })
-                            @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control direccion-lugarentrega", @maxlength = "60" } })
-                            @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-6" style="padding-left: 0px;">
-                            <label class="control-label">Entrega</label>
-                            <label class="checkbox-inline">
-                                <input type="radio" name="EntregaLugarEntrega" id="Entrega1" value="1"> Si
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="radio" name="EntregaLugarEntrega" id="Entrega0" value="0"> No
-                            </label>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">Cobranza</label>
-                            <label class="checkbox-inline">
-                                <input type="radio" name="CobranzaLugarEntrega" id="Cobranza1" value="1"> Si
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="radio" name="CobranzaLugarEntrega" id="Cobranza0" value="0"> No
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="Departamento">Departamento</label>
-                        <select class="form-control departamento-lugarentrega" id="DepartamentoLugarEntrega" name="DepartamentoLugarEntrega"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="Provincia">Provincia</label>
-                        <select class="form-control provincia-lugarentrega" id="ProvinciaLugarEntrega" name="ProvinciaLugarEntrega"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="Distrito">Distrito</label>
-                        <select class="form-control distrito-lugarentrega" id="DistritoLugarEntrega" name="DistritoLugarEntrega"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="Zona">Zona</label>
-                        <select class="form-control zona-lugarentrega" id="ZonaLugarEntrega" name="ZonaLugarEntrega"></select>
+                    <div class="table-responsive">
+                        <table id="tblLugarEntrega" class="table table-striped table-bordered display table-hover"></table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-default" id="btnGrabarLugarEntrega">Grabar</button>
+                    <button type="button" class="btn btn-secondary" id="btnNuevoLugarEntrega">Nuevo</button>
+                    <button id="btnCerrarLugarEntrega" type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+    <form id="LugarEntregaForm" novalidate>
+        <div class="modal fade" id="PopupNuevoLugarEntrega" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 id="titleModalListaContacto" class="modal-title">Seleccionar Lugar de Entrega</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control direccion-lugarentrega", @maxlength = "60" } })
+                                    @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                                </div>
+
+
+                                <div class="col-12 mb-3">
+                                    <div class="form-check  form-check-inline">
+                                        <input class="form-check-input" type="radio" name="EntregaLugarEntrega" id="Entrega1" value="1">
+                                        <label class="form-check-label" for="Entrega1">
+                                            De entrega
+                                        </label>
+                                    </div>
+                                    <div class="form-check  form-check-inline">
+                                        <input class="form-check-input" type="radio" name="EntregaLugarEntrega" id="Entrega0" value="0">
+                                        <label class="form-check-label" for="Entrega0">
+                                            No es de entrega
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <div class="form-check  form-check-inline">
+                                        <input class="form-check-input" type="radio" name="CobranzaLugarEntrega" id="Cobranza1" value="1">
+                                        <label class="form-check-label" for="Cobranza1">
+                                            De cobranza
+                                        </label>
+                                    </div>
+                                    <div class="form-check  form-check-inline">
+                                        <input class="form-check-input" type="radio" name="CobranzaLugarEntrega" id="Cobranza0" value="0">
+                                        <label class="form-check-label" for="Cobranza0">
+                                            No es de cobranza
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12 mb-3">
+                                    <label class="control-label" for="Departamento">Departamento</label>
+                                    <select class="form-select departamento-lugarentrega" id="DepartamentoLugarEntrega" name="DepartamentoLugarEntrega"></select>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="control-label" for="Provincia">Provincia</label>
+                                    <select class="form-select provincia-lugarentrega" id="ProvinciaLugarEntrega" name="ProvinciaLugarEntrega"></select>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="control-label" for="Distrito">Distrito</label>
+                                    <select class="form-select distrito-lugarentrega" id="DistritoLugarEntrega" name="DistritoLugarEntrega"></select>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="control-label" for="Zona">Zona</label>
+                                    <select class="form-select zona-lugarentrega" id="ZonaLugarEntrega" name="ZonaLugarEntrega"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-success" id="btnGrabarLugarEntrega">Grabar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </form>

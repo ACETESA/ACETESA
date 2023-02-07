@@ -2443,6 +2443,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             var ccArtic = model.PedidoDetailViewModel.cc_artic;
             var cc_lista = model.PedidoDetailViewModel.cc_lista;
             model.PedidoDetailViewModel.cc_artic = ccArtic;
+
+
             if (!string.IsNullOrEmpty(ccArtic) && !string.IsNullOrWhiteSpace(ccArtic))
             {
                 var articulo = ArticuloService.GetByCodigo(ccArtic);
@@ -2492,6 +2494,16 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             //var pesoTeorico = model.PedidoDetailViewModel.fq_peso_teorico;
             //model.PedidoDetailViewModel.fq_peso_teorico = pesoTeorico * 1000;
             //
+            //Valida que la cantidad sea mayor a 0
+            if (model.PedidoDetailViewModel.fq_cantidad <= (decimal)0.00)
+            {
+                var messageArticuloExiste = "Debe ingresar una cantidad válida";
+                if (Request.IsAjaxRequest())
+                {
+                    return JsonError(messageArticuloExiste);
+                }
+            }
+
             var tempDetalle = Session[_sessionDetalle];
             if (tempDetalle == null)
             {
@@ -2511,11 +2523,11 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     detalle.cn_item = secuencial;
                 }
                 var detail = detailCast
-                .FirstOrDefault(x => x.cc_artic.Trim() == model.PedidoDetailViewModel.cc_artic);
+                .FirstOrDefault(x => x.cc_artic.Trim() == model.PedidoDetailViewModel.cc_artic.Trim());
 
                 if (detail != null)
                 {
-                    var messageArticuloExiste = "Artículo: '" + model.PedidoDetailViewModel.cd_artic + "' existe.";
+                    var messageArticuloExiste = "Ya ha agregado el artículo: '" + model.PedidoDetailViewModel.cd_artic.Trim().ToUpper();
                     var isAjax = Request.IsAjaxRequest();
                     if (isAjax)
                     {
@@ -2532,6 +2544,11 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var cnItem = ultimoDetalle != null ? ultimoDetalle.cn_item : "0";
                 var nCnItem = Convert.ToInt32(cnItem);
                 model.PedidoDetailViewModel.cn_item = (nCnItem + 1).ToString().PadLeft(2, '0');
+                /*Quitar stock a descripcion Articulo*/
+                var cdArtic = model.PedidoDetailViewModel.cd_artic;
+                int ixFrom = cdArtic.IndexOf("==");
+                int charsQ = cdArtic.Length - ixFrom;
+                model.PedidoDetailViewModel.cd_artic = cdArtic.Remove(ixFrom, charsQ).Trim();
 
                 detailCast.Add(model.PedidoDetailViewModel);
                 Session[_sessionDetalle] = detailCast;

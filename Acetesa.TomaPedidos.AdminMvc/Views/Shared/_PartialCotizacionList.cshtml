@@ -8,157 +8,160 @@
         }
     </style>
     <div class="col-xs-12 col-sm-12">Total: @Model.PagedListListaEntity.Count()</div>
-    <table class="table table-responsive" id="table-cotizaciones">
-        <thead>
-            <tr>
-                <th></th>
-                <th style="text-align: left">Nro. Pedido</th>
-                <th style="text-align: left">Nro. Cotiz.</th>
-                <th style="text-align: left">Cliente</th>
-                <th style="text-align: left">Fecha</th>
-                <th style="text-align: left">Total</th>
-                <th style="text-align: left">Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.PagedListListaEntity)
-            {
-                var estado = item.cb_estado;
-                var estadoEmitido = EstadoCotizacionTypes.Por_Enviar.ToString().ToUpper();
-                var estadoEnviado = EstadoCotizacionTypes.Pendiente_Respuesta.ToString().ToUpper();
-                var estadoRechazado = EstadoCotizacionTypes.Rechazado.ToString().ToUpper();
-                var estadoCompraParcial = EstadoCotizacionTypes.Compra_Parcial.ToString().ToUpper();
-                var estadoCompraTotalCerrada = EstadoCotizacionTypes.Compra_Total_Cerrada.ToString().ToUpper();
-                var estadoAnulado = EstadoCotizacionTypes.Anulado.ToString().ToUpper();
-                var estadoCompraParcialCerrada = EstadoCotizacionTypes.Compra_Parcial_Cerrada.ToString().ToUpper();
-                var classEstado = "badge bg-light text-dark";
-                var esGenerable = false;
-                var esCompraParcial = false;
-                var esAnulable = false;
-                var esRechazable = false;
-                string cnCotizacionEliminar = "C" + item.cn_proforma.ToString();
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-hover table-bordered" id="table-cotizaciones">
+            <thead class="table-secondary">
+                <tr>
+                    <th></th>
+                    <th class="text-center">N° Pedido</th>
+                    <th class="text-center">N° Cotización</th>
+                    <th class="text-center">Cliente</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PagedListListaEntity)
+                {
+                    var estado = item.cb_estado;
+                    var estadoEmitido = EstadoCotizacionTypes.Por_Enviar.ToString().ToUpper();
+                    var estadoEnviado = EstadoCotizacionTypes.Pendiente_Respuesta.ToString().ToUpper();
+                    var estadoRechazado = EstadoCotizacionTypes.Rechazado.ToString().ToUpper();
+                    var estadoCompraParcial = EstadoCotizacionTypes.Compra_Parcial.ToString().ToUpper();
+                    var estadoCompraTotalCerrada = EstadoCotizacionTypes.Compra_Total_Cerrada.ToString().ToUpper();
+                    var estadoAnulado = EstadoCotizacionTypes.Anulado.ToString().ToUpper();
+                    var estadoCompraParcialCerrada = EstadoCotizacionTypes.Compra_Parcial_Cerrada.ToString().ToUpper();
+                    var classEstado = "badge bg-light text-dark";
+                    var esGenerable = false;
+                    var esCompraParcial = false;
+                    var esAnulable = false;
+                    var esRechazable = false;
+                    string cnCotizacionEliminar = "C" + item.cn_proforma.ToString();
 
-                if (estado == estadoEnviado)
-                {
-                    classEstado = "badge bg-warning text-dark";
-                    esGenerable = true;
-                }
-                if (estado == estadoRechazado)
-                {
-                    classEstado = "badge bg-danger";
-                }
-                if (estado == estadoCompraTotalCerrada)
-                {
-                    classEstado = "badge bg-success";
-                }
-                if (estado == estadoCompraParcial)
-                {
-                    classEstado = "badge bg-secondary";
-                    esGenerable = true;
-                    esCompraParcial = true;
-                }
-                if (estado == estadoCompraParcialCerrada)
-                {
-                    classEstado = "badge bg-success";
-                }
-                if (estado == estadoAnulado)
-                {
-                    classEstado = "badge bg-danger";
-                }
-                if (estado == estadoEmitido || estado == estadoEnviado)
-                {
-                    esAnulable = true;
-                }
-                if (estado == estadoEnviado)
-                {
-                    esRechazable = true;
-                }
+                    if (estado == estadoEnviado)
+                    {
+                        classEstado = "badge bg-warning text-dark";
+                        esGenerable = true;
+                    }
+                    if (estado == estadoRechazado)
+                    {
+                        classEstado = "badge bg-danger";
+                    }
+                    if (estado == estadoCompraTotalCerrada)
+                    {
+                        classEstado = "badge bg-success";
+                    }
+                    if (estado == estadoCompraParcial)
+                    {
+                        classEstado = "badge bg-secondary";
+                        esGenerable = true;
+                        esCompraParcial = true;
+                    }
+                    if (estado == estadoCompraParcialCerrada)
+                    {
+                        classEstado = "badge bg-success";
+                    }
+                    if (estado == estadoAnulado)
+                    {
+                        classEstado = "badge bg-danger";
+                    }
+                    if (estado == estadoEmitido || estado == estadoEnviado)
+                    {
+                        esAnulable = true;
+                    }
+                    if (estado == estadoEnviado)
+                    {
+                        esRechazable = true;
+                    }
 
-                var dfEmision = item.df_emision.ToShortDateString();
-                <tr role="alert">
-                    <td>
-                        @Html.ActionLink(" ", "Descargar", new { cn_cotizacion = item.cn_proforma }, new { @class = "btn btn-outline-secondary btn-sm fa fa-download", @title = "Descargar" })
-                        @Html.ActionLink(" ", "Editar", new { id = item.cn_proforma }, new { @class = "btn btn-success btn-sm fa fa-pencil-square-o", @title = "Editar" })
-                        @if (esAnulable)
-                        {
-                            @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
-                       {
-                           Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
-                           HttpMethod = "POST",
-                           OnBegin = "OnBeginAnular",
-                           OnComplete = "OnCompleteAnular",
-                           OnSuccess = "OnSuccessAnular",
-                           OnFailure = "OnFailureAnular",
-                           Confirm = "¿Está seguro de anular la cotización seleccionada?"
-
-                       }, new { @class = "btn btn-outline-danger btn-sm fa fa-minus-square-o", @title = "Anular", @id = "btnAnular" + item.cn_proforma })
-                        }
-                        else//Restablecer
-                        {
-                            if (estado == estadoAnulado || estado == estadoRechazado)
+                    var dfEmision = item.df_emision.ToShortDateString();
+                    <tr role="alert">
+                        <td>
+                            @Html.ActionLink(" ", "Descargar", new { cn_cotizacion = item.cn_proforma }, new { @class = "btn btn-outline-secondary btn-sm fa fa-download", @title = "Descargar" })
+                            @Html.ActionLink(" ", "Editar", new { id = item.cn_proforma }, new { @class = "btn btn-success btn-sm fa fa-pencil-square-o", @title = "Editar" })
+                            @if (esAnulable)
                             {
                                 @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
-                                                         {
-                                                             Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
-                                                             HttpMethod = "POST",
-                                                             OnBegin = "OnBeginAnular",
-                                                             OnComplete = "OnCompleteAnular",
-                                                             OnSuccess = "OnSuccessAnular",
-                                                             OnFailure = "OnFailureAnular"
-                                                         }, new { @class = "btn btn-outline-primary btn-sm fa fa-plus-square-o", @title = "Restablecer", @id = "btnAnular" + item.cn_proforma })
+                           {
+                               Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
+                               HttpMethod = "POST",
+                               OnBegin = "OnBeginAnular",
+                               OnComplete = "OnCompleteAnular",
+                               OnSuccess = "OnSuccessAnular",
+                               OnFailure = "OnFailureAnular",
+                               Confirm = "¿Está seguro de anular la cotización seleccionada?"
+
+                           }, new { @class = "btn btn-outline-danger btn-sm fa fa-minus-square-o", @title = "Anular", @id = "btnAnular" + item.cn_proforma })
                             }
-                        }
-                        @if (esRechazable)
-                        {
+                            else//Restablecer
+                            {
+                                if (estado == estadoAnulado || estado == estadoRechazado)
+                                {
+                                    @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
+                                                             {
+                                                                 Url = Url.Action("Anulado", "Cotizacion", new { id = item.cn_proforma }),
+                                                                 HttpMethod = "POST",
+                                                                 OnBegin = "OnBeginAnular",
+                                                                 OnComplete = "OnCompleteAnular",
+                                                                 OnSuccess = "OnSuccessAnular",
+                                                                 OnFailure = "OnFailureAnular"
+                                                             }, new { @class = "btn btn-outline-primary btn-sm fa fa-plus-square-o", @title = "Restablecer", @id = "btnAnular" + item.cn_proforma })
+                                }
+                            }
+                            @if (esRechazable)
+                            {
 
-                            <button class="btn btn-danger btn-sm fa fa-times" data-bs-toggle="modal" data-bs-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',0);"></button>
-                        }
+                                <button class="btn btn-danger btn-sm fa fa-times" data-bs-toggle="modal" data-bs-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',0);"></button>
+                            }
 
-                        @if (esCompraParcial)
-                        {
-                            <button type="button" class="btn btn-warning btn-sm fa fa-check-square-o" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',1);"></button>
-                        }
-                    </td>
-                    <td style="text-align: left; word-wrap:break-word; max-width:100px; width:100px;">
-                        @if (esGenerable)
-                        {
-                            @*@Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });*@
-                            string IDbtn = "btnGenerar" + item.cn_proforma;
-                            <button class="btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido" disabled> </button>
-                        }
-                        else
-                        {
-                            <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
-                        }
+                            @if (esCompraParcial)
+                            {
+                                <button type="button" class="btn btn-warning btn-sm fa fa-check-square-o" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',1);"></button>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (esGenerable)
+                            {
+                                @*@Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });*@
+                                string IDbtn = "btnGenerar" + item.cn_proforma;
+                                <button class="btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido" disabled> </button>
+                            }
+                            else
+                            {
+                                <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
+                            }
 
-                        @if (esCompraParcial)
-                        {
+                            @if (esCompraParcial)
+                            {
 
-                            <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
+                                <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.cn_proforma)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.cd_razsoc)
+                        </td>
+                        @{
+                            var estadoFormato = item.cb_estado.Replace("_", " ");
                         }
-                    </td>
-                    <td style="text-align: left;">
-                        @Html.DisplayFor(modelItem => item.cn_proforma)
-                    </td>
-                    <td style="text-align: left;">
-                        @Html.DisplayFor(modelItem => item.cd_razsoc)
-                    </td>
-                    @{
-                        var estadoFormato = item.cb_estado.Replace("_", " ");
-                    }
-                    <td style="text-align: left;">@Html.DisplayFor(modelItem => dfEmision)</td>
-                    <td style="text-align: right;">
-                        @Html.DisplayFor(modelItem => item.fm_totvta)
-                    </td>
-                    <td style="text-align: left;">
-                        <small class="@classEstado">
-                            @Html.DisplayFor(modelItem => estadoFormato)
-                        </small>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        <td class="text-center">@Html.DisplayFor(modelItem => dfEmision)</td>
+                        <td style="text-align: right;">
+                            @Html.DisplayFor(modelItem => item.fm_totvta)
+                        </td>
+                        <td class="text-center">
+                            <small class="@classEstado">
+                                @Html.DisplayFor(modelItem => estadoFormato)
+                            </small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
     Html.RenderPartial("_PartialCotizacionListPag", Model.PagedListListaEntity);
 }
 <script>

@@ -25,7 +25,7 @@
                         <th scope="col" class="table-dark">Descripción</th>
                         <th scope="col" class="table-dark">U.M.</th>
                         <th scope="col" class="table-dark">Mon</th>
-                        <th scope="col" class="table-dark">Peso U</th>
+                        <th scope="col" class="table-dark">Peso.U</th>
                         <th scope="col" class="table-dark">UNxTN</th>
                         <th scope="col" class="table-dark">TN</th>
                         <th scope="col" class="table-dark">Unidad</th>
@@ -96,7 +96,11 @@
                 failMessageHtml: "There was a problem generating your report, please try again."
             });
         }
-        $('#table-precios').DataTable();
+
+        $('#table-precios').DataTable({
+            "pageLength": 50
+        });
+
     </script>
 }
 <style type="text/css">

@@ -58,7 +58,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Models
         [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
-        [Display(Name = "Recordar cuenta?")]
+        [Display(Name = "Recuerdame")]
         public bool RememberMe { get; set; }
     }
 

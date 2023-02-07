@@ -197,8 +197,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             IEnumerable<PrecioModel> result;
             try
             {
+                var StrFamilias = string.Join(",", model.Familia);
                 //result = ProductoService.GetPreciosProductosSp(model.ListaPrecios, model.Familia, model.SubFamilia, model.Stocks);
-                result = ProductoService.ListarPreciosArticulosPorGrupoEmpresa(model.ListaPrecios, model.Familia,model.SubFamilia, model.Stocks,"acetesa");
+                result = ProductoService.ListarPreciosArticulosPorGrupoEmpresa(model.ListaPrecios, StrFamilias, model.SubFamilia, model.Stocks,"acetesa");
             }
             catch (Exception ex)
             {
@@ -252,8 +253,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             IEnumerable<PrecioModel> result;
             try
             {
+                var StrFamilias = string.Join(",", model.Familia);
                 //result = ProductoService.GetPreciosProductosSp(model.ListaPrecios, model.Familia, model.SubFamilia, model.Stocks);
-                result = ProductoService.ListarPreciosArticulosPorGrupoEmpresa(model.ListaPrecios, model.Familia, model.SubFamilia, model.Stocks, "galpesa");
+                result = ProductoService.ListarPreciosArticulosPorGrupoEmpresa(model.ListaPrecios, StrFamilias, model.SubFamilia, model.Stocks, "galpesa");
             }
             catch (Exception ex)
             {
@@ -329,7 +331,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             {
                 empresa = "2";
             }
-            var result = ProductoService.GetStockPorGrupoProductoSp(empresa, model.Tienda, model.Familia, model.SubGrupo, model.Tipo, fecha).ToList();
+            var StrFamilias = string.Join(",", model.Familia);
+            var result = ProductoService.GetStockPorGrupoProductoSp(empresa, model.Tienda, StrFamilias, model.SubGrupo, model.Tipo, fecha).ToList();
 
             byte[] fileBytes = GeneraExcel(result);
 
@@ -468,8 +471,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         [HttpPost]
         public FileContentResult descargarExcelPrecio(PrecioViewModel model, string empresa)
         {
+            var StrFamilias = string.Join(",", model.Familia);
             //var result = ProductoService.GetPreciosProductosSp(model.ListaPrecios, model.Familia, model.SubFamilia, model.Stocks).ToList();
-            var result = ProductoService.ListarPreciosArticulosPorGrupoEmpresa(model.ListaPrecios, model.Familia, model.SubFamilia, model.Stocks, empresa);
+            var result = ProductoService.ListarPreciosArticulosPorGrupoEmpresa(model.ListaPrecios, StrFamilias, model.SubFamilia, model.Stocks, empresa);
             byte[] fileBytes = GeneraExcelPrecio(result);
             string fecha = DateTime.UtcNow.ToString("ddMMMyyyy");
 
@@ -666,8 +670,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 //{
                 //    empresa = "2";
                 //}
+                var StrFamilias = string.Join(",", model.Familia);
                 empresa = "1"; // Acetesa
-                result = ProductoService.GetStockPorGrupoProductoSp(empresa, model.Tienda, model.Familia, model.SubGrupo, model.Tipo, fecha);
+                result = ProductoService.GetStockPorGrupoProductoSp(empresa, model.Tienda, StrFamilias, model.SubGrupo, model.Tipo, fecha);
             }
             catch (Exception ex)
             {
@@ -730,8 +735,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 //{
                 //    empresa = "2";
                 //}
+                var StrFamilias = string.Join(",", model.Familia);
                 empresa = "2"; //galpesa
-                result = ProductoService.GetStockPorGrupoProductoSp(empresa, model.Tienda, model.Familia, model.SubGrupo, model.Tipo, fecha);
+                result = ProductoService.GetStockPorGrupoProductoSp(empresa, model.Tienda, StrFamilias, model.SubGrupo, model.Tipo, fecha);
             }
             catch (Exception ex)
             {

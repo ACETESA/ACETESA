@@ -71,6 +71,10 @@
                                             @Html.Captcha(4, "_DefaultCaptchaView")
                                         </div>
                                     </div>
+                                    <div class="form-group mb-3">
+                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                        @Html.LabelFor(m => m.RememberMe, new { @style = "padding-left:0;" })
+                                    </div>
                                     <input type="submit" value="Acceder" class="btn btn-success w-100" />
                                     <hr />
 

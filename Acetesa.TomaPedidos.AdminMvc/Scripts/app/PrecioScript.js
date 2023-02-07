@@ -13,17 +13,23 @@ function OnFailure(data) {
     }
 }
 function OnComplete() {
+    unBlockScreen();
+}
+
+function OnSuccess() {
     //scrollToScreen("#tableSector", 1000);
-    $([document.documentElement, document.body]).animate({
+
+    if ($('#tableSector').length)
+    {
+        $([document.documentElement, document.body]).animate({
         scrollTop: $("#tableSector").offset().top
-    }, 2000);
+        }, 2000);
+    }
 
     ListaPreciosAux = $("#ListaPrecios").val();
     FamiliaAux = $("#Familia").val();
     SubFamiliaAux = $("#SubFamilia").val();
     StocksAux = $("#Stocks").val();
-
-    unBlockScreen();
 }
 
 //(function ($) {

@@ -740,19 +740,9 @@ $(document).ready(function () {
 var datosEdicion = null;
 
 function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, precioTM, pesoUnit, precioLista, precioLista2, precioFinal) {
-
-    //var request2 = new Ajax("");
-    //var params2 = {
-    //    idArticulo: idArticulo
-    //};
-
     gs_editando = 1;
 
-    ////Recupera stock del material seleccionado
-    //request2.JsonPost(urlStockSegunArticulo, params2, function (result) {
-    //    gl_stock = result[0].stock;
-    //});
-
+    precioFinal = precioFinal.replace(",", "");
     cantidad = cantidad.replace(",", "");
     var request = new Ajax("");
     var params = {
@@ -763,16 +753,70 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
             idGrupo: result[0].idGrupo,
             idSubgrupo: result[0].idSubgrupo
         };
+
+        //Selecciona el Grupo
         var idGrupo = result[0].idGrupo;
         $("#btnEliminarFila" + idArticulo).trigger("click");
         $("#PedidoDetailViewModel_cc_grupo").val(idGrupo);
-        $("#PedidoDetailViewModel_cc_grupo").trigger("change");
+        //Carga el Subgrupo
+        $("#PedidoDetailViewModel_cc_subgrupo").html("");
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlGetSubGrupos,
+            data: JSON.stringify({
+                codGrupo: $("#PedidoDetailViewModel_cc_grupo").val(),
+            }),
+            dataType: "json",
+            success: function (resultSG) {
+                $SubGrupo = $("#PedidoDetailViewModel_cc_subgrupo")
+                $.each(resultSG, function (index, item) {
+                    var html = "<option value='" + item.Value + "'>";
+                    html += item.Text;
+                    html += "</option>";
+                    $SubGrupo.append(html);
+                });
+                if (datosEdicion != null) {
+                    $SubGrupo.val(datosEdicion.idSubgrupo);
+                }
+                //Selecciona el Subgrupo
+                var idSubgrupo = result[0].idSubgrupo;
+                $("#PedidoDetailViewModel_cc_subgrupo").val(idSubgrupo);
+                //Carga el Articulo
+                $("#PedidoDetailViewModel_cc_artic").html("");
+                $.ajax({
+                    destroy: true,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: urlGetArticulosByGrupoParam,
+                    data: JSON.stringify({
+                        grupo: $("#PedidoDetailViewModel_cc_grupo").val(),
+                        subGrupo: $("#PedidoDetailViewModel_cc_subgrupo").val(),
+                        param: '',
+                        cc_tienda: $("#Tienda").val()
+                    }),
+                    dataType: "json",
+                    success: function (resultArt) {
+                        $.each(resultArt.data, function (i, item) {
+                            sCcArtic.append("<option value='" + item.value + "'>" + item.text + "</option>");
+                        });
+                        $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
+                        //Selecciona el articulo
+                        $('.selectpicker').selectpicker('val', [idArticulo]);
+                        $('.selectpicker').selectpicker('refresh');
+                    },
+                    error: function (resultArt) {
+                        alert("Error en javascript...");
+                    }
+                });
 
-        //Asignamos el articulo
-        var $ccAnalisNew = $("#PedidoDetailViewModel_cc_artic");
-        var option = "<option value='" + idArticulo + "' selected>" + descArticulo.trim() + "</option>";
-        $ccAnalisNew.html(option);
-        $ccAnalisNew.combobox("setValue", idArticulo);
+            },
+            error: function (resultSG) {
+                alert("Error en javascript...");
+            }
+        });
+
 
         //Cargar resto de elementos
         $("#PedidoDetailViewModel_fq_cantidad").val(cantidad);
@@ -781,13 +825,15 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
         $("#PedidoDetailViewModel_fm_precio").val(precioLista);
         $("#PedidoDetailViewModel_fm_precio2").val(precioLista2);
         $("#PedidoDetailViewModel_fm_precio_fin").val(precioFinal);
-        datosEdicion = null;
-
-        //Este codigo se carga al momento de llamar a editar
-        gl_IdArtic = idArticulo;
-
+        //datosEdicion = null;
     });
+
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $("#AgregarArticulos").offset().top
+    }, 2000);
 }
+
+
 $("#PedidoDetailViewModel_fm_precio_tonelada")
     .focusout(function () {
         calcularPrecioFinalPrecioTM(0);
@@ -800,4 +846,13 @@ $("#PedidoDetailViewModel_fm_precio_fin")
 
 
 
+function disableSelect() {
+    $('.selectpicker').prop('disabled', true);
+    $('.selectpicker').selectpicker('refresh');
+}
+
+function enableSelect() {
+    $('.selectpicker').prop('disabled', false);
+    $('.selectpicker').selectpicker('refresh');
+}
 

@@ -1029,7 +1029,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 .Select(x => new SelectListItem
                 {
                     Text = x.cd_artic,
-                    Value = x.cc_artic
+                    Value = x.cc_artic.Trim()
                 });
                 lista = new SelectList(lista, "Value", "Text");
                 return JsonSuccess(new { estado = 1, data = lista });
@@ -1601,7 +1601,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     Session[_sessionIgv_bo] = model.igv_bo;
                     Session[_sessionZonaLiberada] = model.zonaLiberada_bo;
                 }
-                var ccArtic = model.CotizacionDetailViewModel.cc_artic;
+                var ccArtic = model.CotizacionDetailViewModel.cc_artic.Trim();
                 var cc_lista = model.CotizacionDetailViewModel.cc_lista;
                 model.CotizacionDetailViewModel.cc_artic = ccArtic;
                 if (!string.IsNullOrEmpty(ccArtic) && !string.IsNullOrWhiteSpace(ccArtic))
@@ -1653,6 +1653,17 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 //var pesoTeorico = model.CotizacionDetailViewModel.fq_peso_teorico;
                 //model.CotizacionDetailViewModel.fq_peso_teorico = pesoTeorico * 1000;
                 //
+
+                //Valida que la cantidad sea mayor a 0
+                if (model.CotizacionDetailViewModel.fq_cantidad <= (decimal)0.00)
+                {
+                    var messageArticuloExiste = "Debe ingresar una cantidad válida";
+                    if (Request.IsAjaxRequest())
+                    {
+                        return JsonError(messageArticuloExiste);
+                    }
+                }
+
                 var tempDetalle = Session[_sessionDetalle];
                 if (tempDetalle == null)
                 {
@@ -1671,19 +1682,18 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         var secuencial = i.ToString("00");
                         detalle.cn_item = secuencial;
                     }
+                    //Valida si el articulo ya ha sido agregado
                     var detail = detailCotizacionCast
-                        .FirstOrDefault(x => x.cc_artic.Trim() == model.CotizacionDetailViewModel.cc_artic);
+                        .FirstOrDefault(x => x.cc_artic.Trim() == model.CotizacionDetailViewModel.cc_artic.Trim());
                     if (detail != null)
                     {
-                        var messageArticuloExiste = "Artículo: '" + model.CotizacionDetailViewModel.cd_artic + "' existe....";
+                        var messageArticuloExiste = "Ya ha agregado el artículo: '" + model.CotizacionDetailViewModel.cd_artic.Trim().ToUpper();
                         if (Request.IsAjaxRequest())
                         {
                             return JsonError(messageArticuloExiste);
                         }
-                        //ModelState.AddModelError(string.Empty, messageArticuloExiste);
-                        //return View();
-
                     }
+
                     var ultimoDetalle = detailCotizacionCast.LastOrDefault();
                     var cnItem = ultimoDetalle != null ? ultimoDetalle.cn_item : "0";
                     var nCnItem = Convert.ToInt32(cnItem);

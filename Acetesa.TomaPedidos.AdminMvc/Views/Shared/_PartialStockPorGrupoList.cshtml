@@ -2,10 +2,10 @@
 @model Acetesa.TomaPedidos.AdminMvc.Models.StockPorGrupoViewModel
 @if (Model != null && Model.StockPorGrupoModels != null && Model.StockPorGrupoModels.Any())
 {
-    <div class="well">
-        <a href="javascript:void(0);" class="btn btn-primary act-button-expand">+ Expandir</a>
-        <a href="javascript:void(0);" class="btn btn-primary act-button-collapse">- Contraer</a>
-        <a href="javascript:ExportarExcelStock('collaptable')" class="btn btn-primary">Exportar</a>
+    <div class="well mb-3">
+        <a href="javascript:void(0);" class="btn btn-warning act-button-expand">+ Expandir</a>
+        <a href="javascript:void(0);" class="btn btn-warning act-button-collapse">- Contraer</a>
+        <a href="javascript:ExportarExcelStock('collaptable')" class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</a>
     </div>
     <div class="fixedHeaderTable">
         <table id="collaptable" class="table table-bordered table-hover fixed">

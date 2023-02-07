@@ -637,7 +637,6 @@ namespace Acetesa.TomaPedidos.Repository
                 {
                     ParameterName = "@cc_gruartec_p",
                     SqlDbType = SqlDbType.VarChar,
-                    Size = 2,
                     Value = codFamilia
                 },
                          new SqlParameter
@@ -673,8 +672,16 @@ namespace Acetesa.TomaPedidos.Repository
                     Value = "N"
                 }
             };
-            var query = _dbContext.GetExecSpEnumerable<StockPorGrupoModel>("usp_web_stock_por_grupo", parameters: sqlParams2);
-            return query;
+            if (sEmpresa == "1") /*Acetesa*/
+            {
+                var query = _dbContext.GetExecSpEnumerable<StockPorGrupoModel>("ZICO_ERP01.DBO.usp_web_stock_por_grupo", parameters: sqlParams2);
+                return query;
+            }
+            else
+            {
+                var query = _dbContext.GetExecSpEnumerable<StockPorGrupoModel>("ZICO_ERP04.DBO.usp_web_stock_por_grupo", parameters: sqlParams2);
+                return query;
+            }
         }
     }
 }

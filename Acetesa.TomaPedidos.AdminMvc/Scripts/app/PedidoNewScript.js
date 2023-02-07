@@ -1,12 +1,4 @@
-﻿/// <reference path="../jquery-ui-1.11.4.js" />
-/// <reference path="GlobalScript.js" />
-/// <reference path="../lib/Ajax.js" />
-/// <reference path="../jquery-2.1.3.intellisense.js" />
-/// <reference path="../toastr.js" />
-/// <reference path="../jquery-2.1.3.js" />
-/// <reference path="../jquery.validate-vsdoc.js" />
-
-var _sessionType = "Nuevo";
+﻿var _sessionType = "Nuevo";
 var params;
 var url;
 var request;
@@ -32,31 +24,42 @@ function OnSuccess(data) {
     if ($.trim(data).length === 0) {
     } else {
         AddParameterEliminarFila();
-        $("#txtArticulo").val("");
-        $("#PedidoDetailViewModel_fq_cantidad").val("");
-        $("#PedidoDetailViewModel_fm_precio").val("");
-        $("#PedidoDetailViewModel_fm_precio2").val("");
-        $("#PedidoDetailViewModel_fm_precio_fin").val("");
-        $("#PedidoDetailViewModel_fm_precio_tonelada").val("");
-        $("#PedidoDetailViewModel_fq_peso_teorico").val("");
-        scrollToScreen("#articulo", 1000);
+        limpiarCamposArticulo();
     }
     //Bloqueamos cada que se añade detalle
     $("#Tienda option:not(:selected)").prop("disabled", true);
     $("#igv_bo option:not(:selected)").prop("disabled", true);
     $("#cc_moneda option:not(:selected)").prop("disabled", true);
+
+    if ($EsProforma.val().toLowerCase() === "true") {
+        disableSelect();
+    }
 }
 function OnComplete() {
     unBlockScreen();
 }
 function OnFailure(data) {
-    var errorMessages = $.parseJSON(data.responseText);
+    var errorMessages = JSON.parse(JSON.stringify(data.responseText));
+    //var errorMessages = $.parseJSON(data.responseText);
     if (errorMessages.errorMessage) {
         var errors = errorMessages.errorMessage;
         toastr.error(errors);
     } else {
         toastr.error(errorMessages);
     }
+}
+
+function limpiarCamposArticulo() {
+    $('#PedidoDetailViewModel_cc_grupo').prop('selectedIndex', 0);
+    $('#PedidoDetailViewModel_cc_subgrupo').prop('selectedIndex', 0);
+    UnselectArticles();
+    LlenarArticulosSelect();
+    $("#PedidoDetailViewModel_fq_cantidad").val("");
+    $("#PedidoDetailViewModel_fm_precio").val("");
+    $("#PedidoDetailViewModel_fm_precio2").val("");
+    $("#PedidoDetailViewModel_fm_precio_fin").val("");
+    $("#PedidoDetailViewModel_fm_precio_tonelada").val("");
+    $("#PedidoDetailViewModel_fq_peso_teorico").val("");
 }
 
 (function ($, toastr) {
@@ -430,7 +433,7 @@ function OnFailure(data) {
     $fechaEntrega.datepicker({ dateFormat: "dd/mm/yy" });
     $fechaEntrega.mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
 
-    var callbackPrecioLista = function (ccArtic) {
+    function CargarPrecioLista(ccArtic) {
         //Obtenemos la lista seleccionada
         var cc_tienda = $('#Tienda option:selected').val();
         var igv_bo = $('#igv_bo option:selected').val();
@@ -465,17 +468,17 @@ function OnFailure(data) {
                 var mensaje = result.mensaje;
                 if (id == 0) {
                     toastr.warning(mensaje);
-                    $("#txtArticulo").val("");
+                    UnselectArticles();
                 } else {
                     var $moneda = $("#cc_moneda");
                     var $tienda = $("#Tienda");
                     if ($.trim($tienda.val()).length === 0) {
                             toastr.warning("Para mostrar Precio de Lista, debe seleccionar la Tienda.");
-                            $("#txtArticulo").val("");
+                            UnselectArticles();
                         } else if ($.trim($moneda.val()).length === 0) {
                             toastr.warning("Para mostrar Precio de Lista, debe seleccionar la Moneda.");
-                            $("#txtArticulo").val("");
-                        } else {
+                            UnselectArticles();
+                    } else {
                             try {
                                 var request = new Ajax();
                                 var url = _baseUrl + "Pedido/GetPrecioLista";
@@ -521,100 +524,46 @@ function OnFailure(data) {
                 alert("Error en javascript...");
             }
         });
-    };
+    }
 
     var $Grupo = $("#PedidoDetailViewModel_cc_grupo");
     var $SubGrupo = $("#PedidoDetailViewModel_cc_subgrupo");
     $Grupo.change(function () {
-        request = new Ajax("");
-        params = {
-            codGrupo: $(this).val()
-        };
         $SubGrupo.html("");
-        request.JsonPost(_baseUrl + "Pedido/GetSubGrupos", params, function (data) {
-            $.each(data, function (index, item) {
-                var html = "<option value='" + item.Value + "'>";
-                html += item.Text;
-                html += "</option>";
-                $SubGrupo.append(html);
-            });
-            if (datosEdicion != null) {
-                $SubGrupo.val(datosEdicion.idSubgrupo);
-            }
-        }, true, false);//Pantalla bloqueada , asincrono
-    });
-
-    var $Articulo = $("#PedidoDetailViewModel_cc_artic");
-    var $msgeArticulo = $("#msgeArticulo");
-
-    $Articulo.combobox({
-        id: "txtArticulo",
-        messageRequired: "Debe seleccionar un Artículo.",
-        objMessage: $msgeArticulo,
-        objCallback: callbackPrecioLista
-    });
-    var $txtArticulo = $("#txtArticulo");
-    $txtArticulo.click(function () {
-        var input = this;
-        input.focus();
-        input.setSelectionRange(0, 999);
-    });
-
-    $txtArticulo.on("keydown keypress", function (e) {
-        var keyCode = e.keyCode || e.which;
-
-        if ((keyCode === 9 || keyCode === 13) && ($Articulo.val() == null || $Articulo.val() =="")) {
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            var grupo = $("#PedidoDetailViewModel_cc_grupo").val();
-            var subGrupo = $("#PedidoDetailViewModel_cc_subgrupo").val();
-            var cc_tienda = $("#Tienda").val();
-
-            var $component = $(this);
-            var criterio = $component.val();
-            var longitud = $.trim($component.val()).length;
-
-
-            if (longitud === 0) {
-                return;
-            }
-
-            try {
-                var request = new Ajax(_baseUrl);
-                var url = "pedido/GetArticulosByGrupoParam";
-                var params = {
-                    grupo: grupo,
-                    subGrupo: subGrupo,
-                    param: criterio,
-                    cc_tienda: cc_tienda
-                };
-                request.JsonPost(url, params, function (response) {
-                    if (response.estado && response.estado === 1) {
-                        $Articulo.children().remove();
-                        $.each(response.data, function (i, state) {
-                            $("<option>", {
-                                value: $.trim(state.value)
-                            }).html($.trim(state.text)).appendTo($Articulo);
-                        });
-                        $Articulo.combobox();
-
-
-
-
-
-                        var event = jQuery.Event("keypress");
-                        event.which = 40;
-                        event.keyCode = 40; //keycode to trigger this for simulating arrow bottom
-                        $component.trigger(event);
-                    }
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlGetSubGrupos,
+            data: JSON.stringify({
+                codGrupo: $(this).val(),
+            }),
+            dataType: "json",
+            success: function (result) {
+                $.each(result, function (index, item) {
+                    var html = "<option value='" + item.Value + "'>";
+                    html += item.Text;
+                    html += "</option>";
+                    $SubGrupo.append(html);
                 });
-            } catch (ex) {
-                toastr.error(ex);
+                if (datosEdicion != null) {
+                    $SubGrupo.val(datosEdicion.idSubgrupo);
+                }
+
+                if (result.length == 1) {
+                    $("#PedidoDetailViewModel_cc_subgrupo").val("Ninguno");
+                }
+
+                LlenarArticulosSelect();
+            },
+            error: function (result) {
+                alert("Error en javascript...");
             }
-        }
+        });
     });
+
+    //var $Articulo = $("#PedidoDetailViewModel_cc_artic");
+    var $msgeArticulo = $("#msgeArticulo");
 
     //Ajax para validar el stock de articulo disponible
     function ValidaStockArticuloPedido() {
@@ -680,6 +629,9 @@ function OnFailure(data) {
     //Evento clic del boton añadir detalle
     var $btnAdd = $("#btnAdd");
     $btnAdd.on("click", async function (e) {
+        if ($EsProforma.val().toLowerCase() === "true") {
+            enableSelect();
+        }
         var bValidRazonSocial = false;
         var bValidArticulo = false;
         var bValidCantidad = false;
@@ -687,13 +639,11 @@ function OnFailure(data) {
 
         var $cdRazsoc = $("#cd_razsoc");
         var $cdArtic = $("#PedidoDetailViewModel_cd_artic");
-        var $txtArticulo = $("#txtArticulo");
+        $cdRazsoc.val($txtRazonSocial.val());
+        $cdArtic.val($('#PedidoDetailViewModel_cc_artic option:selected').text());
 
         var cantidadArtic = parseFloat($cantidad.val());
         cantidadArtic = cantidadArtic.toFixed(2);
-
-        $cdRazsoc.val($txtRazonSocial.val());
-        $cdArtic.val($txtArticulo.val());
 
         $("#pedidoForm").valid();
 
@@ -705,19 +655,29 @@ function OnFailure(data) {
             $msgeCliente.hide();
         }
 
-        if ($.trim($txtArticulo.val()).length === 0) {
-            $msgeArticulo.text("Debe seleccionar un artículo.");
-            $msgeArticulo.show();
-        } else {
-            bValidArticulo = true;
-            $msgeArticulo.hide();
-        }
-
         if (cantidadArtic == 0.00) {
             toastr.error("La cantidad del artículo debe ser mayor a 0");
         } else {
             bValidCantidad = true;
         }
+
+        //Valida si articulo esta seleccionado
+        var selected = 0;
+        $('#PedidoDetailViewModel_cc_artic option').each(function () {
+            if (this.selected) {
+                selected = 1;
+            }
+        });
+
+        if (selected == 1) {
+            bValidArticulo = true;
+            $msgeArticulo.hide();
+        }
+        else {
+            $msgeArticulo.text("Debe seleccionar un Artículo.");
+            $msgeArticulo.show();
+        }
+
 
         if (!bValidRazonSocial || !bValidArticulo || !bValidCantidad) {
             e.preventDefault();
@@ -803,9 +763,9 @@ function OnFailure(data) {
         if ($.trim($txtRazonSocial.val()).length === 0) {
             $Cliente.val("");
         }
-        if ($.trim($txtArticulo.val()).length === 0) {
-            $Articulo.val("");
-        }
+
+        UnselectArticles();
+
         $sCcAnalis.val($("#cc_analis").val());
         $sCcMoneda.val($("#cc_moneda").val());
         $sCcVta.val($("#cc_vta").val());
@@ -823,8 +783,6 @@ function OnFailure(data) {
         $sVt_observacion.val($("#Vt_observacion").val());
         $sCn_ocompra.val($("#cn_ocompra").val().trim());
         $sCbRecojo.val($("#cb_recojo").val());
-
-        //return Validaciones();
 
         if (!Validaciones()) {
             e.preventDefault();
@@ -886,10 +844,10 @@ function OnFailure(data) {
 
     
     $btnSaveAndSend.on("click", function (e) {
-        var table = document.getElementById("table-detail-cotizaciones");
+        var table = document.getElementById("table-detail-pedidos");
         var r = 1; //start counting rows in table
         var filasNoInvolucradas = 4;
-        var filas = $('#table-detail-cotizaciones tr').length - filasNoInvolucradas;
+        var filas = $('#table-detail-pedidos tr').length - filasNoInvolucradas;
         var lista_ccArtic = "";
         var lista_stockSolicitado = "";
         while (r <= filas) {
@@ -927,9 +885,9 @@ function OnFailure(data) {
                     if ($.trim($txtRazonSocial.val()).length === 0) {
                         $Cliente.val("");
                     }
-                    if ($.trim($txtArticulo.val()).length === 0) {
-                        $Articulo.val("");
-                    }
+
+                    UnselectArticles();
+
                     $sCcAnalis.val($("#cc_analis").val());
                     $sCcMoneda.val($("#cc_moneda").val());
                     $sCcVta.val($("#cc_vta").val());
@@ -950,7 +908,7 @@ function OnFailure(data) {
                     if (!Validaciones()) {
                         return false;
                     }
-                    var $detallePedidos = $("#table-detail-cotizaciones");
+                    var $detallePedidos = $("#table-detail-pedidos");
                     $detallePedidos.find("tbody tr");
 
                     if ($detallePedidos.length === 0) {
@@ -1091,6 +1049,7 @@ function OnFailure(data) {
                 } else {
                     $("#result").html(response);
                 }
+                limpiarCamposArticulo();
             });
         } catch (e) {
             toastr.error(e);
@@ -1140,27 +1099,24 @@ function OnFailure(data) {
         }
     });
 
-    var $PedidoDetailViewModel_cc_grupo = $("#PedidoDetailViewModel_cc_grupo");
-    $PedidoDetailViewModel_cc_grupo.on("change", function () {
+    var $PedidoDetailViewModel_cc_subgrupo = $("#PedidoDetailViewModel_cc_subgrupo");
+    $PedidoDetailViewModel_cc_subgrupo.on("change", function () {
         try {
-            $("#PedidoDetailViewModel_cc_artic").val("");
-            $("#txtArticulo").val("");
-            $Articulo.children().remove();
+            LlenarArticulosSelect();
         } catch (e) {
             toastr.error(e);
         }
     });
 
-    var $PedidoDetailViewModel_cc_subgrupo = $("#PedidoDetailViewModel_cc_subgrupo");
-    $PedidoDetailViewModel_cc_subgrupo.on("change", function () {
+    var PedidoDetailViewModel_cc_artic = $("#PedidoDetailViewModel_cc_artic");
+    PedidoDetailViewModel_cc_artic.on("change", function () {
         try {
-            $("#PedidoDetailViewModel_cc_artic").val("");
-            $("#txtArticulo").val("");
-            $Articulo.children().remove();
+            CargarPrecioLista(this.value);
         } catch (e) {
             toastr.error(e);
         }
     });
+
     AddParameterEliminarFila();
 
 })(jQuery, toastr);
@@ -1201,41 +1157,17 @@ function IsNumeric(n) {
 }
 
 window.onload = function () {
-    //SeleccionarTiendaSegunVendedor();
     ListarSectores();
     ListarDepartamentos();
 }
 
-//function SeleccionarTiendaSegunVendedor() {
-//    $.ajax({
-//        destroy: true,
-//        type: "POST",
-//        contentType: "application/json; charset=utf-8",
-//        url: urlTiendaSegunVendedor,
-//        data: JSON.stringify({
-//        }),
-//        dataType: "json",
-//        success: function (result) {
-//            var stienda = $("#Tienda");
-//            var cc_tienda = result.cc_tienda;
-//            stienda.val(cc_tienda);
-//        },
-//        error: function (result) {
-//            alert("Error en javascript...");
-//        }
-//    });
-//}
 
 $('#igv_bo').on('change', function () {
-    $("#txtArticulo").val("");
+    limpiarCamposArticulo();
 });
 
 $('#Tienda').on('change', function () {
-    $("#txtArticulo").val("");
-    //PedidoDetailViewModel_cc_artic
-    $('#PedidoDetailViewModel_cc_artic')
-        .find('option')
-        .remove()
+    limpiarCamposArticulo();
 });
 
 function ListarSectores() {
@@ -1366,3 +1298,54 @@ $('#modal-cliente').on('hidden.bs.modal', function () {
     $("#Telefono").val("");
     $("#Email").val("");
 })
+
+//Llena Select Articulos
+function LlenarArticulosSelect() {
+
+    sCcArtic = $("#PedidoDetailViewModel_cc_artic");
+
+    var grupo = $("#PedidoDetailViewModel_cc_grupo").val();
+    var subGrupo = $("#PedidoDetailViewModel_cc_subgrupo").val();
+    var cc_tienda = $("#Tienda").val();
+
+    sCcArtic.html("");
+
+    $.ajax({
+        destroy: true,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: urlGetArticulosByGrupoParam,
+        data: JSON.stringify({
+            grupo: grupo,
+            subGrupo: subGrupo,
+            param: '',
+            cc_tienda: cc_tienda
+        }),
+        dataType: "json",
+        success: function (result) {
+            $.each(result.data, function (i, item) {
+                sCcArtic.append("<option value='" + item.value + "'>" + item.text + "</option>");
+            });
+
+            $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
+        },
+        error: function (result) {
+            alert("Error en javascript...");
+        }
+    });
+
+}
+
+//Propiedad selectPicker Articulos
+$(document).ready(function () {
+    LlenarArticulosSelect();
+    $('.selectpicker').selectpicker({
+        size: 5,
+        title: 'Seleccione una opción'
+    });
+});
+
+function UnselectArticles() {
+    $('#PedidoDetailViewModel_cc_artic').val('default').selectpicker('deselectAll');
+    $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
+}

@@ -10,19 +10,7 @@ var gsCcAnalis = "";
 
 function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, precioTM, pesoUnit, precioLista, precioLista2, precioFinal) {
 
-    //var request2 = new Ajax("");
-    //var params2 = {
-    //    idArticulo: idArticulo
-    //};
-
     gs_editando = 1;
-    //alert("EDITAR: " + gs_editando);
-
-
-    //Recupera stock del material seleccionado
-    //request2.JsonPost(urlStockSegunArticulo, params2, function (result) {
-    //    gl_stock = result[0].stock;
-    //});
 
     cantidad = cantidad.replace(",", "");
     var request = new Ajax("");
@@ -34,20 +22,70 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
             idGrupo: result[0].idGrupo,
             idSubgrupo: result[0].idSubgrupo
         };
+
+        //Selecciona el Grupo
         var idGrupo = result[0].idGrupo;
         $("#btnEliminarFila" + idArticulo).trigger("click");
         $("#CotizacionDetailViewModel_cc_grupo").val(idGrupo);
-        $("#CotizacionDetailViewModel_cc_grupo").trigger("change");
+        //Carga el Subgrupo
+        $("#CotizacionDetailViewModel_cc_subgrupo").html("");
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlGetSubGrupos,
+            data: JSON.stringify({
+                codGrupo: $("#CotizacionDetailViewModel_cc_grupo").val(),
+            }),
+            dataType: "json",
+            success: function (resultSG) {
+                $SubGrupo = $("#CotizacionDetailViewModel_cc_subgrupo")
+                $.each(resultSG, function (index, item) {
+                    var html = "<option value='" + item.Value + "'>";
+                    html += item.Text;
+                    html += "</option>";
+                    $SubGrupo.append(html);
+                });
+                if (datosEdicion != null) {
+                    $SubGrupo.val(datosEdicion.idSubgrupo);
+                }
+                //Selecciona el Subgrupo
+                var idSubgrupo = result[0].idSubgrupo;
+                $("#CotizacionDetailViewModel_cc_subgrupo").val(idSubgrupo);
+                //Carga el Articulo
+                $("#CotizacionDetailViewModel_cc_artic").html("");
+                $.ajax({
+                    destroy: true,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: urlGetArticulosByGrupoParam,
+                    data: JSON.stringify({
+                        grupo: $("#CotizacionDetailViewModel_cc_grupo").val(),
+                        subGrupo: $("#CotizacionDetailViewModel_cc_subgrupo").val(),
+                        param: '',
+                        cc_tienda: $("#Tienda").val()
+                    }),
+                    dataType: "json",
+                    success: function (resultArt) {
+                        $.each(resultArt.data, function (i, item) {
+                            sCcArtic.append("<option value='" + item.value + "'>" + item.text + "</option>");
+                        });
+                        $('#CotizacionDetailViewModel_cc_artic').selectpicker('refresh');
+                        //Selecciona el articulo
+                        $('.selectpicker').selectpicker('val', [idArticulo]);
+                        $('.selectpicker').selectpicker('refresh');
+                    },
+                    error: function (resultArt) {
+                        alert("Error en javascript...");
+                    }
+                });
 
-        var idSubgrupo= result[0].idSubgrupo;
-        $("#CotizacionDetailViewModel_cc_subgrupo").val(idSubgrupo);
-        $("#CotizacionDetailViewModel_cc_subgrupo").trigger("change");
+            },
+            error: function (resultSG) {
+                alert("Error en javascript...");
+            }
+        });
 
-        //Asignamos el articulo
-        var $ccAnalisNew = $("#CotizacionDetailViewModel_cc_artic");
-        var option = "<option value='" + idArticulo + "' selected>" + descArticulo.trim() + "</option>";
-        $ccAnalisNew.html(option);
-        $ccAnalisNew.combobox("setValue", idArticulo);
 
         //Cargar resto de elementos
         $("#CotizacionDetailViewModel_fq_cantidad").val(cantidad);
@@ -58,6 +96,10 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
         $("#CotizacionDetailViewModel_fm_precio_fin").val(precioFinal);
         //datosEdicion = null;
     });
+
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $("#AgregarArticulos").offset().top
+    }, 2000);
 }
 
 $("#CotizacionDetailViewModel_fm_precio_tonelada")

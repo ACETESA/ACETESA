@@ -158,7 +158,7 @@
 
         <div id="containerArticulo" class="col-12">
 
-            <div class="card">
+            <div class="card" id="AgregarArticulos">
                 <div class="card-header bg-dark text-bg-secondary opacity-75">
                     Agregar Artículos
                 </div>
@@ -179,10 +179,17 @@
                             </div>
 
 
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label" })
-                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "form-select" })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+                            <div class="col-12 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
+                                <div class="input-group">
+                                    @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+                                    <script>
+                                        $('#PedidoDetailViewModel_cc_artic').attr('data-show-subtext', 'true');
+                                        $('#PedidoDetailViewModel_cc_artic').attr('data-live-search', 'true');
+                                        $('#PedidoDetailViewModel_cc_artic').attr('data-width', '100%');
+                                    </script>
+                                </div>
                             </div>
 
 
@@ -316,6 +323,7 @@
 @section CssTop{
     @Styles.Render("~/Content/ui")
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -325,10 +333,10 @@
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=9"></script>
     <script src="~/Scripts/app/email-service.js?v=9"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
         urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
-       // urlTiendaSegunVendedor = "@Url.Action("TiendaSegunVendedor", "Pedido")";
         urlListarSectores = "@Url.Action("Sectores", "Pedido")";
         urlListarDepartamentos = "@Url.Action("Departamentos", "Pedido")";
         urlListarProvincias = "@Url.Action("Provincias", "Pedido")";
@@ -340,6 +348,8 @@
         var urlValidaProductosCotizacion = '@Url.Action("ValidaProductosCotizacion", "Pedido")';
         urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
         urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
+        urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Pedido")";
+        urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
     </script>
     <script>
         var gl_IdArtic;
@@ -361,11 +371,7 @@
     {
         <script>
             $(document).ready(function () {
-
-                //document.getElementById("zonaLiberada_bo").value = "0";
                 document.getElementById("igv_bo").value = "0";
-                //document.getElementById("mostrarIGV_bo").value = "1";
-
                 $('#zonaLiberada_bo option:not(:selected)').attr('disabled', true);
                 $('#igv_bo option:not(:selected)').attr('disabled', true);
                 $('#mostrarIGV_bo option:not(:selected)').attr('disabled', true);
@@ -377,15 +383,12 @@
     {
         <script>
             document.getElementById("zonaLiberada_bo").value = "0";
-            //document.getElementById("igv_bo").value = "1";
             document.getElementById("mostrarIGV_bo").value = "1";
 
             var $EsProforma = $("#EsProforma");
             if ($EsProforma.val().toLowerCase() === "true") {
-                //alert("Es proforma");
             }
             else {
-                //alert("No es proforma");
                 document.getElementById("igv_bo").value = "0";
             }
 
@@ -400,7 +403,6 @@
     <script>
         var slcchange = document.getElementById("zonaLiberada_bo");
         slcchange.addEventListener("change", function () {
-            //alert(this.value);
             if (this.value == "1") {
                 document.getElementById("igv_bo").value = "0";
                 document.getElementById("mostrarIGV_bo").value = "0";
@@ -423,7 +425,7 @@
             var ccAnalis = $Ruc.val();
             $.ajax({
                 destroy: true,
-                url: urlValidarExistenciaClienteRUC,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                url: urlValidarExistenciaClienteRUC,
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({
@@ -437,9 +439,6 @@
                     var mensaje = data.mensaje;
                     if (error === "True") {//Si hay error
                         $('#clienteForm').trigger("reset");
-                        //$("#Ruc").val("");
-                        //$("#RazonSocial").val("");
-                        //$("#Domicilio").val("");
                         $("#btnSendClienteNew").prop("disabled", true);
                         toastr.error(mensaje);
                     }
@@ -465,7 +464,7 @@
                 var ccAnalis = $Ruc;
                 $.ajax({
                     destroy: true,
-                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    url: urlValidarClienteEnZonaLiberada,
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
@@ -488,10 +487,8 @@
 
 
                         if (zonaLiberada == "1") {
-                            //document.getElementById("igv_bo").value = "0";
                             document.getElementById("mostrarIGV_bo").value = "0";
                         } else {
-                            //document.getElementById("igv_bo").value = "1";
                             document.getElementById("mostrarIGV_bo").value = "1";
                         }
 
@@ -517,7 +514,7 @@
                 var ccAnalis = $Ruc;
                 $.ajax({
                     destroy: true,
-                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    url: urlValidarClienteEnZonaLiberada,
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
@@ -561,8 +558,8 @@
         </script>
     }
 
-    <script src="~/Scripts/app/PedidoNewScript.js?v=9"></script>
-    <script src="~/Scripts/app/Pedido.js?v=9"></script>
+    <script src="~/Scripts/app/PedidoNewScript.js?v=10"></script>
+    <script src="~/Scripts/app/Pedido.js?v=10"></script>
 
     <script>
         var cn_pedido = $("#cn_pedido").val(); //Setting value to pedido
@@ -598,56 +595,15 @@
         }
         var $EsProforma = $("#EsProforma");
         if ($EsProforma.val().toLowerCase() === "true") {
-            $("#txtRazonSocial, #FechaEmision, #btnClienteNew, #txtArticulo").attr("disabled", "disabled");
+            $("#txtRazonSocial, #FechaEmision, #btnClienteNew").attr("disabled", "disabled");
+
             $("#cc_analis option:not(:selected)").prop("disabled", true);
             $("#cc_moneda option:not(:selected)").prop("disabled", true);
             $("#cc_vta option:not(:selected)").prop("disabled", true);
 
             $('label[for=PedidoDetailViewModel_cc_grupo], #PedidoDetailViewModel_cc_grupo').hide();
             $('label[for=PedidoDetailViewModel_cc_subgrupo], #PedidoDetailViewModel_cc_subgrupo').hide();
-            //alert("Es proforma");
+            disableSelect();
         }
-        else {
-            //alert("No es proforma");
-            //document.getElementById("igv_bo").value = "1";
-        }
-    </script>
-}
-
-@{var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
-
-@if (sqlDB.InitialCatalog == "ZICO_ERP01")
-{
-    <script type='text/javascript'>
-                                                                //var cc_analis = document.getElementById('cc_analis').value;
-                                                                //if (cc_analis.length === 0) {
-                                                                //    runScript();
-                                                                //    function runScript() {
-                                                                //        if (window.$) {
-                                                                //            var igv_bo = $("#igv_bo");
-                                                                //            igv_bo.val("1");
-                                                                //        } else {
-                                                                //            window.setTimeout(runScript, 50);
-                                                                //        }
-                                                                //    }
-                                                                //}
-
-    </script>
-}
-else
-{
-    <script type='text/javascript'>
-
-                                                                //runScript();
-
-                                                                //function runScript() {
-                                                                //    if (window.$) {
-                                                                //        var igv_bo = $("#igv_bo");
-                                                                //        igv_bo.val("0");
-                                                                //    } else {
-                                                                //        window.setTimeout(runScript, 50);
-                                                                //    }
-                                                                //}
-
     </script>
 }

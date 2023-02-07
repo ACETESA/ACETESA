@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "Stock Por Familia";
 }
-<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
 
 <div class="container">
 
@@ -19,54 +18,55 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
+        <div class="form mb-3">
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Empresa, htmlAttributes: new { @class = "control-label col-md-2", @style = "display: none" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Empresa, ViewBag.GetEmpresas as SelectList, new { @class = "form-control", @style = "display: none" })
-                    @Html.ValidationMessageFor(model => model.Empresa, "", new { @class = "text-danger" })
+            <div class="card mb-1">
+                <div class="card-header bg-success text-white">
+                    <h3>
+                        Consulta de Stock de <b>Galpesa</b>
+                    </h3>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Empresa, htmlAttributes: new { @class = "form-label col-md-2 d-none" })
+                            @Html.DropDownListFor(model => model.Empresa, ViewBag.GetEmpresas as SelectList, new { @class = "form-select d-none" })
+                            @Html.ValidationMessageFor(model => model.Empresa, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-select" })
+                            @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "selectpicker" })
+                            @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
+                            <script>
+                                $('#Familia').prop('multiple', 'multiple');
+                                $('#Familia').attr('data-width', '100%');
+                            </script>
+                        </div>
+                        <div class="col-12 mb-3 SubFamiliaGroup">
+                            @Html.LabelFor(model => model.SubGrupo, htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.SubGrupo, ViewBag.GetSubFamilias as SelectList, new { @class = "form-select" })
+                            @Html.ValidationMessageFor(model => model.SubGrupo, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.Tipo, ViewBag.GetTipos as SelectList, new { @class = "form-select" })
+                            @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-12 mb-3 d-none">
+                            @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.SubGrupo, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.SubGrupo, ViewBag.GetSubFamilias as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.SubGrupo, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Tipo, ViewBag.GetTipos as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group" style="display:none">
-                @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Buscar" class="btn btn-success" />
+                <div class="card-footer bg-white">
+                    <input type="submit" value="Buscar" class="btn btn-dark" />
                 </div>
             </div>
         </div>
@@ -77,6 +77,8 @@
 
     @section CssTop{
         @Styles.Render("~/Content/ui")
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
     }
 
     @section Scripts {
@@ -92,28 +94,47 @@
         </script>
         <script src="~/Scripts/app/StockPorGrupo.js?v=2"></script>
         <script src="~/Scripts/jquery.fileDownload.js?v=1"></script>
+        <script src="~/Scripts/bootstrap-select.min.js"></script>
 
         <script type="text/javascript">
 
             var $Familia = $("#Familia");
             var $SubFamilia = $("#SubGrupo");
+
             $Familia.change(function () {
-                var request = new Ajax("");
-                var params = {
-                    empresa: "acetesa",
-                    codFamilia: $(this).val()
-                };
-                $SubFamilia.html("");
-                request.JsonPost("GetSubFamilias", params, function (data) {
-                    $.each(data, function (index, item) {
-                        var html = "<option value='" + item.Value + "'>";
-                        html += item.Text;
-                        html += "</option>";
-                        $SubFamilia.append(html);
+
+                var familiaSelected = String($Familia.val());
+
+                if ((familiaSelected.indexOf(",") >= 0)) {
+                    //Oculta subgrupo
+                    $(".SubFamiliaGroup").hide();
+                }
+                else {
+                    //Muestra subgrupo
+                    $(".SubFamiliaGroup").show();
+                    //Recupera segun selección única
+                    var request = new Ajax("");
+                    var params = {
+                        empresa: "galpesa",
+                        codFamilia: $(this).val()
+                    };
+                    $SubFamilia.html("");
+                    request.JsonPost("GetSubFamilias", params, function (data) {
+                        $.each(data, function (index, item) {
+                            var html = "<option value='" + item.Value + "'>";
+                            html += item.Text;
+                            html += "</option>";
+                            $SubFamilia.append(html);
+                        });
                     });
-                });
+                }
+
             });
 
+            //Propiedad selectPicker Familia
+            $(document).ready(function () {
+                $('.selectpicker').selectpicker();
+            });
         </script>
 
     }

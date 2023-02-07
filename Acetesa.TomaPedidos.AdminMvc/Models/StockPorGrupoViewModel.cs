@@ -20,7 +20,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Models
 
         [Display(Name = "Grupo")]
         //[Required(ErrorMessage = "Campo requerido")]
-        public string Familia { get; set; }
+        public string[] Familia { get; set; }
 
         [Display(Name = "Sub Grupo")]
         public string SubGrupo { get; set; } 

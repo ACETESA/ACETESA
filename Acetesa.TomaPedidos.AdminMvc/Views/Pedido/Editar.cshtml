@@ -159,7 +159,7 @@
 
         <div id="containerArticulo" class="col-12">
 
-            <div class="card">
+            <div class="card" id="AgregarArticulos">
                 <div class="card-header bg-dark text-bg-secondary opacity-75">
                     Agregar Artículos
                 </div>
@@ -180,11 +180,19 @@
                             </div>
 
 
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label" })
-                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "form-select" })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+                            <div class="col-12 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
+                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
+                                <div class="input-group">
+                                    @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+                                    <script>
+                                        $('#PedidoDetailViewModel_cc_artic').attr('data-show-subtext', 'true');
+                                        $('#PedidoDetailViewModel_cc_artic').attr('data-live-search', 'true');
+                                        $('#PedidoDetailViewModel_cc_artic').attr('data-width', '100%');
+                                    </script>
+                                </div>
                             </div>
+
 
 
                             <div class="col-12 mb-3">
@@ -317,6 +325,7 @@
 @section CssTop{
     @Styles.Render("~/Content/ui")
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -325,6 +334,7 @@
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=9"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
         urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
@@ -333,7 +343,8 @@
         urlGetEmailCliente = "@Url.Action("GetEmailCliente", "Pedido")";
         urlValidarStockPedido = "@Url.Action("ValidarStockPedido", "Pedido")";
         urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
-
+        urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Pedido")";
+        urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
     </script>
     <script>
         var gl_stock;
@@ -342,8 +353,8 @@
         //Variable Global de edicion:
         var gs_editando = 0;
     </script>
-    <script src="~/Scripts/app/PedidoEditScript.js?v=9"></script>
-    <script src="~/Scripts/app/Pedido.js?v=9"></script>
+    <script src="~/Scripts/app/PedidoEditScript.js?v=10"></script>
+    <script src="~/Scripts/app/Pedido.js?v=10"></script>
     <script>
     var cn_pedido = $("#cn_pedido").val(); //Setting value to pedido
     var messageValidation = "@(Html.Raw(ViewBag.MessageValidation))";
@@ -410,7 +421,7 @@
         }
         var $EsProforma = $("#EsProforma");
         if ($EsProforma.val().toLowerCase() === "true") {
-            $("#txtRazonSocial, #FechaEmision, #txtArticulo").attr("disabled", "disabled");
+            $("#txtRazonSocial, #FechaEmision").attr("disabled", "disabled");
 
             $("#cc_moneda option:not(:selected)").prop("disabled", true);
             $("#cc_vta option:not(:selected)").prop("disabled", true);
@@ -418,7 +429,7 @@
 
             $('label[for=PedidoDetailViewModel_cc_grupo], #PedidoDetailViewModel_cc_grupo').hide();
             $('label[for=PedidoDetailViewModel_cc_subgrupo], #PedidoDetailViewModel_cc_subgrupo').hide();
-
+            disableSelect();
         }
     </script>
 
@@ -434,7 +445,7 @@
                 var ccAnalis = $Ruc;
                 $.ajax({
                     destroy: true,
-                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    url: urlValidarClienteEnZonaLiberada,
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
@@ -457,10 +468,8 @@
 
 
                         if (zonaLiberada == "1") {
-                            //document.getElementById("igv_bo").value = "0";
                             document.getElementById("mostrarIGV_bo").value = "0";
                         } else {
-                            //document.getElementById("igv_bo").value = "1";
                             document.getElementById("mostrarIGV_bo").value = "1";
                         }
 
@@ -486,7 +495,7 @@
                 var ccAnalis = $Ruc;
                 $.ajax({
                     destroy: true,
-                    url: urlValidarClienteEnZonaLiberada,//_baseUrl + "Cliente/ValidarExistenciaClientePorRUC",
+                    url: urlValidarClienteEnZonaLiberada,
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({

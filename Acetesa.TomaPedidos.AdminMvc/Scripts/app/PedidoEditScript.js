@@ -1,13 +1,4 @@
-﻿/// <reference path="../jquery-ui-1.11.4.js" />
-/// <reference path="GlobalScript.js" />
-/// <reference path="../lib/Ajax.js" />
-/// <reference path="../jquery-2.1.3.intellisense.js" />
-/// <reference path="../toastr.js" />
-/// <reference path="../jquery-2.1.3.js" />
-/// <reference path="../jquery.validate-vsdoc.js" />
-
-
-
+﻿
 $("#btnNuevoContactoEntregaDirecta").on("click", btnNuevoContactoEntregaDirecta_click);
 function btnNuevoContactoEntregaDirecta_click() {
     try {
@@ -51,24 +42,19 @@ function OnSuccess(data) {
     if ($.trim(data).length === 0) {
     } else {
         AddParameterEliminarFila();
-        $("#txtArticulo").val("");
-        $("#PedidoDetailViewModel_fq_cantidad").val("");
-        $("#PedidoDetailViewModel_fm_precio").val("");
-        $("#PedidoDetailViewModel_fm_precio2").val("");
-        $("#PedidoDetailViewModel_fm_precio_fin").val("");
-        $("#PedidoDetailViewModel_fm_precio_tonelada").val("");
-        $("#PedidoDetailViewModel_fq_peso_teorico").val("");
-        scrollToScreen("#articulo", 1000);
+        limpiarCamposArticulo();
     }
     //Bloqueamos cada que se añade detalle
     $("#Tienda option:not(:selected)").prop("disabled", true);
     $("#igv_bo option:not(:selected)").prop("disabled", true);
     $("#cc_moneda option:not(:selected)").prop("disabled", true);
-
+    if ($EsProforma.val().toLowerCase() === "true") {
+        disableSelect();
+    }
 }
 function OnComplete() { unBlockScreen(); }
 function OnFailure(data) {
-    var errorMessages = $.parseJSON(data.responseText);
+    var errorMessages = JSON.parse(JSON.stringify(data.responseText));
     if (errorMessages.errorMessage) {
         var errors = errorMessages.errorMessage;
         toastr.error(errors);
@@ -95,6 +81,19 @@ function OnFailureRechazado(data) {
     } else {
         toastr.error(errorMessages);
     }
+}
+
+function limpiarCamposArticulo() {
+    $('#PedidoDetailViewModel_cc_grupo').prop('selectedIndex', 0);
+    $('#PedidoDetailViewModel_cc_subgrupo').prop('selectedIndex', 0);
+    UnselectArticles();
+    LlenarArticulosSelect();
+    $("#PedidoDetailViewModel_fq_cantidad").val("");
+    $("#PedidoDetailViewModel_fm_precio").val("");
+    $("#PedidoDetailViewModel_fm_precio2").val("");
+    $("#PedidoDetailViewModel_fm_precio_fin").val("");
+    $("#PedidoDetailViewModel_fm_precio_tonelada").val("");
+    $("#PedidoDetailViewModel_fq_peso_teorico").val("");
 }
 
 (function ($, toastr) {
@@ -262,8 +261,6 @@ function OnFailureRechazado(data) {
     };
 
     var callbackCliente = function (ccAnalis, callbackSucursal) {
-        //alert("holas");
-        //validarClienteZonaLiberadaXRUC();
         $.ajax({
             url: urlValidarVendedorCliente,
             data: JSON.stringify({
@@ -472,7 +469,7 @@ function OnFailureRechazado(data) {
     $fechaEntrega.datepicker({ dateFormat: "dd/mm/yy" });
     $fechaEntrega.mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
 
-    var callbackPrecioLista = function (ccArtic) {
+    function CargarPrecioLista(ccArtic) {
         //Obtenemos la lista seleccionada
         var cc_tienda = $('#Tienda option:selected').val();
         var igv_bo = $('#igv_bo option:selected').val();
@@ -486,7 +483,6 @@ function OnFailureRechazado(data) {
         if (cantidadSolicitado.length === 0) {
             cantidadSolicitado = 0;
         }
-
 
         $.ajax({
             destroy: true,
@@ -507,57 +503,56 @@ function OnFailureRechazado(data) {
                 var mensaje = result.mensaje;
                 if (id == 0) {
                     toastr.warning(mensaje);
-                    $("#txtArticulo").val("");
+                    UnselectArticles();
                 } else {
                     var $moneda = $("#cc_moneda");
                     var $tienda = $("#Tienda");
                     if ($.trim($tienda.val()).length === 0) {
-                            toastr.warning("Para mostrar Precio de Lista, debe seleccionar la Tienda.");
-                            $("#txtArticulo").val("");
-                        } else if ($.trim($moneda.val()).length === 0) {
-                            toastr.warning("Para mostrar Precio de Lista, debe seleccionar la Moneda.");
-                            $("#txtArticulo").val("");
-                        } else {
-                            try {
-                                var request = new Ajax();
-                                var url = _baseUrl + "Pedido/GetPrecioLista";
-                                var params = {
-                                    ccArtic: ccArtic,
-                                    cc_tienda: cc_tienda,
-                                    igv_bo: igv_bo
-                                };
-                                request.JsonPost(url, params, function (response) {
-                                    var $precioLista = $("#PedidoDetailViewModel_fm_precio");
-                                    var $precioLista2 = $("#PedidoDetailViewModel_fm_precio2");
-                                    var $precioListaFin = $("#PedidoDetailViewModel_fm_precio_fin");
-                                    var $pesoUnitario = $("#PedidoDetailViewModel_fq_peso_teorico");
-                                    var $precioTM = $("#PedidoDetailViewModel_fm_precio_tonelada");
-                                    if (response !== null) {
-                                        $pesoUnitario.val(response.fq_peso_teorico);
-                                        switch ($moneda.find("option:selected").text()) {
-                                            case "S/.":
-                                                $precioLista.val(response.fm_precio_mn);
-                                                $precioLista2.val(response.fm_precio2_mn);
-                                                $precioListaFin.val(response.fm_precio_mn);
-                                                break;
-                                            case "US$":
-                                                $precioLista.val(response.fm_precio_me);
-                                                $precioLista2.val(response.fm_precio2_me);
-                                                $precioListaFin.val(response.fm_precio_me);
-                                                break;
-                                        }
-                                        $precioTM.val((($precioLista.val() / $pesoUnitario.val()) * 1000).toFixed(4));
-                                    } else {
-                                        $precioLista.val("");
-                                        $precioLista2.val("");
-                                        toastr.info("Artículo sin precio de lista.");
+                        toastr.warning("Para mostrar Precio de Lista, debe seleccionar la Tienda.");
+                        UnselectArticles();
+                    } else if ($.trim($moneda.val()).length === 0) {
+                        toastr.warning("Para mostrar Precio de Lista, debe seleccionar la Moneda.");
+                        UnselectArticles();
+                    } else {
+                        try {
+                            var request = new Ajax();
+                            var url = _baseUrl + "Pedido/GetPrecioLista";
+                            var params = {
+                                ccArtic: ccArtic,
+                                cc_tienda: cc_tienda,
+                                igv_bo: igv_bo
+                            };
+                            request.JsonPost(url, params, function (response) {
+                                var $precioLista = $("#PedidoDetailViewModel_fm_precio");
+                                var $precioLista2 = $("#PedidoDetailViewModel_fm_precio2");
+                                var $precioListaFin = $("#PedidoDetailViewModel_fm_precio_fin");
+                                var $pesoUnitario = $("#PedidoDetailViewModel_fq_peso_teorico");
+                                var $precioTM = $("#PedidoDetailViewModel_fm_precio_tonelada");
+                                if (response !== null) {
+                                    $pesoUnitario.val(response.fq_peso_teorico);
+                                    switch ($moneda.find("option:selected").text()) {
+                                        case "S/.":
+                                            $precioLista.val(response.fm_precio_mn);
+                                            $precioLista2.val(response.fm_precio2_mn);
+                                            $precioListaFin.val(response.fm_precio_mn);
+                                            break;
+                                        case "US$":
+                                            $precioLista.val(response.fm_precio_me);
+                                            $precioLista2.val(response.fm_precio2_me);
+                                            $precioListaFin.val(response.fm_precio_me);
+                                            break;
                                     }
-                                });
-                            } catch (e) {
-                                alert(e);
-                            }
+                                    $precioTM.val((($precioLista.val() / $pesoUnitario.val()) * 1000).toFixed(4));
+                                } else {
+                                    $precioLista.val("");
+                                    $precioLista2.val("");
+                                    toastr.info("Artículo sin precio de lista.");
+                                }
+                            });
+                        } catch (e) {
+                            alert(e);
                         }
-                    //});
+                    }
                 }
 
             },
@@ -567,88 +562,46 @@ function OnFailureRechazado(data) {
         });
     }
 
+
     var $Grupo = $("#PedidoDetailViewModel_cc_grupo");
     var $SubGrupo = $("#PedidoDetailViewModel_cc_subgrupo");
     $Grupo.change(function () {
-        request = new Ajax(_baseUrl);
-        params = {
-            codGrupo: $(this).val()
-        };
         $SubGrupo.html("");
-        request.JsonPost("Pedido/GetSubGrupos", params, function (data) {
-            $.each(data, function (index, item) {
-                var html = "<option value='" + item.Value + "'>";
-                html += item.Text;
-                html += "</option>";
-                $SubGrupo.append(html);
-            });
-            if (datosEdicion != null) {
-                $SubGrupo.val(datosEdicion.idSubgrupo);
-            }
-        }, true, false);//Pantalla bloqueada , asincrono
-    });
-
-    var $Articulo = $("#PedidoDetailViewModel_cc_artic");
-    var $msgeArticulo = $("#msgeArticulo");
-    $Articulo.combobox({
-        id: "txtArticulo",
-        messageRequired: "Debe seleccionar un artículo.",
-        objMessage: $msgeArticulo,
-        objCallback: callbackPrecioLista
-    });
-    var $txtArticulo = $("#txtArticulo");
-    $txtArticulo.click(function () {
-        var input = this;
-        input.focus();
-        input.setSelectionRange(0, 999);
-    });
-    $txtArticulo.on("keydown keypress", function (e) {
-        var keyCode = e.keyCode || e.which;
-
-        if ((keyCode === 9 || keyCode === 13) && ($Articulo.val() == null || $Articulo.val() == "")) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var grupo = $("#PedidoDetailViewModel_cc_grupo").val();
-            var subGrupo = $("#PedidoDetailViewModel_cc_subgrupo").val();
-            var cc_tienda = $("#Tienda").val();
-
-            var $component = $(this);
-            var criterio = $component.val();
-            var longitud = $.trim($component.val()).length;
-            if (longitud === 0) {
-                return;
-            }
-
-            try {
-                var request = new Ajax(_baseUrl);
-                var url = "pedido/GetArticulosByGrupoParam";
-                var params = {
-                    grupo: grupo,
-                    subGrupo: subGrupo,
-                    param: criterio,
-                    cc_tienda: cc_tienda
-                };
-                request.JsonPost(url, params, function (response) {
-                    if (response.estado && response.estado === 1) {
-                        $Articulo.children().remove();
-                        $.each(response.data, function (i, state) {
-                            $("<option>", {
-                                value: $.trim(state.value)
-                            }).html($.trim(state.text)).appendTo($Articulo);
-                        });
-                        $Articulo.combobox();
-                        var event = jQuery.Event("keypress");
-                        event.which = 40;
-                        event.keyCode = 40; //keycode to trigger this for simulating arrow bottom
-                        $component.trigger(event);
-                    }
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlGetSubGrupos,
+            data: JSON.stringify({
+                codGrupo: $(this).val(),
+            }),
+            dataType: "json",
+            success: function (result) {
+                $.each(result, function (index, item) {
+                    var html = "<option value='" + item.Value + "'>";
+                    html += item.Text;
+                    html += "</option>";
+                    $SubGrupo.append(html);
                 });
-            } catch (ex) {
-                toastr.error(ex);
+                if (datosEdicion != null) {
+                    $SubGrupo.val(datosEdicion.idSubgrupo);
+                }
+
+                if (result.length == 1) {
+                    $("#PedidoDetailViewModel_cc_subgrupo").val("Ninguno");
+                }
+
+                LlenarArticulosSelect();
+            },
+            error: function (result) {
+                alert("Error en javascript...");
             }
-        }
+        });
+
     });
+
+
+    var $msgeArticulo = $("#msgeArticulo");
 
     //Ajax para validar el stock de articulo disponible
     function ValidaStockArticuloPedido() {
@@ -714,20 +667,22 @@ function OnFailureRechazado(data) {
     //Evento clic del boton añadir detalle
     var $btnAdd = $("#btnAdd");
     $btnAdd.on("click", async function (e) {
+        if ($EsProforma.val().toLowerCase() === "true") {
+            enableSelect();
+        }
         var bValidRazonSocial = false;
         var bValidArticulo = false;
         var bValidCantidad = false;
 
         var $cdRazsoc = $("#cd_razsoc");
         var $cdArtic = $("#PedidoDetailViewModel_cd_artic");
-        var $txtArticulo = $("#txtArticulo");
         var $cantidad = $("#PedidoDetailViewModel_fq_cantidad");
 
         var cantidadArtic = parseFloat($cantidad.val());
         cantidadArtic = cantidadArtic.toFixed(2);
 
         $cdRazsoc.val($txtRazonSocial.val());
-        $cdArtic.val($txtArticulo.val());
+        $cdArtic.val($('#PedidoDetailViewModel_cc_artic option:selected').text());
 
         $("#pedidoForm").valid();
 
@@ -739,18 +694,27 @@ function OnFailureRechazado(data) {
             $msgeCliente.hide();
         }
 
-        if ($.trim($txtArticulo.val()).length === 0) {
-            $msgeArticulo.text("Debe seleccionar un artículo.");
-            $msgeArticulo.show();
-        } else {
-            bValidArticulo = true;
-            $msgeArticulo.hide();
-        }
-
         if (cantidadArtic == 0.00) {
             toastr.error("La cantidad del artículo debe ser mayor a 0");
         } else {
             bValidCantidad = true;
+        }
+
+        //Valida si articulo esta seleccionado
+        var selected = 0;
+        $('#PedidoDetailViewModel_cc_artic option').each(function () {
+            if (this.selected) {
+                selected = 1;
+            }
+        });
+
+        if (selected == 1) {
+            bValidArticulo = true;
+            $msgeArticulo.hide();
+        }
+        else {
+            $msgeArticulo.text("Debe seleccionar un Artículo.");
+            $msgeArticulo.show();
         }
 
         if (!bValidRazonSocial || !bValidArticulo || !bValidCantidad) {
@@ -1095,28 +1059,23 @@ function OnFailureRechazado(data) {
         }
     });
 
-    var $CotizacionDetailViewModel_cc_grupo = $("#PedidoDetailViewModel_cc_grupo");
-    $CotizacionDetailViewModel_cc_grupo.on("change", function () {
+    var $PedidoDetailViewModel_cc_subgrupo = $("#PedidoDetailViewModel_cc_subgrupo");
+    $PedidoDetailViewModel_cc_subgrupo.on("change", function () {
         try {
-            $("#PedidoDetailViewModel_cc_artic").val("");
-            $("#txtArticulo").val("");
-            $Articulo.children().remove();
+            LlenarArticulosSelect();
         } catch (e) {
             toastr.error(e);
         }
     });
 
-    var $CotizacionDetailViewModel_cc_subgrupo = $("#PedidoDetailViewModel_cc_subgrupo");
-    $CotizacionDetailViewModel_cc_subgrupo.on("change", function () {
+    var PedidoDetailViewModel_cc_artic = $("#PedidoDetailViewModel_cc_artic");
+    PedidoDetailViewModel_cc_artic.on("change", function () {
         try {
-            $("#PedidoDetailViewModel_cc_artic").val("");
-            $("#txtArticulo").val("");
-            $Articulo.children().remove();
+            CargarPrecioLista(this.value);
         } catch (e) {
             toastr.error(e);
         }
     });
-
 
     AddParameterEliminarFila();
 
@@ -1157,21 +1116,68 @@ function IsNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-$(window).load(function () {
+window.onload = function () {
     //Bloqueamos cada que se añade detalle
     $("#Tienda option:not(:selected)").prop("disabled", true);
     $("#igv_bo option:not(:selected)").prop("disabled", true);
     $("#cc_moneda option:not(:selected)").prop("disabled", true);
-});
+};
 
 $('#igv_bo').on('change', function () {
-    $("#txtArticulo").val("");
+    limpiarCamposArticulo();
 });
 
 $('#Tienda').on('change', function () {
-    $("#txtArticulo").val("");
-    //PedidoDetailViewModel_cc_artic
-    $('#PedidoDetailViewModel_cc_artic')
-        .find('option')
-        .remove()
+    limpiarCamposArticulo();
 });
+
+//Llena Select Articulos
+function LlenarArticulosSelect() {
+
+    sCcArtic = $("#PedidoDetailViewModel_cc_artic");
+
+    var grupo = $("#PedidoDetailViewModel_cc_grupo").val();
+    var subGrupo = $("#PedidoDetailViewModel_cc_subgrupo").val();
+    var cc_tienda = $("#Tienda").val();
+
+    sCcArtic.html("");
+
+    $.ajax({
+        destroy: true,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: urlGetArticulosByGrupoParam,
+        data: JSON.stringify({
+            grupo: grupo,
+            subGrupo: subGrupo,
+            param: '',
+            cc_tienda: cc_tienda
+        }),
+        dataType: "json",
+        success: function (result) {
+            $.each(result.data, function (i, item) {
+                sCcArtic.append("<option value='" + item.value + "'>" + item.text + "</option>");
+            });
+
+            $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
+        },
+        error: function (result) {
+            alert("Error en javascript...");
+        }
+    });
+
+}
+
+//Propiedad selectPicker Articulos
+$(document).ready(function () {
+    LlenarArticulosSelect();
+    $('.selectpicker').selectpicker({
+        size: 5,
+        title: 'Seleccione una opción'
+    });
+});
+
+function UnselectArticles() {
+    $('#PedidoDetailViewModel_cc_artic').val('default').selectpicker('deselectAll');
+    $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
+}

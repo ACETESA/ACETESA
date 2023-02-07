@@ -12,6 +12,7 @@
         OnBegin = "OnBegin",
         OnComplete = "OnComplete",
         OnFailure = "OnFailure",
+        OnSuccess = "OnSuccess",
         UpdateTargetId = "result"
     }))
     {
@@ -31,12 +32,16 @@
                         @Html.DropDownListFor(model => model.ListaPrecios, ViewBag.GetListaPrecios as SelectList, new { @class = "form-select" })
                         @Html.ValidationMessageFor(model => model.ListaPrecios, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3 FamiliaGroup">
                         @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "form-label" })
-                        @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "form-select" })
-                        @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
+                            @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "selectpicker" })
+                            @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
+                        <script>
+                            $('#Familia').prop('multiple', 'multiple');
+                            $('#Familia').attr('data-width', '100%');
+                        </script>
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3 SubFamiliaGroup">
                         @Html.LabelFor(model => model.SubFamilia, htmlAttributes: new { @class = "form-label" })
                         @Html.DropDownListFor(model => model.SubFamilia, ViewBag.GetSubFamilias as SelectList, new { @class = "form-select" })
                         @Html.ValidationMessageFor(model => model.SubFamilia, "", new { @class = "text-danger" })
@@ -48,7 +53,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white">
-                    <input type="submit" value="Buscar" class="btn btn-dark" />
+                    <input type="submit" value="Buscar" class="btn btn-dark"/>
                 </div>
             </div>
         </form>
@@ -57,8 +62,9 @@
 
 
     @section CssTop{
-        <link href="~/Content/toastr.min.css" rel="stylesheet" />
+        @*<link href="~/Content/toastr.min.css" rel="stylesheet" />*@
         <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
     }
 
     @section Scripts {
@@ -68,29 +74,46 @@
         <script src="~/Scripts/app/PrecioScript.js"></script>
         <script src="~/Scripts/jquery.fileDownload.js?v=1"></script>
         <script src="~/Scripts/toastr.min.js"></script>
-
-
+        <script src="~/Scripts/bootstrap-select.min.js"></script>
         <script type="text/javascript">
 
             var $Familia = $("#Familia");
             var $SubFamilia = $("#SubFamilia");
             $Familia.change(function () {
-                var request = new Ajax("");
-                var params = {
-                    empresa: "acetesa",
-                    codFamilia: $(this).val()
-                };
-                $SubFamilia.html("");
-                request.JsonPost("GetSubFamilias", params, function (data) {
-                    $.each(data, function (index, item) {
-                        var html = "<option value='" + item.Value + "'>";
-                        html += item.Text;
-                        html += "</option>";
-                        $SubFamilia.append(html);
+
+                var familiaSelected = String($Familia.val());
+
+                if ((familiaSelected.indexOf(",") >= 0)) {
+                    //Oculta subgrupo
+                    $(".SubFamiliaGroup").hide();
+                }
+                else {
+                    //Muestra subgrupo
+                    $(".SubFamiliaGroup").show();
+                    //Recupera segun selección única
+                    var request = new Ajax("");
+                    var params = {
+                        empresa: "acetesa",
+                        codFamilia: $(this).val()
+                    };
+                    $SubFamilia.html("");
+                    request.JsonPost("GetSubFamilias", params, function (data) {
+                        $.each(data, function (index, item) {
+                            var html = "<option value='" + item.Value + "'>";
+                            html += item.Text;
+                            html += "</option>";
+                            $SubFamilia.append(html);
+                        });
                     });
-                });
+                }
             });
 
+
+
+            //Propiedad selectPicker Familia
+            $(document).ready(function () {
+                $('.selectpicker').selectpicker();
+            });
         </script>
     }
 
