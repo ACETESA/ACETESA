@@ -187,13 +187,26 @@
                             <div class="col-12 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
                                 @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
                                 <div class="input-group">
-                                    @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker"})
+                                    @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
                                     @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
                                     <script>
                                         $('#CotizacionDetailViewModel_cc_artic').attr('data-show-subtext', 'true');
                                         $('#CotizacionDetailViewModel_cc_artic').attr('data-live-search', 'true');
                                         $('#CotizacionDetailViewModel_cc_artic').attr('data-width', '100%');
                                     </script>
+                                    <style>
+                                        /*.selectpicker div.dropdown-menu {
+                                            width: 200px;
+                                        }
+
+                                        .dropdown-menu span.text {
+                                            white-space: normal;
+                                        }*/
+
+                                        .bootstrap-select .dropdown-menu {
+                                            max-width: 100% !important;
+                                        }
+                                    </style>
                                 </div>
                             </div>
 

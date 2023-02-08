@@ -255,3 +255,13 @@ function ValidaDatosSUNAT(RUC, fnc_callback, async) {
         OnFailure(data);
         });
 }
+
+//Cuando inicia una solicitud Ajax Bloquea la pantalla
+$(document).ajaxSend(function (event, request, settings) {
+    blockScreen();
+});
+
+//Desbloquea la pantalla cuando la solicitud Ajax terminó
+$(document).ajaxComplete(function (event, request, settings) {
+    unBlockScreen();
+});
