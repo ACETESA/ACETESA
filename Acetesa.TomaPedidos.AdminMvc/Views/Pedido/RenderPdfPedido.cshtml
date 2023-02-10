@@ -31,7 +31,9 @@
     var tienda = Model.Adicional.cd_tienda;
     var zonaLiberada = Model.Adicional.zonaLiberada;
     var mostrarIGV = zonaLiberada == 1 ? 0 : 1;
-    
+
+    var fechaHora = DateTime.Now.AddMinutes(0).ToString("dd'/'MM'/'yyyy HH':'mm':'ss");
+
     switch (idMoneda)
     {
         case "01":
@@ -352,5 +354,25 @@
             <tr><td>&nbsp;</td></tr>
         </table>
     }
+    <table style="height:100%; width:100%;">
+        <tr>
+            <td style="height:100%; vertical-align:bottom;">
+                <table style="width:100%; border-top:1px solid;">
+                    <tr style="width:100%;">
+                        <td style="width:50%;"></td>
+                        <td style="width:50%; text-align:right;">
+                            <i>
+                                Fecha y hora de emisión:
+                                <br />
+                                <b>@fechaHora</b>
+                                <br />
+                                TomaPedidosApp
+                            </i>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

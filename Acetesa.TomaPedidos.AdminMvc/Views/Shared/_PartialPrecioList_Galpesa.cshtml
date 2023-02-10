@@ -54,18 +54,18 @@
                             <td style="text-align:center;">@Html.DisplayFor(modelItem => item.fq_peso_teorico)</td>
                             <td style="text-align:center;">@Html.DisplayFor(modelItem => item.fq_unid_tm)</td>
                             @*@if (fila % 2 == 0)
-                            {
-                                <td style="text-align:center;background-color:#FEFEDB;">@Html.DisplayFor(modelItem => item.fm_valorvta_tn)</td>
-                                <td style="text-align:center;background-color:#FEFEDB;">@Html.DisplayFor(modelItem => item.fm_valorunit)</td>
-                                <td style="text-align:center;background-color:#EFFFDD;">@Html.DisplayFor(modelItem => item.fm_valorvta_tn2)</td>
-                                <td style="text-align:center;background-color:#EFFFDD;">@Html.DisplayFor(modelItem => item.fm_valorunit2)</td>
-                            }
-                            else
-                            {*@
-                                <td class="table-warning">@Html.DisplayFor(modelItem => item.fm_valorvta_tn)</td>
-                                <td class="table-warning">@Html.DisplayFor(modelItem => item.fm_valorunit)</td>
-                                <td class="table-success">@Html.DisplayFor(modelItem => item.fm_valorvta_tn2)</td>
-                                <td class="table-success">@Html.DisplayFor(modelItem => item.fm_valorunit2)</td>
+                                {
+                                    <td style="text-align:center;background-color:#FEFEDB;">@Html.DisplayFor(modelItem => item.fm_valorvta_tn)</td>
+                                    <td style="text-align:center;background-color:#FEFEDB;">@Html.DisplayFor(modelItem => item.fm_valorunit)</td>
+                                    <td style="text-align:center;background-color:#EFFFDD;">@Html.DisplayFor(modelItem => item.fm_valorvta_tn2)</td>
+                                    <td style="text-align:center;background-color:#EFFFDD;">@Html.DisplayFor(modelItem => item.fm_valorunit2)</td>
+                                }
+                                else
+                                {*@
+                            <td class="table-warning">@Html.DisplayFor(modelItem => item.fm_valorvta_tn)</td>
+                            <td class="table-warning">@Html.DisplayFor(modelItem => item.fm_valorunit)</td>
+                            <td class="table-success">@Html.DisplayFor(modelItem => item.fm_valorvta_tn2)</td>
+                            <td class="table-success">@Html.DisplayFor(modelItem => item.fm_valorunit2)</td>
                             @*}*@
                             <td style="text-align:center;">@Html.DisplayFor(modelItem => item.ArticStk)</td>
 
@@ -76,7 +76,33 @@
         </div>
     </div>
 
+    <script>
+        var ListaPreciosAux = null;
+        var FamiliaAux = null;
+        var SubFamiliaAux = null;
+        var StocksAux = null;
 
+        function ExportarExcelPrecio() {
+            var sUrl = "descargarExcelPrecio";
+
+            $.fileDownload(sUrl, {
+                httpMethod: "POST",
+                data: {
+                    ListaPrecios: ListaPreciosAux,
+                    Familia: FamiliaAux,
+                    SubFamilia: SubFamiliaAux,
+                    Stocks: StocksAux,
+                    empresa: "Galpesa"
+                },
+                failMessageHtml: "There was a problem generating your report, please try again."
+            });
+        }
+
+        $('#table-precios').DataTable({
+            order: [[1, 'asc']],
+            "pageLength": 50
+        });
+    </script>
 
 }
 <style type="text/css">
@@ -106,30 +132,5 @@
 }
 
 
-<script>
-    var ListaPreciosAux = null;
-    var FamiliaAux = null;
-    var SubFamiliaAux = null;
-    var StocksAux = null;
 
-    function ExportarExcelPrecio() {
-        var sUrl = "descargarExcelPrecio";
-
-        $.fileDownload(sUrl, {
-            httpMethod: "POST",
-            data: {
-                ListaPrecios: ListaPreciosAux,
-                Familia: FamiliaAux,
-                SubFamilia: SubFamiliaAux,
-                Stocks: StocksAux,
-                empresa: "Galpesa"
-            },
-            failMessageHtml: "There was a problem generating your report, please try again."
-        });
-    }
-
-    $('#table-precios').DataTable({
-        "pageLength": 50
-    });
-</script>
 

@@ -15,7 +15,7 @@
                 var nivel3 = 1;
                 var nivel4 = 1;
             }
-            <thead>
+            <thead class="text-white fw-bold">
                 <tr class="bg-success">
                     <td id="thDescripcion" rowspan="2" colspan="3">Descripción</td>
                     <td  id="thPU" rowspan="2">PU</td>
@@ -29,7 +29,7 @@
                     <td id="thReser">Reser</td>
                     <td id="thDispo">Dispo</td>
                 </tr>
-                <tr class="excluir-excel bg-secondary" id="cabeceraNP">
+                <tr class="excluir-excel bg-light text-dark" id="cabeceraNP">
                     <td id="C_NP">NP</td>
                     <td id="C_Fec">Fec</td>
                     <td id="C_Cli">Cli</td>
@@ -42,12 +42,12 @@
             <tbody>
                 @foreach (var grupo in Model.StockPorGrupoModels.GroupBy(x => x.Art_Grupo))
                 {
-                    <tr bgcolor="#8BCE84" data-id="@nivel1.ToString()a" data-parent="">
+                    <tr class="bg-success bg-opacity-50" data-id="@nivel1.ToString()a" data-parent="">
                         <td colspan="9" align="left">@grupo.Key</td>
                     </tr>
                     foreach (var subGrupo in grupo.GroupBy(x => x.Art_SubGrupo))
                     {
-                        <tr bgcolor="#ECFFE7" data-id="@nivel2.ToString()b" data-parent="@nivel1.ToString()a">
+                        <tr class="bg-success bg-opacity-10" data-id="@nivel2.ToString()b" data-parent="@nivel1.ToString()a">
                             <td colspan="9" align="left">@subGrupo.Key</td>
                         </tr>
                         foreach (var group2 in subGrupo.GroupBy(Y => new { Y.cd_desc, Y.fq_embalaje, Y.fq_unidades, Y.fq_peso, Y.tot_un, Y.tot_tn }))
@@ -217,7 +217,7 @@
         });
     </script>
     <style>
-        table thead th {
+        /*table thead th {
             background-color: #4CAF50;
             color: white;
             text-align: center;
@@ -228,6 +228,6 @@
             color: black;
             font-style: italic;
             text-align: center;
-        }
+        }*/
     </style>
 }
