@@ -15,13 +15,9 @@
 }))
 
 
-
-
 {
     @Html.AntiForgeryToken()
     @Html.Hidden("page")
-
-
 
     <div class="card">
         <div class="card-header bg-success text-bg-secondary">
@@ -30,18 +26,30 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 mb-3">
-                    @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label" })
-                    @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+                    @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label ps-2" })
+                    <div class="input-group">
+                        @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
+                        @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+                        <script>
+                            $('#Cliente').attr('data-show-subtext', 'true');
+                            $('#Cliente').attr('data-live-search', 'true');
+                            $('#Cliente').attr('data-width', '100%');
+                        </script>
+                        <style>
+                            .bootstrap-select .dropdown-menu {
+                                max-width: 100% !important;
+                            }
+                        </style>
+                    </div>
                 </div>
                 <div class="col-12 mb-3">
                     @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "form-label" })
-                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @type = "date", @onfocus = "this.showPicker()" })
                     @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-12 mb-3">
                     @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "form-label" })
-                    @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control", @type = "date", @onfocus = "this.showPicker()"})
                     @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-12 mb-3">
@@ -58,48 +66,6 @@
 
         </div>
     </div>
-
-
-
-    @*<div class="form-horizontal" id="formListado">
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="ui-widget">
-                        @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Estado, ViewBag.GetEstados as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Buscar" id="btnEnviar" class="btn btn-primary" />
-                </div>
-            </div>
-        </div>*@
 }
 <script>
 
@@ -122,6 +88,7 @@
     @Styles.Render("~/Content/ui")
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
     <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -129,12 +96,14 @@
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=9"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script>
         _baseUrl = "@ViewBag.BaseUrl";
         var urlValidaProductosCotizacion = '@Url.Action("ValidaProductosCotizacion", "Pedido")';
         var urlMotivosRechazoCotizacion = '@Url.Action("ListaMotivosRechazoCotizacion", "Cotizacion")';
         var urlRegistrarRechazoCotizacion = '@Url.Action("RegistarRechazoCotizacion", "Cotizacion")';
         var urlRegistrarCierreCotizacionParcial = '@Url.Action("RegistarCierreCotizacionParcial", "Cotizacion")';
+        var urlSelectClientesSegunCarteraVendedor = '@Url.Action("SelectClientesSegunCarteraVendedor", "Cliente")';
 
     </script>
     <script src="~/Scripts/app/CotizacionFindScript.js?v=9"></script>

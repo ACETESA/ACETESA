@@ -24,9 +24,21 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 mb-3">
-                    @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label" })
-                    @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+                    @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label ps-2" })
+                    <div class="input-group">
+                        @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
+                        @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
+                        <script>
+                            $('#Cliente').attr('data-show-subtext', 'true');
+                            $('#Cliente').attr('data-live-search', 'true');
+                            $('#Cliente').attr('data-width', '100%');
+                        </script>
+                        <style>
+                            .bootstrap-select .dropdown-menu {
+                                max-width: 100% !important;
+                            }
+                        </style>
+                    </div>
                 </div>
                 <div class="col-12 mb-3">
                     @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "form-label" })
@@ -51,48 +63,6 @@
             <input type="submit" value="Buscar" id="btnEnviar" class="btn btn-dark" />
         </div>
     </div>
-
-
-
-
-    @*<div class="form-horizontal">
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="ui-widget">
-                        @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Estado, ViewBag.GetEstados as SelectList, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                </div>
-            </div>
-        </div>*@
 }
 
 <div class="table-responsive" id="result">
@@ -106,6 +76,7 @@
     @Styles.Render("~/Content/ui")
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
     <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -113,11 +84,13 @@
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=1"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script>
         _baseUrl = "@ViewBag.BaseUrl";
     </script>
     <script src="~/Scripts/app/PedidoFindScript.js?v=3"></script>
     <script>
-        urlRegistrarDocumentoOC = '@Url.Action("RegistrarDocumentoOC", "Pedido")'
+        var urlRegistrarDocumentoOC = '@Url.Action("RegistrarDocumentoOC", "Pedido")'
+        var urlSelectClientesSegunCarteraVendedor = '@Url.Action("SelectClientesSegunCarteraVendedor", "Cliente")';
     </script>
 }

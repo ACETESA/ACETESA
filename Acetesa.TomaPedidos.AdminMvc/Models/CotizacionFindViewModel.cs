@@ -23,7 +23,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Models
             {
                 if (string.IsNullOrEmpty(_fechaInicio) || string.IsNullOrWhiteSpace(_fechaInicio))
                 {
-                    _fechaInicio = new DateTime(_fechaActual.Year, _fechaActual.Month, 1).ToString("dd/MM/yyyy",
+                    _fechaInicio = new DateTime(_fechaActual.Year, _fechaActual.Month, 1).ToString("yyyy-MM-dd",
                     CultureInfo.CreateSpecificCulture("es-PE"));
                 }
                 return _fechaInicio;
@@ -42,7 +42,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Models
             {
                 if (string.IsNullOrEmpty(_fechaFin) || string.IsNullOrWhiteSpace(_fechaFin)) {
                     DateTime dFechaFin = new DateTime(_fechaActual.Year, _fechaActual.Month, 1).AddMonths(1).AddDays(-1);
-                    _fechaFin = dFechaFin.ToString("dd/MM/yyyy",CultureInfo.CreateSpecificCulture("es-PE"));
+                    _fechaFin = dFechaFin.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("es-PE"));
                 }
                 return _fechaFin;
             }

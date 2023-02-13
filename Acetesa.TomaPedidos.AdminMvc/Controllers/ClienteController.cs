@@ -97,6 +97,16 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             return JsonSuccess(selectClientes);
         }
 
+        public ActionResult SelectClientesSegunCarteraVendedor()
+        {
+            var listaClientes = ClienteService.SelectClientesSegunCarteraVendedor(User.Identity.Name);
+
+            var selectClientes = (from model in listaClientes
+                                  select new { model.cc_analis, model.cd_razsoc}).ToList();
+
+            return JsonSuccess(selectClientes);
+        }
+
         public ActionResult ClientesAsignadosSelect(string departamentoId, string provinciaId, string distritoId)
         {
             var listaClientes = ClienteService.CarteraClientesAsignados(User.Identity.Name, departamentoId, provinciaId, distritoId);

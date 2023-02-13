@@ -29,6 +29,7 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
 
         Dictionary<string, string> ActualizarAsignacionClienteVendedor(string rucCliente, string correoVendedor, bool asignar);
         string ValidarClienteEnZonaLiberada(string ruc);
+        List<ClienteModel> SelectClientesSegunCarteraVendedor(string correoVendedor);
 
 
 

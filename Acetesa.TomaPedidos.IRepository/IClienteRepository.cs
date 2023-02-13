@@ -26,6 +26,8 @@ namespace Acetesa.TomaPedidos.IRepository
         void ActualizarMailContacto(int tipoMail, string id, string emailPara);
         List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor);
         List<CarteraCliente> CarteraClientesAsignados(string correoVendedor, string departamentoId, string provinciaId, string distritoId);
+        List<ClienteModel> SelectClientesSegunCarteraVendedor(string correoVendedor);
+
 
         Dictionary<string, string> ActualizarAsignacionClienteVendedor(string rucCliente, string correoVendedor, bool asignar);
         string ValidarClienteEnZonaLiberada(string ruc);

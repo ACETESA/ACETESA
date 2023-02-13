@@ -829,6 +829,34 @@ namespace Acetesa.TomaPedidos.Repository
             return listaCartera;
         }
 
+        public List<ClienteModel> SelectClientesSegunCarteraVendedor(string correoVendedor)
+        {
+            List<ClienteModel> ListaClientes = new List<ClienteModel>();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("web.spSelectClientesSegunCarteraVendedor", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@correoVendedor", correoVendedor);
+                sqlCommand.CommandTimeout = 0;
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        ClienteModel c = new ClienteModel();
+                        c.cc_analis = reader["Ruc"].ToString();
+                        c.cd_razsoc = reader["RazonSocial"].ToString();
+
+                        ListaClientes.Add(c);
+                    }
+                }
+            }
+            return ListaClientes;
+        }
+
         public List<CarteraCliente> CarteraClientesAsignados(string correoVendedor ,string departamentoId, string provinciaId, string distritoId)
         {
 
