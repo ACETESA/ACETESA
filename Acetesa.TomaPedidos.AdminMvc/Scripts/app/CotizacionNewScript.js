@@ -43,8 +43,8 @@ function OnFailure(data) {
 }
 
 function limpiarCamposArticulo() {
-    $('#CotizacionDetailViewModel_cc_grupo').prop('selectedIndex', 0);
-    $('#CotizacionDetailViewModel_cc_subgrupo').prop('selectedIndex', 0);
+    //$('#CotizacionDetailViewModel_cc_grupo').prop('selectedIndex', 0);
+    //$('#CotizacionDetailViewModel_cc_subgrupo').prop('selectedIndex', 0);
     UnselectArticles();
     LlenarArticulosSelect();
     $("#CotizacionDetailViewModel_fq_cantidad").val("");

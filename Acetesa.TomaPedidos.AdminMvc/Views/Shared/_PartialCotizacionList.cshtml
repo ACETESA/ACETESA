@@ -9,8 +9,8 @@
     </style>
     @*<div class="col-xs-12 col-sm-12">Total: @Model.PagedListListaEntity.Count()</div>*@
     <div class="table-responsive">
-        <table class="table table-sm table-striped table-hover table-bordered" id="table-cotizaciones">
-            <thead class="table-secondary">
+        <table class="table table-striped table-hover table-bordered" id="table-cotizaciones">
+            <thead class="bg-secondary text-white">
                 <tr>
                     <th></th>
                     <th class="text-center">N° Pedido</th>
@@ -24,6 +24,7 @@
             <tbody>
                 @foreach (var item in Model.CotizacionModels)
                 {
+                    var IdPedidosArray = item.cn_pedido.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
                     var estado = item.cb_estado;
                     var estadoEmitido = EstadoCotizacionTypes.Por_Enviar.ToString().ToUpper();
                     var estadoEnviado = EstadoCotizacionTypes.Pendiente_Respuesta.ToString().ToUpper();
@@ -80,7 +81,7 @@
                         <td>
                             <div class="btn-group" role="group">
                                 @Html.ActionLink(" ", "Descargar", new { cn_cotizacion = item.cn_proforma }, new { @class = "btn btn-outline-secondary btn-sm fa fa-download", @title = "Descargar" })
-                                @Html.ActionLink(" ", "Editar", new { id = item.cn_proforma }, new { @class = "btn btn-success btn-sm fa fa-pencil-square-o", @title = "Editar" })
+                                @Html.ActionLink(" ", "Editar", new { id = item.cn_proforma }, new { @class = "btn btn-outline-primary btn-sm fa fa-pencil-square-o", @title = "Editar" })
                                 @if (esAnulable)
                                 {
                                     @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_proforma }, new AjaxOptions
@@ -113,32 +114,43 @@
                                 @if (esRechazable)
                                 {
 
-                                    <button class="btn btn-danger btn-sm fa fa-times" data-bs-toggle="modal" data-bs-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',0);"></button>
+                                    <button class="btn btn-outline-danger btn-sm fa fa-times" data-bs-toggle="modal" data-bs-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',0);"></button>
                                 }
 
                                 @if (esCompraParcial)
                                 {
-                                    <button type="button" class="btn btn-warning btn-sm fa fa-check-square-o" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',1);"></button>
+                                    <button type="button" class="btn btn-outline-success btn-sm fa fa-check-square-o" data-toggle="modal" data-target="#rechazoCotizacionModal" onclick="obtenerNumeroProforma('@cnCotizacionEliminar',1);"></button>
                                 }
                             </div>
                         </td>
                         <td class="text-center">
-                            @if (esGenerable)
-                            {
-                                @*@Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });*@
-                                string IDbtn = "btnGenerar" + item.cn_proforma;
-                                <button class="btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido" disabled> </button>
-                            }
-                            else
-                            {
-                                <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
-                            }
+                            <div class="btn-group-vertical">
+                                @if (esGenerable)
+                                {
+                                    @*@Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });*@
+                                    string IDbtn = "btnGenerar" + item.cn_proforma;
+                                    <button class="btn btn-warning btn-sm fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido" disabled> </button>
+                                }
+                                else
+                                {
+                                        foreach (string IdPedido in IdPedidosArray)
+                                        {
+                                            <button class="btn btn-sm btn-outline-warning text-dark">
+                                                @IdPedido
+                                            </button>
+                                        }
+                                }
 
-                            @if (esCompraParcial)
-                            {
-
-                                <h6 style="margin:0px 0px 0px 0px;">@item.cn_pedido.Replace(",", "\n")</h6>
-                            }
+                                @if (esCompraParcial)
+                                {
+                                        foreach (string IdPedido in IdPedidosArray)
+                                        {
+                                            <button class="btn btn-sm btn-outline-warning text-dark">
+                                                @IdPedido
+                                            </button>
+                                        }
+                                }
+                            </div>
                         </td>
                         <td class="text-center">
                             @Html.DisplayFor(modelItem => item.cn_proforma)
@@ -164,7 +176,7 @@
         </table>
     </div>
 
-                            //Html.RenderPartial("_PartialCotizacionListPag", Model.PagedListListaEntity);
+    //Html.RenderPartial("_PartialCotizacionListPag", Model.PagedListListaEntity);
 
 }
 <script>

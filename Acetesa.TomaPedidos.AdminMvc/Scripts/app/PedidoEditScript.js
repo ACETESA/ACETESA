@@ -84,8 +84,8 @@ function OnFailureRechazado(data) {
 }
 
 function limpiarCamposArticulo() {
-    $('#PedidoDetailViewModel_cc_grupo').prop('selectedIndex', 0);
-    $('#PedidoDetailViewModel_cc_subgrupo').prop('selectedIndex', 0);
+    //$('#PedidoDetailViewModel_cc_grupo').prop('selectedIndex', 0);
+    //$('#PedidoDetailViewModel_cc_subgrupo').prop('selectedIndex', 0);
     UnselectArticles();
     LlenarArticulosSelect();
     $("#PedidoDetailViewModel_fq_cantidad").val("");
