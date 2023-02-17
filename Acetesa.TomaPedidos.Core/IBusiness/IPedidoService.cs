@@ -19,5 +19,7 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
         IEnumerable<LDPEDIDO_WEB> PedidoDetalleServices { get; set; }
         void UpdateEstado(string cnProforma, string estado);
         Dictionary<string, string> RegistrarDocumentoOCPorPedido(string idPedido, string usuarioRegistro, byte[] documento);
+        Dictionary<string, string> ValidaCreditoSobregiroPorPedido(string ruc, decimal total, string moneda);
+
     }
 }

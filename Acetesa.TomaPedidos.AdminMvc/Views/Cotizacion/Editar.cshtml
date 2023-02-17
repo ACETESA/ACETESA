@@ -187,7 +187,7 @@
                             </div>
 
 
-                            <div class="col-12 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
+                            <div class="col-12 col-lg-9 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
                                 @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
                                 <div class="input-group">
                                     @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
@@ -200,9 +200,13 @@
                                     <style>
                                         .bootstrap-select .dropdown-menu {
                                             max-width: 100% !important;
+                                            font-size: 91%;
                                         }
                                     </style>
                                 </div>
+                            </div>
+                            <div class="col-12 col-lg-3 mb-3 rounded-3 border border-white border-3" id="datosStockTodasTiendas" style="font-size:75%;">
+
                             </div>
 
 
@@ -345,7 +349,7 @@
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
-    <script src="~/Scripts/lib/Ajax.js?v=9"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=15"></script>
     <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script>
         var gl_stock;
@@ -358,36 +362,37 @@
     </script>
 
     <script type="text/javascript">
-        urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
-        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Cotizacion")";
-        urlSucursales = "@Url.Action("GetSucursalesJson", "Cotizacion")";
-        urlContactoPorSucursal = "@Url.Action("ContactoPorSucursal", "Cotizacion")";
-        urlGetColumnasContactoEntregaDirecta = "@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
-        urlGetContactoEntregaDirectaJsonTodos = "@Url.Action("GetContactoEntregaDirectaJsonTodos", "Pedido")";
-        urlGetSucursalesJson = "@Url.Action("GetSucursalesJson", "Pedido")";
-        urlContactoEntregaDirectaNew ="@Url.Action("ContactoEntregaDirectaNew", "Pedido")";
-        urlGetContactoEditar = "@Url.Action("GetContactoEditar", "Pedido")";
-        urlActualizarContacto ="@Url.Action("ActualizarContacto", "Pedido")";
-        urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Cotizacion")";
-        urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Cotizacion")";
-        urlgetclientesbyparam ="@Url.Action("getclientesbyparam", "Cotizacion")";
-        urlGetPrecioLista ="@Url.Action("GetPrecioLista", "Cotizacion")";
-        urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Cotizacion")";
-        urlEditarAjax ="@Url.Action("EditarAjax", "Cotizacion")";
-        urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Cotizacion")";
-        urlEnviarMail ="@Url.Action("EnviarMail", "Cotizacion")";
-        urlChangePreciosByMoneda ="@Url.Action("ChangePreciosByMoneda", "Cotizacion")";
-        urlChangeTipoCambio ="@Url.Action("ChangeTipoCambio", "Cotizacion")";
-        urlGetCondicionesVentasJson ="@Url.Action("GetCondicionesVentasJson", "Cotizacion")";
-        urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
-        urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
-        urlGetVisitasClientesJson ="@Url.Action("GetVisitasClientesJson", "Cotizacion")";
-        urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Cotizacion")";
+        var urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
+        var urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Cotizacion")";
+        var urlSucursales = "@Url.Action("GetSucursalesJson", "Cotizacion")";
+        var urlContactoPorSucursal = "@Url.Action("ContactoPorSucursal", "Cotizacion")";
+        var urlGetColumnasContactoEntregaDirecta = "@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
+        var urlGetContactoEntregaDirectaJsonTodos = "@Url.Action("GetContactoEntregaDirectaJsonTodos", "Pedido")";
+        var urlGetSucursalesJson = "@Url.Action("GetSucursalesJson", "Pedido")";
+        var urlContactoEntregaDirectaNew ="@Url.Action("ContactoEntregaDirectaNew", "Pedido")";
+        var urlGetContactoEditar = "@Url.Action("GetContactoEditar", "Pedido")";
+        var urlActualizarContacto ="@Url.Action("ActualizarContacto", "Pedido")";
+        var urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Cotizacion")";
+        var urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Cotizacion")";
+        var urlgetclientesbyparam ="@Url.Action("getclientesbyparam", "Cotizacion")";
+        var urlGetPrecioLista ="@Url.Action("GetPrecioLista", "Cotizacion")";
+        var urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Cotizacion")";
+        var urlEditarAjax ="@Url.Action("EditarAjax", "Cotizacion")";
+        var urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Cotizacion")";
+        var urlEnviarMail ="@Url.Action("EnviarMail", "Cotizacion")";
+        var urlChangePreciosByMoneda ="@Url.Action("ChangePreciosByMoneda", "Cotizacion")";
+        var urlChangeTipoCambio ="@Url.Action("ChangeTipoCambio", "Cotizacion")";
+        var urlGetCondicionesVentasJson ="@Url.Action("GetCondicionesVentasJson", "Cotizacion")";
+        var urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
+        var urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
+        var urlGetVisitasClientesJson ="@Url.Action("GetVisitasClientesJson", "Cotizacion")";
+        var urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Cotizacion")";
+        var urlStockTodasTiendasPorArticulo ="@Url.Action("StockTodasTiendasPorArticulo", "Cotizacion")";
 
     </script>
-    <script src="~/Scripts/app/GlobalScript.js?v=10"></script>
-    <script src="~/Scripts/app/CotizacionEditScript.js?v=10"></script>
-    <script src="~/Scripts/app/Cotizacion.js?v=10"></script>
+    <script src="~/Scripts/app/GlobalScript.js?v=15"></script>
+    <script src="~/Scripts/app/CotizacionEditScript.js?v=15"></script>
+    <script src="~/Scripts/app/Cotizacion.js?v=15"></script>
     <script>
         var messageValidation = "@(Html.Raw(ViewBag.MessageValidation))";
         if ($.trim(messageValidation).length > 0) {

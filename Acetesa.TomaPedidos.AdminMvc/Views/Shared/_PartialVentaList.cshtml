@@ -134,7 +134,15 @@
                                                 try
                                                 {
                                                     decimal iMonto = decimal.Parse(sMonto);
-                                                    string formated_monto = iMonto.ToString("0.00");
+                                                    string formated_monto;
+                                                    if (itemCab == "Per Documento")
+                                                    {
+                                                        formated_monto = iMonto.ToString();
+                                                    }
+                                                    else
+                                                    {
+                                                        formated_monto = iMonto.ToString("0.00");
+                                                    }
                                                     @formated_monto
                                                 }
                                                 catch

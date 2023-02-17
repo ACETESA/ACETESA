@@ -1633,7 +1633,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     grupo = "%";
                 }
                 var lista = ArticuloService
-                .GetByNombreOrCodigoYGrupo(grupo, subGrupo, param, cc_tienda)
+                .GetByNombreOrCodigoYGrupo(grupo, subGrupo, /*param,*/ cc_tienda)
                 .Select(x => new SelectListItem
                 {
                     Text = x.cd_artic,
@@ -2903,6 +2903,17 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             //save fileName and fileBytes into database
             return JsonSuccess(resultado);
         }
+
+        #region VALIDACIONES PEDIDO WEB A NOTA DE PEDIDO DIRECTO
+
+        public ActionResult ValidaCreditoSobregiroPorPedido(string ruc, decimal totalPedido, string monedaPedido)
+        {
+            var resultado = PedidoService.ValidaCreditoSobregiroPorPedido(ruc, totalPedido, monedaPedido);
+
+            return JsonSuccess(resultado);
+        }
+
+        #endregion
 
     }
 

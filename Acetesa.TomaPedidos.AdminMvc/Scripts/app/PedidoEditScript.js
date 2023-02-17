@@ -94,6 +94,7 @@ function limpiarCamposArticulo() {
     $("#PedidoDetailViewModel_fm_precio_fin").val("");
     $("#PedidoDetailViewModel_fm_precio_tonelada").val("");
     $("#PedidoDetailViewModel_fq_peso_teorico").val("");
+    $("#datosStockTodasTiendas").html('');
 }
 
 (function ($, toastr) {
@@ -873,7 +874,7 @@ function limpiarCamposArticulo() {
         $sCbRecojo.val($("#cb_recojo").val());
         var $cnPedido = $("#cn_pedido");
 
-        //Primera validacion de stock que se manda a editar
+        //Primera validacion de stock
         $.ajax({
             destroy: true,
             type: "POST",
@@ -889,54 +890,94 @@ function limpiarCamposArticulo() {
                     toastr.error(result.mensaje);
                 }
                 else {
-                    //Sigue validando y resto del proceso
-                    if (!Validaciones()) {
-                        return false;
-                    }
-
-                    var form = $("#scc_analis").parent("form").serialize();
-
+                    //Valida Linea de Credito del Cliente
                     $.ajax({
-                        type: 'POST',
-                        url: _baseUrl + "Pedido/EditarAjax",
-                        data: form,
-                        async: false,
-                        cache: false,
-                        dataType: 'json',
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert(jqXHR.responseJSON.errorMessage);
-                        },
-                        success: function (data) {
-                            if (data.result == "Error") {
-                                alert(data.message);
-                                return false;
-                            } else {
-                                var idCliente = $.trim($Cliente.val());
-                                if (idCliente.length === 0) {
-                                    toastr.warning("Debe seleccionar un cliente.");
-                                    return;
-                                }
-                                var request = new Ajax();
-                                var url = _baseUrl + "Pedido/GetEmailCliente";
-                                var params = {
-                                    id: idCliente,
-                                    tipo: 'P',
-                                    Nro: $cnPedido.val()
-                                };
-                                var $Para = $("#Para");
-                                var $ConCopia = $("#ConCopia");
-                                var $Asunto = $("#Asunto");
-                                request.JsonPost(url, params, function (response) {
-                                    $Para.val($.trim(response.para));
-                                    $ConCopia.val($.trim(response.conCopia));
-                                    $Asunto.val($.trim(response.asunto));
-                                }).fail(function (data) {
-                                    OnFailure(data);
-                                });
-                                $("#modal-send-mail").modal("show");
+                        destroy: true,
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: urlValidaCreditoSobregiroPorPedido,
+                        data: JSON.stringify({
+                            ruc: $("#cc_analis").val(),
+                            totalPedido: document.getElementById("TD_TotalDetallePedido").innerText.replace(",",""),
+                            monedaPedido: $("#cc_moneda").val()
+                        }),
+                        dataType: "json",
+                        success: function (resultVLC) {
+                            //Ver si la Condicion Vta es Credito
+                            var EsCredito;
+                            var $CondicionVta = $("#cc_vta option:selected").text();
+                            if (~$CondicionVta.indexOf("CREDITO")) {
+                                EsCredito = "1";
                             }
+                            else {
+                                EsCredito = "0";
+                            }
+
+                            //Si el mensaje es error: return
+                            var mensajeID = resultVLC.mensajeID;
+                            if (mensajeID == "0" && EsCredito == "1") {
+                                toastr.error(resultVLC.mensaje);
+                            }
+                            //if (mensajeID == "0" && EsCredito == "1") {
+                            //    toastr.error(resultVLC.mensaje);
+                            //}
+                            //else {
+                                //Inicio: Save N Send
+                                if (!Validaciones()) {
+                                    return false;
+                                }
+
+                                var form = $("#scc_analis").parent("form").serialize();
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: _baseUrl + "Pedido/EditarAjax",
+                                    data: form,
+                                    async: false,
+                                    cache: false,
+                                    dataType: 'json',
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        alert(jqXHR.responseJSON.errorMessage);
+                                    },
+                                    success: function (data) {
+                                        if (data.result == "Error") {
+                                            alert(data.message);
+                                            return false;
+                                        } else {
+                                            var idCliente = $.trim($Cliente.val());
+                                            if (idCliente.length === 0) {
+                                                toastr.warning("Debe seleccionar un cliente.");
+                                                return;
+                                            }
+                                            var request = new Ajax();
+                                            var url = _baseUrl + "Pedido/GetEmailCliente";
+                                            var params = {
+                                                id: idCliente,
+                                                tipo: 'P',
+                                                Nro: $cnPedido.val()
+                                            };
+                                            var $Para = $("#Para");
+                                            var $ConCopia = $("#ConCopia");
+                                            var $Asunto = $("#Asunto");
+                                            request.JsonPost(url, params, function (response) {
+                                                $Para.val($.trim(response.para));
+                                                $ConCopia.val($.trim(response.conCopia));
+                                                $Asunto.val($.trim(response.asunto));
+                                            }).fail(function (data) {
+                                                OnFailure(data);
+                                            });
+                                            $("#modal-send-mail").modal("show");
+                                        }
+                                    }
+                                });
+                                //Fin: Save N Send
+                            //}
+                        },
+                        error: function (resultVLC) {
+                            alert("Error en javascript...");
                         }
                     });
+
                 }
             },
             error: function (result) {
@@ -1150,7 +1191,7 @@ function LlenarArticulosSelect() {
         data: JSON.stringify({
             grupo: grupo,
             subGrupo: subGrupo,
-            param: '',
+            //param: '',
             cc_tienda: cc_tienda
         }),
         dataType: "json",

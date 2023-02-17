@@ -1,75 +1,75 @@
 ﻿@model Acetesa.TomaPedidos.AdminMvc.Models.TransportistaNewViewModel
-<div id="PopupGrillaTransportista" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Seleccionar Transportista</h4>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table id="tblTransportistas" class="table table-striped table-bordered display table-hover"></table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="btnNuevoTransporte">Nuevo</button>
-                <button type="button" class="btn btn-default" id="btnCerrarTransporte">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<form id="TransporteForm" novalidate>
-    <div id="PopupNuevoTransportista" class="modal fade" tabindex="-1" role="dialog" style="z-index:1050;">
+<div class="modal fade" id="PopupGrillaTransportista" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Nuevo Transportista</h4>
+                    <h5 class="modal-title" id="staticBackdropLabel">Seleccionar Transportista</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Ruc, htmlAttributes: new { @class = "control-label" })
-                        <div class="input-group">
-                            @Html.EditorFor(model => model.Ruc, new { htmlAttributes = new { @class = "form-control ruc-sunat-tran", @maxlength = "11" } })
-                            <div class="input-group-addon" onclick="TraerDatosSUNAT('-tran')" style="cursor:pointer">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </div>
-                        </div>
-                        @Html.ValidationMessageFor(model => model.Ruc, "", new { @class = "text-danger" })
+                    <div class="table-responsive">
+                        <table id="tblTransportistas" class="table table-striped table-bordered display table-hover"></table>
                     </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.RazonSocial, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.RazonSocial, new { htmlAttributes = new { @class = "form-control razon-social-sunat-tran", @maxlength = "65" } })
-                        @Html.ValidationMessageFor(model => model.RazonSocial, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Domicilio, htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Domicilio, new { htmlAttributes = new { @class = "form-control domicilio-sunat-tran", @maxlength = "45" } })
-                        @Html.ValidationMessageFor(model => model.Domicilio, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Departamento, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.Departamento, ViewBag.GetDepartamentos as SelectList, new { @class = "form-control departamento-tran" })
-                        @Html.ValidationMessageFor(model => model.Departamento, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Provincia, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.Provincia, new List<SelectListItem>(), new { @class = "form-control provincia-tran" })
-                        @Html.ValidationMessageFor(model => model.Provincia, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Distrito, htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownListFor(model => model.Distrito, new List<SelectListItem>(), new { @class = "form-control distrito-tran" })
-                        @Html.ValidationMessageFor(model => model.Distrito, "", new { @class = "text-danger" })
-                    </div>
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-default" id="btnGrabarTransporte">Grabar</button>
+                    <button type="button" class="btn btn-primary" id="btnNuevoTransporte">Nuevo</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="btnCerrarTransporte">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+    <form id="TransporteForm" novalidate>
+        <div class="modal fade" id="PopupNuevoTransportista" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Nuevo Transportista</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Ruc, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.Ruc, new { htmlAttributes = new { @class = "form-control ruc-sunat-tran", @maxlength = "11" } })
+                                    <div class="input-group-addon" onclick="TraerDatosSUNAT('-tran')" style="cursor:pointer">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Ruc, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RazonSocial, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.RazonSocial, new { htmlAttributes = new { @class = "form-control razon-social-sunat-tran", @maxlength = "65" } })
+                                @Html.ValidationMessageFor(model => model.RazonSocial, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Domicilio, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Domicilio, new { htmlAttributes = new { @class = "form-control domicilio-sunat-tran", @maxlength = "45" } })
+                                @Html.ValidationMessageFor(model => model.Domicilio, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Departamento, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.Departamento, ViewBag.GetDepartamentos as SelectList, new { @class = "form-select departamento-tran" })
+                                @Html.ValidationMessageFor(model => model.Departamento, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Provincia, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.Provincia, new List<SelectListItem>(), new { @class = "form-select provincia-tran" })
+                                @Html.ValidationMessageFor(model => model.Provincia, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Distrito, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.Distrito, new List<SelectListItem>(), new { @class = "form-select distrito-tran" })
+                                @Html.ValidationMessageFor(model => model.Distrito, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-success" id="btnGrabarTransporte">Grabar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </form>

@@ -72,7 +72,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var fechaFinal = (model.FechaFinal + " 23:59:59").ConvertDateTime();
                 var estadoTodos = "0";//((int)EstadoCotizacionTypes.Por_Enviar).ToString();
                 var result = CotizacionService.GetCotizacionesByClienteFecInicioFecFinal(model.Cliente, fechaInicio, fechaFinal, User.Identity.Name, estadoTodos);
-                model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                //model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                model.CotizacionModels = result;
             }
             catch (Exception ex)
             {
@@ -172,7 +173,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var estadoPorEnviar = ((int)model.Estado).ToString();
 
                 var result = CotizacionService.GetCotizacionesByClienteFecInicioFecFinal(model.Cliente, fechaInicio, fechaFinal, User.Identity.Name, estadoPorEnviar);
-                model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                //model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                model.CotizacionModels = result;
+                //var model = result;//.ToPagedList(pageNumber, PageSize);
             }
             catch (Exception ex)
             {
@@ -1056,7 +1059,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 }
 
                 var lista = ArticuloService
-                .GetByNombreOrCodigoYGrupo(grupo, subGrupo, param, cc_tienda)
+                .GetByNombreOrCodigoYGrupo(grupo, subGrupo, /*param,*/ cc_tienda)
                 .Select(x => new SelectListItem
                 {
                     Text = x.cd_artic,
@@ -2064,6 +2067,12 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             Dictionary<string, string> diccionario = new Dictionary<string, string>();
             diccionario = CotizacionService.RegistrarCierreCotizacionParcial(cn_proforma, idMotivo, mensajeRechazo);
             return JsonSuccess(diccionario);
+        }
+
+        public ActionResult StockTodasTiendasPorArticulo(string idArticulo)
+        {
+            var listaStockArticulos = ArticuloService.ObtenerStockTodasTiendasPorArticulo(idArticulo);
+            return JsonSuccess(listaStockArticulos);
         }
     }
 }

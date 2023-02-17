@@ -7,7 +7,7 @@ function OnComplete() {
     unBlockScreen();
 }
 function OnFailure(data) {
-    var errorMessages = $.parseJSON(data.responseText);
+    var errorMessages = JSON.parse(JSON.stringify(data.responseText));
     if (errorMessages.errorMessage) {
         alert(errorMessages.errorMessage);
     } else {

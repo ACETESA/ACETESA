@@ -13,6 +13,8 @@
         }
         public class Stock {
             public int stock { get; set; }
+            public decimal stockActual { get; set; }
+            public string tienda { get; set; }
         }
     }
 }

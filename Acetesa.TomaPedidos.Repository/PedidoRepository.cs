@@ -312,5 +312,40 @@ namespace Acetesa.TomaPedidos.Repository
             return diccionario;
         }
 
+        public Dictionary<string, string> ValidaCreditoSobregiroPorPedido(string ruc, decimal total, string moneda)
+        {
+            Dictionary<string, string> diccionario = new Dictionary<string, string>();
+            var cn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var conexion = new SqlConnection(cn);
+            using (conexion)
+            {
+                SqlCommand cmd = new SqlCommand("[dbo].[spValidaCreditoSobregiroPorPedido]", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@cc_analis", ruc);
+                cmd.Parameters.AddWithValue("@montoTotalPedido", total);
+                cmd.Parameters.AddWithValue("@MonedaPedido", moneda);
+                cmd.CommandTimeout = 0;
+                conexion.Open();
+                var da = new SqlDataAdapter(cmd);
+                var dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow fila in dt.Rows)
+                {
+                    string mensajeID = fila["mensajeID"].ToString();
+                    string mensaje = fila["mensaje"].ToString();
+                    string DeudaCliente = fila["DeudaCliente"].ToString();
+                    string LimiteCreditoCliente = fila["LimiteCreditoCliente"].ToString();
+                    string EsSobregiro = fila["EsSobregiro"].ToString();
+
+                    diccionario.Add("mensajeID", mensajeID);
+                    diccionario.Add("mensaje", mensaje);
+                    diccionario.Add("DeudaCliente", DeudaCliente);
+                    diccionario.Add("LimiteCreditoCliente", LimiteCreditoCliente);
+                    diccionario.Add("EsSobregiro", EsSobregiro);
+                }
+            }
+            return diccionario;
+        }
+
     }
 }

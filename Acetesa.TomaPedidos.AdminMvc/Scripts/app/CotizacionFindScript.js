@@ -11,7 +11,7 @@ function OnSuccess(data) {
             timeOut: 3000
         });
     } else {
-        scrollToScreen("#result", 1000);
+        ScrollToElement("#result",2000);
         validarProductos();
     }
 }
@@ -177,6 +177,7 @@ function OnFailureRechazar(data) {
         //    $("#FechaFinal").focus();
         //    return false;
         //}
+
     });
 })(jQuery);
 

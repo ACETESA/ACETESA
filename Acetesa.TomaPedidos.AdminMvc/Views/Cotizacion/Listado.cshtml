@@ -19,7 +19,7 @@
     @Html.AntiForgeryToken()
     @Html.Hidden("page")
 
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header bg-success text-bg-secondary">
             <h3>Listado de Cotizaciones</h3>
         </div>
@@ -42,14 +42,14 @@
                         </style>
                     </div>
                 </div>
-                <div class="col-12 mb-3">
+                <div class="col-12 col-lg-6 mb-3">
                     @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "form-label" })
-                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @type = "date", @onfocus = "this.showPicker()" })
+                    @Html.TextBoxFor(model => model.FechaInicio, new { @class = "form-control", @type = "date" }) @*, @onfocus = "this.showPicker()" *@
                     @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-12 mb-3">
+                <div class="col-12 col-lg-6 mb-3">
                     @Html.LabelFor(model => model.FechaFinal, htmlAttributes: new { @class = "form-label" })
-                    @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control", @type = "date", @onfocus = "this.showPicker()"})
+                    @Html.TextBoxFor(model => model.FechaFinal, new { @class = "form-control", @type = "date" })
                     @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-12 mb-3">
@@ -87,7 +87,8 @@
 @section CssTop{
     @Styles.Render("~/Content/ui")
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
-    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    @*<link href="~/Content/PagedList.css" rel="stylesheet" />*@
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
 }
 @section Scripts {
@@ -95,7 +96,7 @@
     @Scripts.Render("~/bundles/jqueryui")
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
-    <script src="~/Scripts/lib/Ajax.js?v=9"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=15"></script>
     <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script>
         _baseUrl = "@ViewBag.BaseUrl";
@@ -106,7 +107,7 @@
         var urlSelectClientesSegunCarteraVendedor = '@Url.Action("SelectClientesSegunCarteraVendedor", "Cliente")';
 
     </script>
-    <script src="~/Scripts/app/CotizacionFindScript.js?v=9"></script>
+    <script src="~/Scripts/app/CotizacionFindScript.js?v=15"></script>
 
     <script>
         //Carga el select del modal de Rechazar Cotizacion
@@ -136,6 +137,8 @@
         //Se ejecuta cuando la ventana ha cargado
         window.onload = function () {
             LlenarMotivoSelect();
+            //Cargar el Listado
+            $("#btnEnviar").click();
         }
 
         //Guardar los datos de Rechazar Cotizacion

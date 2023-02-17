@@ -644,71 +644,86 @@ namespace Acetesa.TomaPedidos.Repository
         public List<TSECTOR> ListarSector()
         {
             List<TSECTOR> listaSector = new List<TSECTOR>();
-            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection sqlConnection = new SqlConnection(connection))
-            {
-                SqlCommand sqlCommand = new SqlCommand("sp_cat_cli_tsector", sqlConnection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlConnection.Open();
 
-                var reader = sqlCommand.ExecuteReader();
-                using (reader)
+            string query = "[dbo].[sp_cat_cli_tsector]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    while (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                     {
-                        TSECTOR sector = new TSECTOR();
-                        sector.cc_sector = reader["cc_sector"].ToString();
-                        sector.cd_sector = reader["cd_sector"].ToString();
-                        listaSector.Add(sector);
+                        while (reader.Read())
+                        {
+                            listaSector.Add(
+                                new TSECTOR
+                                {
+                                    cc_sector = reader["cc_sector"].ToString(),
+                                    cd_sector = reader["cd_sector"].ToString()
+                                }
+                                );
+                        }
                     }
                 }
             }
             return listaSector;
         }
+
         public List<UBIGEO> ListarDepartamento()
         {
-            List<UBIGEO> listaDepartamento = new List<UBIGEO>();
-            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection sqlConnection = new SqlConnection(connection))
-            {
-                SqlCommand sqlCommand = new SqlCommand("sp_cat_cli_ay_dpto", sqlConnection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlConnection.Open();
+            List<UBIGEO> listaDepartamentos = new List<UBIGEO>();
 
-                var reader = sqlCommand.ExecuteReader();
-                using (reader)
+            string query = "[dbo].[sp_cat_cli_ay_dpto]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    while (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    using(SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                     {
-                        UBIGEO departamento = new UBIGEO();
-                        departamento.cc_dpto = reader["cc_dpto"].ToString();
-                        departamento.cd_dpto = reader["cd_dpto"].ToString();
-                        listaDepartamento.Add(departamento);
+                        while (reader.Read())
+                        {
+                            listaDepartamentos.Add(
+                                new UBIGEO {
+                                    cc_dpto = reader["cc_dpto"].ToString(),
+                                    cd_dpto = reader["cd_dpto"].ToString()
+                                }
+                                );
+                        }
                     }
                 }
             }
-            return listaDepartamento;
+            return listaDepartamentos;
         }
         public List<UBIGEO> ListarProvincia(string cc_dpto)
         {
             List<UBIGEO> listaProvincia = new List<UBIGEO>();
-            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection sqlConnection = new SqlConnection(connection))
-            {
-                SqlCommand sqlCommand = new SqlCommand("sp_cat_cli_ay_prov", sqlConnection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@cc_dpto", cc_dpto);
-                sqlConnection.Open();
 
-                var reader = sqlCommand.ExecuteReader();
-                using (reader)
+            string query = "[dbo].[sp_cat_cli_ay_prov]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    while (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc_dpto", cc_dpto);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                     {
-                        UBIGEO provincia = new UBIGEO();
-                        provincia.cc_prov = reader["cc_prov"].ToString();
-                        provincia.cd_prov = reader["cd_prov"].ToString();
-                        listaProvincia.Add(provincia);
+                        while (reader.Read())
+                        {
+                            listaProvincia.Add(
+                                new UBIGEO
+                                {
+                                    cc_prov = reader["cc_prov"].ToString(),
+                                    cd_prov = reader["cd_prov"].ToString()
+                                }
+                                );
+                        }
                     }
                 }
             }
@@ -717,24 +732,29 @@ namespace Acetesa.TomaPedidos.Repository
         public List<UBIGEO> ListarDistrito(string cc_dpto, string cc_prov)
         {
             List<UBIGEO> listaDistrito = new List<UBIGEO>();
-            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection sqlConnection = new SqlConnection(connection))
-            {
-                SqlCommand sqlCommand = new SqlCommand("sp_cat_cli_ay_distrito", sqlConnection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@cc_dpto", cc_dpto);
-                sqlCommand.Parameters.AddWithValue("@cc_prov", cc_prov);
-                sqlConnection.Open();
 
-                var reader = sqlCommand.ExecuteReader();
-                using (reader)
+            string query = "[dbo].[sp_cat_cli_ay_distrito]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    while (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc_dpto", cc_dpto);
+                    cmd.Parameters.AddWithValue("@cc_prov", cc_prov);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                     {
-                        UBIGEO distrito = new UBIGEO();
-                        distrito.cc_distrito = reader["cc_distrito"].ToString();
-                        distrito.cd_distrito = reader["cd_distrito"].ToString();
-                        listaDistrito.Add(distrito);
+                        while (reader.Read())
+                        {
+                            listaDistrito.Add(
+                                new UBIGEO
+                                {
+                                    cc_distrito = reader["cc_distrito"].ToString(),
+                                    cd_distrito = reader["cd_distrito"].ToString()
+                                }
+                                );
+                        }
                     }
                 }
             }

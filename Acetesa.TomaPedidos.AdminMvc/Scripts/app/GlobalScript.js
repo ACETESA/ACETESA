@@ -265,3 +265,11 @@ $(document).ajaxSend(function (event, request, settings) {
 $(document).ajaxComplete(function (event, request, settings) {
     unBlockScreen();
 });
+
+
+//Scroll to Element
+function ScrollToElement(element, time) {
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(element).offset().top - 100
+    }, time);
+}

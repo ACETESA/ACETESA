@@ -39,9 +39,9 @@ namespace Acetesa.TomaPedidos.Core.Business
         }
 
 
-        public IEnumerable<ArticuloModel> GetByNombreOrCodigoYGrupo(string grupo, string subGrupo, string param, string cc_tienda)
+        public IEnumerable<ArticuloModel> GetByNombreOrCodigoYGrupo(string grupo, string subGrupo, /*string param,*/ string cc_tienda)
         {
-            return _articuloRepository.GetArticuloNombreOrCodigoYGrupo(grupo, subGrupo, param, cc_tienda);
+            return _articuloRepository.GetArticuloNombreOrCodigoYGrupo(grupo, subGrupo, /*param,*/ cc_tienda);
         }
         public List<ArticuloModel.ArticuloGS> GrupoSubgrupoSegunArtic(string idArticulo)
         {
@@ -66,6 +66,10 @@ namespace Acetesa.TomaPedidos.Core.Business
         public Dictionary<string, string> ValidarStockPedido(string cnPedido, string listaArtic, string listaStockSolicitado, string ccTienda)
         {
             return _articuloRepository.ValidarStockPedido(cnPedido, listaArtic, listaStockSolicitado, ccTienda);
+        }
+        public List<ArticuloModel.Stock> ObtenerStockTodasTiendasPorArticulo(string IdArticulo)
+        {
+            return _articuloRepository.ObtenerStockTodasTiendasPorArticulo(IdArticulo);
         }
     }
 }

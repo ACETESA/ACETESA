@@ -126,42 +126,40 @@ namespace Acetesa.TomaPedidos.Repository
             return query;
         }
 
-        public IEnumerable<ArticuloModel> GetArticuloNombreOrCodigoYGrupo(string grupo, string subGrupo, string param,string cc_tienda)
+        public IEnumerable<ArticuloModel> GetArticuloNombreOrCodigoYGrupo(string grupo, string subGrupo, /*string param,*/ string cc_tienda)
         {
-            object[] sqlParamt =
-            {
-                 new SqlParameter
-                {
-                    ParameterName = "@grupo",
-                    SqlDbType = SqlDbType.VarChar,
-                    Size = 2,
-                    Value = grupo
-                },
-                 new SqlParameter
-                {
-                    ParameterName = "@subGrupo",
-                    SqlDbType = SqlDbType.VarChar,
-                    //Size = 4,
-                    Value = subGrupo
-                },
-                new SqlParameter
-                {
-                    ParameterName = "@param",
-                    SqlDbType = SqlDbType.VarChar ,
-                    Value = param
-                },
-                new SqlParameter
-                {
-                    ParameterName = "@cc_tienda",
-                    SqlDbType = SqlDbType.VarChar ,
-                    Size=2,
-                    Value = cc_tienda
-                }
-            };
+            List<ArticuloModel> listaArticulos = new List<ArticuloModel>();
 
-            var query = _dbContext.GetExecSpEnumerable<ArticuloModel>("usp_tm_getArticuloNombreCodigoYGrupo", sqlParamt);
-            return query;
+            string query = "[dbo].[usp_tm_getArticuloNombreCodigoYGrupo]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@grupo", grupo);
+                    cmd.Parameters.AddWithValue("@subGrupo", subGrupo);
+                    //cmd.Parameters.AddWithValue("@param", param);
+                    cmd.Parameters.AddWithValue("@cc_tienda", cc_tienda);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaArticulos.Add(
+                                new ArticuloModel
+                                {
+                                    cc_artic = reader["cc_artic"].ToString(),
+                                    cd_artic = reader["cd_artic"].ToString()
+                                }
+                                );
+                        }
+                    }
+                }
+            }
+            return listaArticulos;
         }
+
         public List<ArticuloModel.ArticuloGS> GrupoSubgrupoSegunArtic(string idArticulo)
         {
             object[] sqlParams =
@@ -308,6 +306,37 @@ namespace Acetesa.TomaPedidos.Repository
                 }
             }
             return diccionario;
+        }
+
+        public List<ArticuloModel.Stock> ObtenerStockTodasTiendasPorArticulo(string IdArticulo)
+        {
+            List<ArticuloModel.Stock> listaStockArticulo = new List<ArticuloModel.Stock>();
+
+            string query = "[web].[spObtenerStockTodasTiendasPorArticulo]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdArticulo", IdArticulo);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaStockArticulo.Add(
+                                new ArticuloModel.Stock
+                                {
+                                    tienda = reader["tienda"].ToString(),
+                                    stockActual = decimal.Parse(reader["stock"].ToString())
+                                }
+                                );
+                        }
+                    }
+                }
+            }
+            return listaStockArticulo;
         }
     }
 }

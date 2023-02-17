@@ -74,6 +74,8 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
                         //Selecciona el articulo
                         $('.selectpicker').selectpicker('val', [idArticulo]);
                         $('.selectpicker').selectpicker('refresh');
+
+                        StockTodasTiendasPorArticulo();
                     },
                     error: function (resultArt) {
                         alert("Error en javascript...");
@@ -430,3 +432,53 @@ function ActualizarContacto() {
         }
     });
 }
+
+
+//Mostrar stock todas las tiendas por Articulo
+function StockTodasTiendasPorArticulo() {
+    var $datosStockTodasTiendas = $("#datosStockTodasTiendas");
+    var $cc_artic = $("#CotizacionDetailViewModel_cc_artic");
+
+    $datosStockTodasTiendas.html('');
+
+    if ($cc_artic.val() == null) {
+        $datosStockTodasTiendas.html('');
+    }
+    else {
+        $.ajax({
+            destroy: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: urlStockTodasTiendasPorArticulo,
+            data: JSON.stringify({
+                idArticulo: $cc_artic.val()
+            }),
+            dataType: "json",
+            success: function (result) {
+                var html = '<div class="row">';
+
+                $.each(result, function (i, item) {
+                    var stockActual = item.stockActual;
+                    var tienda = item.tienda.replace("AREQUIPA","AQP").replace("PUCALLPA","PUC");
+
+                    html += '<div class="col-6">Stock ' + tienda + ' </div>'
+                        + '<div class="col-1">:</div>'
+                        + '<div class="col-4"> ' + stockActual + '</div>'
+                });
+
+                html += '</div>';
+
+                $datosStockTodasTiendas.html(html);
+            },
+            error: function (result) {
+                alert("Error en javascript...");
+            }
+        });
+    }
+
+}
+
+
+$('#CotizacionDetailViewModel_cc_artic').on('change', function (e) {
+    StockTodasTiendasPorArticulo();
+});

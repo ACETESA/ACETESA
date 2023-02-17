@@ -161,19 +161,23 @@
             <td>Dirección</td>
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;">@direccion</td>
-            <td>Correo</td>
+            @*<td>Correo</td>
             <td>:</td>
-            <td style="border-bottom: 1px solid #000000;" colspan="3">@email</td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3">@email</td>*@
+            <td>Teléfono</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3">@telefono</td>
         </tr>
         <tr>
             <td>Punto de Entrega</td>
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Cn_lug) ? "" : pedidoAdicional.cd_direc))</td>
-            <td>Teléfono</td>
+            @*<td>Teléfono</td>
+        <td>:</td>
+        <td style="border-bottom: 1px solid #000000;">@telefono</td>*@
+            <td>Fecha</td>
             <td>:</td>
-            <td style="border-bottom: 1px solid #000000;">@telefono</td>
-            <td width="50px;">Fecha :</td>
-            <td style="border-bottom: 1px solid #000000;">@fecha</td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3">@fecha</td>
         </tr>
         <tr>
             <td>Forma de pago</td>

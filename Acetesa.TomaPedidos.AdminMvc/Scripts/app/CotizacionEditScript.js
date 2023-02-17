@@ -80,6 +80,7 @@ function limpiarCamposArticulo() {
     $("#CotizacionDetailViewModel_fm_precio_fin").val("");
     $("#CotizacionDetailViewModel_fm_precio_tonelada").val("");
     $("#CotizacionDetailViewModel_fq_peso_teorico").val("");
+    $("#datosStockTodasTiendas").html('');
 }
 
 (function ($, toastr) {
@@ -1007,7 +1008,7 @@ function LlenarArticulosSelect() {
         data: JSON.stringify({
             grupo: grupo,
             subGrupo: subGrupo,
-            param: '',
+            //param: '',
             cc_tienda: cc_tienda
         }),
         dataType: "json",

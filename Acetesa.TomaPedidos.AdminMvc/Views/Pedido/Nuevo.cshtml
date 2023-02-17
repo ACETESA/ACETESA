@@ -179,7 +179,7 @@
                             </div>
 
 
-                            <div class="col-12 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
+                            <div class="col-12 col-lg-9 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
                                 @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
                                 <div class="input-group">
                                     @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
@@ -192,9 +192,13 @@
                                     <style>
                                         .bootstrap-select .dropdown-menu {
                                             max-width: 100% !important;
+                                            font-size: 91%;
                                         }
                                     </style>
                                 </div>
+                            </div>
+                            <div class="col-12 col-lg-3 mb-3 rounded-3 border border-white border-3" id="datosStockTodasTiendas" style="font-size:75%;">
+
                             </div>
 
 
@@ -336,25 +340,28 @@
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
     <script src="~/Scripts/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
-    <script src="~/Scripts/lib/Ajax.js?v=9"></script>
-    <script src="~/Scripts/app/email-service.js?v=9"></script>
+    <script src="~/Scripts/lib/Ajax.js?v=15"></script>
+    <script src="~/Scripts/app/email-service.js?v=15"></script>
     <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script type="text/javascript">
-        urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
-        urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
-        urlListarSectores = "@Url.Action("Sectores", "Pedido")";
-        urlListarDepartamentos = "@Url.Action("Departamentos", "Pedido")";
-        urlListarProvincias = "@Url.Action("Provincias", "Pedido")";
-        urlListarDistritos = "@Url.Action("Distritos", "Pedido")";
-        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Pedido")";
-        urlGetColumnasContactoEntregaDirecta = "@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
-        urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Pedido")";
-        urlValidarStockPedido = "@Url.Action("ValidarStockPedido", "Pedido")";
+        var urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
+        var urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
+        var urlListarSectores = "@Url.Action("Sectores", "Pedido")";
+        var urlListarDepartamentos = "@Url.Action("Departamentos", "Pedido")";
+        var urlListarProvincias = "@Url.Action("Provincias", "Pedido")";
+        var urlListarDistritos = "@Url.Action("Distritos", "Pedido")";
+        var urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Pedido")";
+        var urlGetColumnasContactoEntregaDirecta = "@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
+        var urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Pedido")";
+        var urlValidarStockPedido = "@Url.Action("ValidarStockPedido", "Pedido")";
         var urlValidaProductosCotizacion = '@Url.Action("ValidaProductosCotizacion", "Pedido")';
-        urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
-        urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
-        urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Pedido")";
-        urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
+        var urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
+        var urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
+        var urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Pedido")";
+        var urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
+        var urlValidaCreditoSobregiroPorPedido = "@Url.Action("ValidaCreditoSobregiroPorPedido", "Pedido")";
+        var urlStockTodasTiendasPorArticulo ="@Url.Action("StockTodasTiendasPorArticulo", "Cotizacion")";
+
     </script>
     <script>
         var gl_IdArtic;
@@ -563,8 +570,8 @@
         </script>
     }
 
-    <script src="~/Scripts/app/PedidoNewScript.js?v=10"></script>
-    <script src="~/Scripts/app/Pedido.js?v=10"></script>
+    <script src="~/Scripts/app/PedidoNewScript.js?v=15"></script>
+    <script src="~/Scripts/app/Pedido.js?v=15"></script>
 
     <script>
         var cn_pedido = $("#cn_pedido").val(); //Setting value to pedido

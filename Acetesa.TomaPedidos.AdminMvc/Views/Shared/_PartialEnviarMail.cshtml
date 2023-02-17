@@ -3,11 +3,11 @@
 <div class="modal fade" id="modal-send-mail" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
+            <div class="modal-header bg-warning text-dark bg-opacity-75">
                 <h5 class="modal-title" id="staticBackdropLabel">Nuevo Mensaje</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> @*btn-close-white*@
             </div>
-            <div class="modal-body bg-warning bg-opacity-25">
+            <div class="modal-body bg-secondary bg-opacity-10">
                 <form id="enviarMailForm" novalidate>
                     <row>
                         <div class="col-12 mb-3">
@@ -31,9 +31,9 @@
                     </row>
                 </form>
             </div>
-            <div class="modal-footer bg-warning bg-opacity-25 border-top-0">
+            <div class="modal-footer bg-secondary bg-opacity-10 border-top-0">
                 <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="btnCloseModal">Cerrar</button>
-                <button type="button" class="btn btn-warning" id="btnSendMailModal">Enviar</button>
+                <button type="button" class="btn btn-warning bg-opacity-75" id="btnSendMailModal">Enviar</button>
             </div>
         </div>
     </div>

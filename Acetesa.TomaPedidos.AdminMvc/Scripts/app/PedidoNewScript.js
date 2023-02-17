@@ -60,6 +60,7 @@ function limpiarCamposArticulo() {
     $("#PedidoDetailViewModel_fm_precio_fin").val("");
     $("#PedidoDetailViewModel_fm_precio_tonelada").val("");
     $("#PedidoDetailViewModel_fq_peso_teorico").val("");
+    $("#datosStockTodasTiendas").html('');
 }
 
 (function ($, toastr) {
@@ -862,7 +863,7 @@ function limpiarCamposArticulo() {
         lista_ccArtic = lista_ccArtic.substring(0, lista_ccArtic.length - 1);
         lista_stockSolicitado = lista_stockSolicitado.substring(0, lista_stockSolicitado.length - 1);
 
-        //Primera validacion de stock que se manda a editar
+        //Primera validacion de stock
         $.ajax({
             destroy: true,
             type: "POST",
@@ -880,45 +881,86 @@ function limpiarCamposArticulo() {
                     toastr.error(result.mensaje);
                 }
                 else {
+                    //Valida Linea de Credito del Cliente
+                    $.ajax({
+                        destroy: true,
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: urlValidaCreditoSobregiroPorPedido,
+                        data: JSON.stringify({
+                            ruc: $("#cc_analis").val(),
+                            totalPedido: document.getElementById("TD_TotalDetallePedido").innerText.replace(",",""),
+                            //totalPedido: document.getElementById("aTotVta").innerText,
+                            monedaPedido: $("#cc_moneda").val()
+                        }),
+                        dataType: "json",
+                        success: function (resultVLC) {
+                            //Ver si la Condicion Vta es Credito
+                            var EsCredito;
+                            var $CondicionVta = $("#cc_vta option:selected").text();
+                            if (~$CondicionVta.indexOf("CREDITO")) {
+                                EsCredito = "1";
+                            }
+                            else {
+                                EsCredito = "0";
+                            }
 
-                    _tipoFormulario = "Pedido";
-                    if ($.trim($txtRazonSocial.val()).length === 0) {
-                        $Cliente.val("");
-                    }
+                            //Si el mensaje es error: return
+                            var mensajeID = resultVLC.mensajeID;
 
-                    UnselectArticles();
+                            if (mensajeID == "0" && EsCredito == "1") {
+                                toastr.error(resultVLC.mensaje);
+                            }
+                            //if (mensajeID == "0" && EsCredito == "1") {
+                            //    toastr.error(resultVLC.mensaje);
+                            //}
+                            //else {
+                                //Inicio: Save N Send
+                                _tipoFormulario = "Pedido";
+                                if ($.trim($txtRazonSocial.val()).length === 0) {
+                                    $Cliente.val("");
+                                }
 
-                    $sCcAnalis.val($("#cc_analis").val());
-                    $sCcMoneda.val($("#cc_moneda").val());
-                    $sCcVta.val($("#cc_vta").val());
-                    $sFechaEmision.val($("#FechaEmision").val());
-                    $sFechaEntrega.val($("#FechaEntrega").val());
-                    $sFmTipCam.val($("#n_i_paralelo_venta").val());
-                    $sCnSuc.val($("#cn_suc").val());
-                    $sCC_transp.val($("#CC_transp").val());
-                    $sContactoTransporte.val($("#ContactoTransporte").val());
-                    $sCn_lug.val($("#Cn_lug").val());
-                    $sIdContactoEntregaDirecta.val($("#IdContactoEntregaDirecta").val());
-                    $sTienda.val($("#Tienda").val());
-                    $sIgv_bo.val($("#igv_bo").val());
-                    $sZonaLiberada.val($("#zonaLiberada_bo").val());
-                    $sVt_observacion.val($("#Vt_observacion").val());
-                    $sCn_ocompra.val($("#cn_ocompra").val());
-                    $sCbRecojo.val($("#cb_recojo").val());
-                    if (!Validaciones()) {
-                        return false;
-                    }
-                    var $detallePedidos = $("#table-detail-pedidos");
-                    $detallePedidos.find("tbody tr");
+                                UnselectArticles();
 
-                    if ($detallePedidos.length === 0) {
-                        toastr.warning("Debe seleccionar los articulos");
-                        e.preventDefault();
-                        return;
-                    }
-                    if ($formNew.valid()) {
-                        emailService.GetEmailByCliente("cc_analis");
-                    }
+                                $sCcAnalis.val($("#cc_analis").val());
+                                $sCcMoneda.val($("#cc_moneda").val());
+                                $sCcVta.val($("#cc_vta").val());
+                                $sFechaEmision.val($("#FechaEmision").val());
+                                $sFechaEntrega.val($("#FechaEntrega").val());
+                                $sFmTipCam.val($("#n_i_paralelo_venta").val());
+                                $sCnSuc.val($("#cn_suc").val());
+                                $sCC_transp.val($("#CC_transp").val());
+                                $sContactoTransporte.val($("#ContactoTransporte").val());
+                                $sCn_lug.val($("#Cn_lug").val());
+                                $sIdContactoEntregaDirecta.val($("#IdContactoEntregaDirecta").val());
+                                $sTienda.val($("#Tienda").val());
+                                $sIgv_bo.val($("#igv_bo").val());
+                                $sZonaLiberada.val($("#zonaLiberada_bo").val());
+                                $sVt_observacion.val($("#Vt_observacion").val());
+                                $sCn_ocompra.val($("#cn_ocompra").val());
+                                $sCbRecojo.val($("#cb_recojo").val());
+                                if (!Validaciones()) {
+                                    return false;
+                                }
+                                var $detallePedidos = $("#table-detail-pedidos");
+                                $detallePedidos.find("tbody tr");
+
+                                if ($detallePedidos.length === 0) {
+                                    toastr.warning("Debe seleccionar los articulos");
+                                    e.preventDefault();
+                                    return;
+                                }
+                                if ($formNew.valid()) {
+                                    emailService.GetEmailByCliente("cc_analis");
+                                }
+                                //Fin: Save N Send
+                            //}
+                        },
+                        error: function (resultVLC) {
+                            alert("Error en javascript...");
+                        }
+                    });
                 }
             },
             error: function (result) {
@@ -1318,7 +1360,7 @@ function LlenarArticulosSelect() {
         data: JSON.stringify({
             grupo: grupo,
             subGrupo: subGrupo,
-            param: '',
+            //param: '',
             cc_tienda: cc_tienda
         }),
         dataType: "json",

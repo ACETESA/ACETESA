@@ -203,5 +203,9 @@ namespace Acetesa.TomaPedidos.Core.Business
         {
             return _pedidoRepository.RegistrarDocumentoOCPorPedido(idPedido,usuarioRegistro,documento);
         }
+        public Dictionary<string, string> ValidaCreditoSobregiroPorPedido(string ruc, decimal total, string moneda)
+        {
+            return _pedidoRepository.ValidaCreditoSobregiroPorPedido(ruc,total,moneda);
+        }
     }
 }
