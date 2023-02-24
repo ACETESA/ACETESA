@@ -81,7 +81,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var fechaFinal = (model.FechaFinal + " 23:59:59").ConvertDateTime();
                 var estadoEnviado = ((int)EstadoPedidoTypes.Emitido).ToString();
                 var result = PedidoService.GetPedidosByClienteFecInicioFecFinal(model.Cliente, fechaInicio, fechaFinal, estadoEnviado, User.Identity.Name);
-                model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                //model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                model.CotizacionModels = result;
             }
             catch (Exception ex)
             {
@@ -127,7 +128,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var fechaFinal = (model.FechaFinal + " 23:59:59").ConvertDateTime();
                 var estado = ((int)model.Estado).ToString();
                 var result = PedidoService.GetPedidosByClienteFecInicioFecFinal(model.Cliente, fechaInicio, fechaFinal, estado, User.Identity.Name);
-                model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                //model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                model.CotizacionModels = result;
             }
             catch (Exception ex)
             {

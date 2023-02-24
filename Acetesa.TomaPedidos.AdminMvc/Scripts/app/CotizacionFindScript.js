@@ -12,41 +12,41 @@ function OnSuccess(data) {
         });
     } else {
         ScrollToElement("#result",2000);
-        validarProductos();
+        //validarProductos();
     }
 }
 function OnComplete() {
     unBlockScreen();
 }
 
-function validarProductos() {
-    $(".GenerarPedido").each(function () {
-        var cnProforma = $(this).attr('id');
-        cnProforma = cnProforma.substring(10, cnProforma.length);
-        var btnGenerar = document.getElementById($(this).attr('id'));
-        $.ajax({
-            destroy: true,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: urlValidaProductosCotizacion,
-            data: JSON.stringify({
-                cnProforma: cnProforma
-            }),
-            dataType: "json",
-            success: function (result) {
-                id = result.id;
-                if (id == "0") {
-                    btnGenerar.setAttribute("onclick", "toastr.error('" + result.mensaje + "'); event.preventDefault();");
-                }
-                btnGenerar.removeAttribute("disabled");
-            },
-            error: function (result) {
-                alert("Error en javascript...");
-            }
-        });
+//function validarProductos() {
+//    $(".GenerarPedido").each(function () {
+//        var cnProforma = $(this).attr('id');
+//        cnProforma = cnProforma.substring(10, cnProforma.length);
+//        var btnGenerar = document.getElementById($(this).attr('id'));
+//        $.ajax({
+//            destroy: true,
+//            type: "POST",
+//            contentType: "application/json; charset=utf-8",
+//            url: urlValidaProductosCotizacion,
+//            data: JSON.stringify({
+//                cnProforma: cnProforma
+//            }),
+//            dataType: "json",
+//            success: function (result) {
+//                id = result.id;
+//                if (id == "0") {
+//                    btnGenerar.setAttribute("onclick", "toastr.error('" + result.mensaje + "'); event.preventDefault();");
+//                }
+//                btnGenerar.removeAttribute("disabled");
+//            },
+//            error: function (result) {
+//                alert("Error en javascript...");
+//            }
+//        });
 
-    });
-}
+//    });
+//}
 
 function OnFailure(data) {
     var errorMessages = JSON.parse(JSON.stringify(data.responseText));
@@ -212,5 +212,18 @@ function LlenarClientesSelect() {
     error: function (result) {
         alert("Error en javascript...");
     }
+    });
+}
+
+
+
+//                    btnGenerar.setAttribute("onclick", "toastr.error('" + result.mensaje + "'); event.preventDefault();");
+
+
+function mensajeValidacionArticulos(idmensaje, mensaje) {
+    toastr.error(mensaje, "Validación de Artículos", {
+        closeButton: true,
+        timeOut: 30000,
+        progressBar: true
     });
 }

@@ -1,15 +1,15 @@
 ﻿@using Acetesa.TomaPedidos.Transversal.Enums
 @model Acetesa.TomaPedidos.AdminMvc.Models.PedidoFindViewModel
-@if (Model != null && Model.PagedListListaEntity != null && Model.PagedListListaEntity.Any())
+@if (Model != null && Model.CotizacionModels != null && Model.CotizacionModels.Any())
 {
     <style type="text/css">
         .table > tbody > tr > td {
             vertical-align: middle;
         }
     </style>
-    <div class="col-xs-12 col-sm-12">Total: @Model.PagedListListaEntity.Count()</div>
-    <table class="table table-responsive" id="table-cotizaciones">
-        <thead>
+    @*<div class="col-xs-12 col-sm-12">Total: @Model.PagedListListaEntity.Count()</div>*@
+    <table class="table table-striped table-hover table-bordered" id="table-cotizaciones">
+        <thead class="bg-secondary text-white">
             <tr>
                 <th></th>
                 <th style="text-align: left">Nro. Pedido</th>
@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.PagedListListaEntity)
+            @foreach (var item in Model.CotizacionModels)
             {
                 var estado = item.cb_estado;
                 var estadoEmitido = EstadoPedidoTypes.Emitido.ToString().ToUpper();
@@ -59,7 +59,7 @@
                 <tr>
                     <td>
                         @Html.ActionLink(" ", "Descargar", new { cn_pedido = item.cn_pedido }, new { @class = "btn btn-outline-secondary btn-sm fa fa-download", @title = "Descargar" })
-                        @Html.ActionLink(" ", "Editar", new { id = item.cn_pedido }, new { @class = "btn btn-success btn-sm fa fa-pencil-square-o", @title = "Editar" })
+                        @Html.ActionLink(" ", "Editar", new { id = item.cn_pedido }, new { @class = "btn btn-outline-primary btn-sm fa fa-pencil-square-o", @title = "Editar" })
                         @if (esAnulable)
                         {
                             @Ajax.ActionLink(" ", "Anulado", new { id = item.cn_pedido }, new AjaxOptions
@@ -113,7 +113,7 @@
             }
         </tbody>
     </table>
-    Html.RenderPartial("_PartialPedidoListPag", Model.PagedListListaEntity);
+    //Html.RenderPartial("_PartialPedidoListPag", Model.PagedListListaEntity);
     Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
 }
 <script>
@@ -228,6 +228,28 @@
     //        }
     //    });
     //}
+    function setDatatable() {
+        $('#table-cotizaciones').DataTable({
+            order: [[2, 'desc']],
+            "pageLength": 50,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "search": "Buscar:",
+                "info": "Mostrando _START_ al _END_ de _TOTAL_ registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros en total)",
+                "zeroRecords": "Sin resultados coincidentes",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        setDatatable();
+    });
 
 
     function uploadFiles(inputId, pedidoId) {

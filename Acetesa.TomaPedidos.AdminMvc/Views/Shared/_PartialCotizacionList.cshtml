@@ -38,6 +38,8 @@
                     var esCompraParcial = false;
                     var esAnulable = false;
                     var esRechazable = false;
+                    var esPedidoValido = item.esPedidoValido;
+                    var mensajeValidez = item.mensajeValidez;
                     string cnCotizacionEliminar = "C" + item.cn_proforma.ToString();
 
                     if (estado == estadoEnviado)
@@ -129,7 +131,14 @@
                                 {
                                     @*@Html.ActionLink(" ", "Nuevo", "Pedido", new { id = item.cn_proforma }, new { @class = "btn btn-dark btn-sm fa fa-arrow-circle-right GenerarPedido", @title = "Generar pedido", @id = "btnGenerar" + item.cn_proforma, @disabled = true });*@
                                     string IDbtn = "btnGenerar" + item.cn_proforma;
-                                    <button class="btn btn-warning btn-sm fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido" disabled> </button>
+                                    if (esPedidoValido == "1")
+                                    {
+                                    <button class="btn btn-sm bg-warning bg-opacity-75 fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido"> </button>
+                                    }
+                                    else
+                                    {
+                                    <button class="btn btn-sm fa fa-exclamation-triangle bg-danger" style="color:white" onclick="mensajeValidacionArticulos(@esPedidoValido,'@mensajeValidez');" id="@IDbtn" title="Generar Pedido"> </button>
+                                    }
                                 }
                                 else
                                 {

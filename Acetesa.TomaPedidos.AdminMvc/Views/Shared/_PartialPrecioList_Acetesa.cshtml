@@ -99,7 +99,20 @@
 
         $('#table-precios').DataTable({
             order: [[1, 'asc']],
-            "pageLength": 50
+            "pageLength": 50,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "search": "Buscar:",
+                "info": "Mostrando _START_ al _END_ de _TOTAL_ registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros en total)",
+                "zeroRecords": "Sin resultados coincidentes",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
         });
 
     </script>

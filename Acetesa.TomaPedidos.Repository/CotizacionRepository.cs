@@ -56,7 +56,7 @@ namespace Acetesa.TomaPedidos.Repository
                     Value = estado
                 }
             };
-            var query = _dbContext.GetExecSpEnumerable<CotizacionListadoModel>("usp_web_lista_cotizaciones", sqlParams);
+            var query = _dbContext.GetExecSpEnumerable<CotizacionListadoModel>("[web].[usp_web_lista_cotizaciones]", sqlParams);
             return query;
         }
 
@@ -103,7 +103,7 @@ namespace Acetesa.TomaPedidos.Repository
                     Value = estado
                 }
             };
-            var query = _dbContext.GetExecSpEnumerable<CotizacionListadoModel>("usp_web_lista_cotizaciones", sqlParams);
+            var query = _dbContext.GetExecSpEnumerable<CotizacionListadoModel>("[web].[usp_web_lista_cotizaciones]", sqlParams);
             return query;
         }
 

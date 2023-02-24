@@ -12,5 +12,7 @@ namespace Acetesa.TomaPedidos.Domain
         public string cb_estado { get; set; }
         public string cn_pedido { get; set; }
         public bool EsGenerable { get; set; }
+        public string esPedidoValido { get; set; }
+        public string mensajeValidez { get; set; }
     }
 }
