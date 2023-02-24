@@ -9,6 +9,7 @@ using Acetesa.TomaPedidos.Entity;
 using Acetesa.TomaPedidos.IRepository;
 using Acetesa.TomaPedidos.Transversal;
 using Acetesa.TomaPedidos.Transversal.Extensions;
+using System.Xml.Linq;
 
 namespace Acetesa.TomaPedidos.Core.Business
 {
@@ -207,5 +208,9 @@ namespace Acetesa.TomaPedidos.Core.Business
         {
             return _pedidoRepository.ValidaCreditoSobregiroPorPedido(ruc,total,moneda);
         }
+        public Dictionary<string, string> RegistrarNotaPedidoVenta(LCPEDIDO_WEB Pedido, LCPEDIDOADICIONAL_WEB PedidoAdicional, string DetallePedido, string correoVendedor)        {
+            return _pedidoRepository.RegistrarNotaPedidoVenta(Pedido,PedidoAdicional,DetallePedido,correoVendedor);
+        }
+
     }
 }

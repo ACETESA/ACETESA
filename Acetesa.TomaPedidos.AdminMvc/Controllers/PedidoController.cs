@@ -26,6 +26,8 @@ using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using System.IO;
 using System.Web;
+using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 {
@@ -777,7 +779,41 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         model.IdContactoEntregaDirecta = "";
                         break;
                 }
+
                 PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+
+                //Inicio: Registra la Nota de Pedido Tortuga
+                LCPEDIDOADICIONAL_WEB PedidoAdicional = new LCPEDIDOADICIONAL_WEB();
+                PedidoAdicional.Cn_lug = model.Cn_lug;
+                PedidoAdicional.cn_ocompra = model.cn_ocompra;
+                PedidoAdicional.Vt_observacion = model.Vt_observacion;
+                PedidoAdicional.cc_tienda = model.Tienda;
+                PedidoAdicional.CC_transp = model.CC_transp;
+                PedidoAdicional.FechaEntrega = DateTime.Parse(model.FechaEntrega);
+                PedidoAdicional.ContactoTransporte = model.ContactoTransporte;
+
+
+                if (emailModel.Para.Length > 0) //Guardar y Enviar
+                {
+                    var xml = new XDocument(new XElement("DetallePedido",
+                                     from pedidoDetalle in pedidoDetalleList
+                                     select new XElement("Articulo",
+                                       new XElement("cn_item", pedidoDetalle.cn_item),
+                                       new XElement("cc_artic", pedidoDetalle.cc_artic),
+                                       new XElement("cc_unmed", pedidoDetalle.MARTICUL.cc_unmed),
+                                       new XElement("fq_cantped", pedidoDetalle.fq_cantidad),
+                                       new XElement("fm_valunit", pedidoDetalle.fm_precio2),
+                                       new XElement("fm_monvta", pedidoDetalle.fm_total),
+                                       new XElement("cd_artic", pedidoDetalle.MARTICUL.cd_artic),
+                                       new XElement("fq_embalaje", pedidoDetalle.MARTICUL.fq_embalaje),
+                                       new XElement("fm_valuni_cd", pedidoDetalle.fm_precio_fin)
+                                       )
+                                ));
+
+                    PedidoService.RegistrarNotaPedidoVenta(entityMaster, PedidoAdicional, xml.ToString(), User.Identity.Name);
+                }
+                //Fin: Registra la Nota de Pedido Tortuga
+
                 if (!string.IsNullOrEmpty(model.cn_proforma) && !string.IsNullOrWhiteSpace(model.cn_proforma))
                 {
                     var existeCotizacion = CotizacionService.GetById(model.cn_proforma);
@@ -1113,6 +1149,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         break;
                 }
                 PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+
+
+
                 SetSessionNull();
                 TempData["Guardado"] = true;
 
@@ -2710,6 +2749,39 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         break;
                 }
                 PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+
+                //Inicio: Registra la Nota de Pedido Tortuga
+                LCPEDIDOADICIONAL_WEB PedidoAdicional = new LCPEDIDOADICIONAL_WEB();
+                PedidoAdicional.Cn_lug = model.Cn_lug;
+                PedidoAdicional.cn_ocompra = model.cn_ocompra;
+                PedidoAdicional.Vt_observacion = model.Vt_observacion;
+                PedidoAdicional.cc_tienda = model.Tienda;
+                PedidoAdicional.CC_transp = model.CC_transp;
+                PedidoAdicional.FechaEntrega = DateTime.Parse(model.FechaEntrega);
+                PedidoAdicional.ContactoTransporte = model.ContactoTransporte;
+
+                    var xml = new XDocument(new XElement("DetallePedido",
+                                     from pedidoDetalle in pedidoDetalleList
+                                     select new XElement("Articulo",
+                                       new XElement("cn_item", pedidoDetalle.cn_item),
+                                       new XElement("cc_artic", pedidoDetalle.cc_artic),
+                                       new XElement("cc_unmed", pedidoDetalle.MARTICUL.cc_unmed),
+                                       new XElement("fq_cantped", pedidoDetalle.fq_cantidad),
+                                       new XElement("fm_valunit", pedidoDetalle.fm_precio2),
+                                       new XElement("fm_monvta", pedidoDetalle.fm_total),
+                                       new XElement("cd_artic", pedidoDetalle.MARTICUL.cd_artic),
+                                       new XElement("fq_embalaje", pedidoDetalle.MARTICUL.fq_embalaje),
+                                       new XElement("fm_valuni_cd", pedidoDetalle.fm_precio_fin)
+                                       )
+                                ));
+
+                var resultadoRNPV = PedidoService.RegistrarNotaPedidoVenta(entityMaster, PedidoAdicional, xml.ToString(), User.Identity.Name);
+                if (resultadoRNPV["mensajeID"] == "0")
+                {
+                    return JsonError(resultadoRNPV["mensaje"]);
+                }
+                //Fin: Registra la Nota de Pedido Tortuga
+
                 TempData["Guardado"] = true;
 
                 return JsonSuccess(1);

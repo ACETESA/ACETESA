@@ -898,7 +898,8 @@ function limpiarCamposArticulo() {
                         url: urlValidaCreditoSobregiroPorPedido,
                         data: JSON.stringify({
                             ruc: $("#cc_analis").val(),
-                            totalPedido: document.getElementById("TD_TotalDetallePedido").innerText.replace(",",""),
+                            totalPedido: document.getElementById("TD_TotalDetallePedido").innerText.replace(",", ""),
+                            //totalPedido: document.getElementById("aTotVta").innerText,
                             monedaPedido: $("#cc_moneda").val()
                         }),
                         dataType: "json",
@@ -915,63 +916,48 @@ function limpiarCamposArticulo() {
 
                             //Si el mensaje es error: return
                             var mensajeID = resultVLC.mensajeID;
-                            if (mensajeID == "0" && EsCredito == "1") {
-                                toastr.error(resultVLC.mensaje);
-                            }
-                            //if (mensajeID == "0" && EsCredito == "1") {
-                            //    toastr.error(resultVLC.mensaje);
-                            //}
-                            //else {
-                                //Inicio: Save N Send
-                                if (!Validaciones()) {
-                                    return false;
-                                }
+                            var mensajeVLC = resultVLC.mensaje;
 
-                                var form = $("#scc_analis").parent("form").serialize();
 
-                                $.ajax({
-                                    type: 'POST',
-                                    url: _baseUrl + "Pedido/EditarAjax",
-                                    data: form,
-                                    async: false,
-                                    cache: false,
-                                    dataType: 'json',
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        alert(jqXHR.responseJSON.errorMessage);
-                                    },
-                                    success: function (data) {
-                                        if (data.result == "Error") {
-                                            alert(data.message);
-                                            return false;
-                                        } else {
-                                            var idCliente = $.trim($Cliente.val());
-                                            if (idCliente.length === 0) {
-                                                toastr.warning("Debe seleccionar un cliente.");
-                                                return;
-                                            }
-                                            var request = new Ajax();
-                                            var url = _baseUrl + "Pedido/GetEmailCliente";
-                                            var params = {
-                                                id: idCliente,
-                                                tipo: 'P',
-                                                Nro: $cnPedido.val()
-                                            };
-                                            var $Para = $("#Para");
-                                            var $ConCopia = $("#ConCopia");
-                                            var $Asunto = $("#Asunto");
-                                            request.JsonPost(url, params, function (response) {
-                                                $Para.val($.trim(response.para));
-                                                $ConCopia.val($.trim(response.conCopia));
-                                                $Asunto.val($.trim(response.asunto));
-                                            }).fail(function (data) {
-                                                OnFailure(data);
-                                            });
-                                            $("#modal-send-mail").modal("show");
-                                        }
-                                    }
+                            if (mensajeID == "2" && EsCredito == "1") {//El cliente tiene problemas con la Linea de Credito
+                                //Mensaje de confirmación
+                                const modal = new Promise(function (resolve, reject) {
+                                    $("#ModalMensajeConfirmacion .modal-title").html("Validación de Linea de Crédito");
+                                    $("#ModalMensajeConfirmacion .modal-body").html(mensajeVLC);
+                                    $('#ModalMensajeConfirmacion').modal('show');
+                                    $('#ModalMensajeConfirmacion .btn-confirm').click(function () {
+                                        $("#ModalMensajeConfirmacion .modal-title").html("Confirmar");
+                                        $("#ModalMensajeConfirmacion .modal-body").html("[Mensaje de confirmación]");
+                                        $('#ModalMensajeConfirmacion').modal('hide');
+                                        resolve("Usuario desea continuar...");
+                                    });
+                                    $('#ModalMensajeConfirmacion .btn-cancel').click(function () {
+                                        reject("Usuario NO desea continuar...");
+                                    });
+                                }).then(function (val) {
+                                    //RESOLVE
+                                    console.log(val);
+                                    SaveNSendPedido();
+                                }).catch(function (err) {
+                                    //REJECT
+                                    console.log("Usuario canceló la operación.", err)
+                                    toastr.error("No se han guardado los cambios.", "Validación de Linea de Crédito", {
+                                        closeButton: true,
+                                        timeOut: 15000,
+                                        progressBar: true
+                                    });
                                 });
-                                //Fin: Save N Send
-                            //}
+                            }
+                            else if (mensajeID == "0") {
+                                toastr.error(mensajeVLC, "Validación de Linea de Crédito", {
+                                    closeButton: true,
+                                    timeOut: 15000,
+                                    progressBar: true
+                                });
+                            }
+                            else {
+                                SaveNSendPedido();
+                            }
                         },
                         error: function (resultVLC) {
                             alert("Error en javascript...");
@@ -985,6 +971,59 @@ function limpiarCamposArticulo() {
             }
         });
     });
+
+    function SaveNSendPedido() {
+        //Inicio: Save N Send
+        if (!Validaciones()) {
+            return false;
+        }
+
+        var form = $("#scc_analis").parent("form").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: _baseUrl + "Pedido/EditarAjax",
+            data: form,
+            async: false,
+            cache: false,
+            dataType: 'json',
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.errorMessage);
+            },
+            success: function (data) {
+                if (data.result == "Error") {
+                    alert(data.message);
+                    return false;
+                } else {
+                    var idCliente = $.trim($Cliente.val());
+                    if (idCliente.length === 0) {
+                        toastr.warning("Debe seleccionar un cliente.");
+                        return;
+                    }
+                    var request = new Ajax();
+                    var url = _baseUrl + "Pedido/GetEmailCliente";
+                    var params = {
+                        id: idCliente,
+                        tipo: 'P',
+                        Nro: $("#cn_pedido").val()
+                    };
+                    var $Para = $("#Para");
+                    var $ConCopia = $("#ConCopia");
+                    var $Asunto = $("#Asunto");
+                    request.JsonPost(url, params, function (response) {
+                        $Para.val($.trim(response.para));
+                        $ConCopia.val($.trim(response.conCopia));
+                        $Asunto.val($.trim(response.asunto));
+                    }).fail(function (data) {
+                        OnFailure(data);
+                    });
+                    $("#modal-send-mail").modal("show");
+                }
+            }
+        });
+        //Fin: Save N Send
+    }
+
 
     var $btnSendMailModal = $("#btnSendMailModal");
     $btnSendMailModal.on("click", function (e) {

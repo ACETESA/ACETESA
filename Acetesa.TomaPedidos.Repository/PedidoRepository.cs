@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Xml.Linq;
 using Acetesa.TomaPedidos.Domain;
 using Acetesa.TomaPedidos.Entity;
 using Acetesa.TomaPedidos.IRepository;
@@ -319,7 +320,7 @@ namespace Acetesa.TomaPedidos.Repository
             var conexion = new SqlConnection(cn);
             using (conexion)
             {
-                SqlCommand cmd = new SqlCommand("[dbo].[spValidaCreditoSobregiroPorPedido]", conexion);
+                SqlCommand cmd = new SqlCommand("[web].[spValidaCreditoSobregiroPorPedido]", conexion);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@cc_analis", ruc);
                 cmd.Parameters.AddWithValue("@montoTotalPedido", total);
@@ -342,6 +343,60 @@ namespace Acetesa.TomaPedidos.Repository
                     diccionario.Add("DeudaCliente", DeudaCliente);
                     diccionario.Add("LimiteCreditoCliente", LimiteCreditoCliente);
                     diccionario.Add("EsSobregiro", EsSobregiro);
+                }
+            }
+            return diccionario;
+        }
+
+
+        public Dictionary<string, string> RegistrarNotaPedidoVenta(LCPEDIDO_WEB Pedido, LCPEDIDOADICIONAL_WEB PedidoAdicional, string DetallePedido, string correoVendedor)
+        {
+            Dictionary<string, string> diccionario = new Dictionary<string, string>();
+
+            var TotalPrecio2 = Pedido.LDPEDIDO_WEB.Sum(x => x.fm_precio2 * x.fq_cantidad);
+
+            string query = "[web].[spRegistrarNotaPedidoVenta]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc_moneda", Pedido.cc_moneda);
+                    cmd.Parameters.AddWithValue("@cc_analiscli", Pedido.cc_analis);
+                    cmd.Parameters.AddWithValue("@Cn_lug", PedidoAdicional.Cn_lug);
+                    cmd.Parameters.AddWithValue("@cc_vta", Pedido.cc_vta);
+                    cmd.Parameters.AddWithValue("@correoVendedor", correoVendedor);
+                    cmd.Parameters.AddWithValue("@fm_tipcam", Pedido.fm_tipcam);
+                    cmd.Parameters.AddWithValue("@cn_ocompra", PedidoAdicional.cn_ocompra);
+                    cmd.Parameters.AddWithValue("@fm_bruto", TotalPrecio2); //fm_bruto
+                    cmd.Parameters.AddWithValue("@fm_neto", Pedido.fm_valvta); //fm_neto
+                    cmd.Parameters.AddWithValue("@fm_total", Pedido.fm_totvta); //@fm_total
+                    cmd.Parameters.AddWithValue("@fm_igv", Pedido.fm_igv);
+                    cmd.Parameters.AddWithValue("@Vt_observacion", PedidoAdicional.Vt_observacion);
+                    cmd.Parameters.AddWithValue("@cn_pedido", Pedido.cn_pedido);
+                    cmd.Parameters.AddWithValue("@cc_tienda", PedidoAdicional.cc_tienda);
+                    cmd.Parameters.AddWithValue("@TranspIDAgencia", PedidoAdicional.CC_transp); //TranspIDAgencia
+                    cmd.Parameters.AddWithValue("@ClienteTipoEntrega", Pedido.cb_recojo);//ClienteTipoEntrega
+                    cmd.Parameters.AddWithValue("@FechaEntrega", PedidoAdicional.FechaEntrega);
+                    cmd.Parameters.AddWithValue("@TranspContID", PedidoAdicional.ContactoTransporte); //@TranspContID
+                    cmd.Parameters.AddWithValue("@DetallePedido", DetallePedido);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            diccionario.Add("mensajeID", reader["mensajeID"].ToString());
+                            diccionario.Add("mensaje", reader["mensaje"].ToString());
+                            //listaProvincia.Add(
+                            //    new UBIGEO
+                            //    {
+                            //        cc_prov = reader["cc_prov"].ToString(),
+                            //        cd_prov = reader["cd_prov"].ToString()
+                            //    }
+                            //    );
+                        }
+                    }
                 }
             }
             return diccionario;
