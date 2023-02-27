@@ -2,168 +2,183 @@
 @model IEnumerable<Acetesa.TomaPedidos.AdminMvc.Models.CotizacionDetailViewModel>
 @if (Model != null && Model.Any())
 {
-    <div class="col-xs-12 col-sm-12">Nro. Artículos: @Model.Count()</div>
-    <table class="table table-striped table-hover" id="table-detail-cotizaciones">
-        <thead>
-            <tr>
-                <td></td>
-                <td></td>
-                <td style="text-align: right;">Item</td>
-                <td>Código</td>
-                <td>Descripción</td>
-                <td style="text-align: left;">U.M.</td>
-                <td style="text-align: right;">Cant. Ped</td>
-                <td style="text-align: right;">Peso TM</td>
-                <td style="text-align: right;">Precio Lista</td>
-                @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                    if (sqlDB3.InitialCatalog == "ZICO_ERP01")
-                    {
-                        <td style="text-align: right;">Precio Lista 2</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                }
-                <td style="text-align: right;">Precio Final</td>
-                <td style="text-align: right;">Total</td>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                decimal SubTotVta = 0;
-                var igv_bo = Model.First().igv_bo;
-                var zonaLiberada_bo = Model.First().zonaLiberada_bo;
-                var mostrarIGV = zonaLiberada_bo == 1 ? 0 : 1;
 
-            }
-            @foreach (var item in Model)
-            {
-                var sfqCantidad = item.fq_cantidad.ToString("N2");
-                var sfmTotal = item.fm_total.ToString("N2");
-                var sfmPrecio = item.fm_precio.ToString("N4");
-                var sfmPrecio2 = item.fm_precio2.ToString("N4");
-                var sfmPrecioFin = item.fm_precio_fin.ToString("N4");
-                var sfqPesoTM = item.fq_peso_teorico.ToString("N4");
-                SubTotVta += item.fm_total;
-                //Para el editar
-                var pesoUnit = Convert.ToDecimal(sfqPesoTM.Replace(",", ""));
-                var precioTM = ((Convert.ToDecimal(sfmPrecioFin.Replace(",", "")) / pesoUnit) * 1000).ToString("N4").Replace(",", "");
-                string s = item.cd_artic;
-                var descArticulo = s;
-                var PesoTotal = Convert.ToDecimal(sfqPesoTM.Replace(",", "")) * Convert.ToDecimal(sfqCantidad.Replace(",", ""));
+    <span class="badge bg-white text-dark m-2 border border-success"><b>N° Artículos:</b> @Model.Count()</span>
 
-            <tr>
-                <td><a title="Editar" class="btn btn-primary fa fa-pencil-square-o btn-sm editar-grilla" href="#" onclick="cargarDatosParaEditarArticulo('@item.cc_artic','@descArticulo','@sfqCantidad','@precioTM','@pesoUnit','@sfmPrecio','@sfmPrecio2','@sfmPrecioFin');"></a></td>
-                <td>
-                    @Ajax.ActionLink(" ", "EliminarFila",
-new { id = item.cc_artic.Trim() },
-new AjaxOptions
-{
-    HttpMethod = "GET",
-    OnBegin = "OnBegin",
-    OnSuccess = "OnSuccessEliminar",
-    OnComplete = "OnComplete",
-    OnFailure = "OnFailure",
-    UpdateTargetId = "result"
-}, new { @id = "btnEliminarFila" + item.cc_artic.Trim(), @class = "btn btn-danger btn-sm fa fa-times-circle", @title = "Eliminar", @onclick = "btnEliminar_click()" })
-                </td>
-                <td class="indexTR" style="text-align: right;">@Html.DisplayFor(modelItem => item.cn_item)</td>
-                <td>@Html.DisplayFor(modelItem => item.cc_artic)</td>
-                <td>@Html.DisplayFor(modelItem => item.cd_artic)</td>
-                <td>@Html.DisplayFor(modelItem => item.cc_unmed)</td>
-                <td style="text-align: right; width: 90px;">@Html.DisplayFor(modelItem => sfqCantidad)</td>
-                <td style="text-align: right; width: 80px;">@Html.DisplayFor(modelItem => PesoTotal)</td>
-                <td style="text-align: right; width: 100px;">@Html.DisplayFor(modelItem => sfmPrecio)</td>
-                @{var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                    if (sqlDB2.InitialCatalog == "ZICO_ERP01")
-                    {
-                        <td style="text-align: right; width: 110px;">@Html.DisplayFor(modelItem => sfmPrecio2)</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                }
-                <td style="text-align: right; width: 100px;">@Html.DisplayFor(modelItem => sfmPrecioFin)</td>
-                <td style="text-align: right; width: 40px;">@Html.DisplayFor(modelItem => sfmTotal)</td>
-            </tr>
-            }
-            @*@{
-                    var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                    decimal IgvVta;
-                    decimal TotVta;
-                    var igv = 0.18;
-                    if (igv_bo == 0)
-                    {
-                        IgvVta = SubTotVta* (decimal) (igv);
-                        if (sqlDB.InitialCatalog == "ZICO_ERP04") {
-                            IgvVta = 0;
-                        }
-                        TotVta = SubTotVta + IgvVta;
-                    }
-                    else
-                    {
-                        TotVta = SubTotVta;
-                        SubTotVta = TotVta / (decimal) (igv + 1);
-                        IgvVta = SubTotVta* (decimal) (igv);
-                    }
-                }
-                @if (sqlDB.InitialCatalog == "ZICO_ERP01")
-                            {
+
+    @*<div class="col-xs-12 col-sm-12">Nro. Artículos: @Model.Count()</div>*@
+
+    <div class="card table-responsive border-success mb-3">
+        <div class="card-header p-0">
+
+        </div>
+        <div class="card-body p-0 bg-white">
+            @*<table class="table table-striped table-hover table-sm w-100 bg-white" id="table-detail-pedidos">
+            <thead class="bg-success text-white">
                 <tr>
-                    <td colspan="9"></td>
-                    <td style="text-align: right;"><b>Valor Venta</b></td>
-                    <td style="text-align: right;">@SubTotVta.ToString("N2")</td>
-                </tr>
-                <tr>
-                    <td colspan="9"></td>
-                    <td style="text-align: right;"><b>IGV</b></td>
-                    <td style="text-align: right;">@IgvVta.ToString("N2")</td>
-                </tr>
-                            }
-                <tr>
-                    <td colspan="9"></td>
-                    <td style="text-align: right;"><b>Total</b></td>
-                    <td style="text-align: right;"><b><i>@TotVta.ToString("N2")</i></b></td>
-                </tr>*@
-        </tbody>
-    </table>
-
-                var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                decimal IgvVta;
-                decimal TotVta;
-                var igv = 0.18;
-                if (igv_bo == 0)
-                {
-
-                    if (sqlDB.InitialCatalog == "ZICO_ERP04")
-                    {
-                        if (mostrarIGV == 0)
+                    <th></th>
+                    <th></th>
+                    <th class="text-center" style="text-align: right;">Item</th>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Descripción</th>
+                    <th class="text-center" style="text-align: left;">U.M.</th>
+                    <th class="text-center" style="text-align: right;">Cant. Ped</th>
+                    <th class="text-center" style="text-align: right;">Peso TM</th>
+                    <th class="text-center" style="text-align: right;">Precio Lista</th>
+                    @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                        if (sqlDB3.InitialCatalog == "ZICO_ERP01")
                         {
-                            IgvVta = 0; //SubTotVta * (decimal)(igv);
-                            TotVta = SubTotVta + IgvVta;
+                            <th class="text-center" style="text-align: right;">Precio Lista 2</th>
                         }
                         else
                         {
-                            IgvVta = SubTotVta * (decimal)(igv);
-                            TotVta = SubTotVta + IgvVta;
+                            <th></th>
                         }
+                    }
+                    <th class="text-center" style="text-align: right;">Precio Final</th>
+                    <th class="text-center" style="text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tfoot class="bg-success text-success bg-opacity-10">
+
+            </tfoot>
+        </table>*@
+
+            <table class="table table-striped table-hover table-sm w-100 bg-white" id="table-detail-cotizaciones">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th class="text-center">Item</th>
+                        <th class="text-center">Código</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">U.M.</th>
+                        <th class="text-center">Cant. Ped</th>
+                        <th class="text-center">Peso TM</th>
+                        <th class="text-center">Precio Lista</th>
+                        @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                            if (sqlDB3.InitialCatalog == "ZICO_ERP01")
+                            {
+                                <td class="text-center" style="text-align: right;">Precio Lista 2</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                                <th class="text-center" style="text-align: right;">Precio Final</th>
+                        <th class="text-center" style="text-align: right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal SubTotVta = 0;
+                        var igv_bo = Model.First().igv_bo;
+                        var zonaLiberada_bo = Model.First().zonaLiberada_bo;
+                        var mostrarIGV = zonaLiberada_bo == 1 ? 0 : 1;
 
                     }
-                    else
+                    @foreach (var item in Model)
                     {
-                        IgvVta = SubTotVta * (decimal)(igv);
-                        TotVta = SubTotVta + IgvVta;
-                    }
+                        var sfqCantidad = item.fq_cantidad.ToString("N2");
+                        var sfmTotal = item.fm_total.ToString("N2");
+                        var sfmPrecio = item.fm_precio.ToString("N4");
+                        var sfmPrecio2 = item.fm_precio2.ToString("N4");
+                        var sfmPrecioFin = item.fm_precio_fin.ToString("N4");
+                        var sfqPesoTM = item.fq_peso_teorico.ToString("N4");
+                        SubTotVta += item.fm_total;
+                        //Para el editar
+                        var pesoUnit = Convert.ToDecimal(sfqPesoTM.Replace(",", ""));
+                        var precioTM = ((Convert.ToDecimal(sfmPrecioFin.Replace(",", "")) / pesoUnit) * 1000).ToString("N4").Replace(",", "");
+                        string s = item.cd_artic;
+                        var descArticulo = s;
+                        var PesoTotal = Convert.ToDecimal(sfqPesoTM.Replace(",", "")) * Convert.ToDecimal(sfqCantidad.Replace(",", ""));
 
-                }
-                else
-                {
-                    TotVta = SubTotVta;
-                    SubTotVta = TotVta / (decimal)(igv + 1);
-                    IgvVta = SubTotVta * (decimal)(igv);
-                }
+                        <tr class="border border-success border-end-0 border-start">
+                            <td><a title="Editar" class="btn btn-primary fa fa-pencil-square-o btn-sm editar-grilla" href="#" onclick="cargarDatosParaEditarArticulo('@item.cc_artic','@descArticulo','@sfqCantidad','@precioTM','@pesoUnit','@sfmPrecio','@sfmPrecio2','@sfmPrecioFin');"></a></td>
+                            <td class="border border-success border-start-0">
+                                @Ajax.ActionLink(" ", "EliminarFila",
+            new { id = item.cc_artic.Trim() },
+            new AjaxOptions
+            {
+                HttpMethod = "GET",
+                OnBegin = "OnBegin",
+                OnSuccess = "OnSuccessEliminar",
+                OnComplete = "OnComplete",
+                OnFailure = "OnFailure",
+                UpdateTargetId = "result"
+            }, new { @id = "btnEliminarFila" + item.cc_artic.Trim(), @class = "btn btn-danger btn-sm fa fa-times-circle", @title = "Eliminar", @onclick = "btnEliminar_click()" })
+                            </td>
+                            <td class="indexTR border border-success text-center" style="text-align: right;">@Html.DisplayFor(modelItem => item.cn_item)</td>
+                            <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cc_artic)</td>
+                            <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cd_artic)</td>
+                            <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cc_unmed)</td>
+                            <td style="text-align: right; width: 90px;" class="border border-success">@Html.DisplayFor(modelItem => sfqCantidad)</td>
+                            <td style="text-align: right; width: 80px;" class="border border-success">@Html.DisplayFor(modelItem => PesoTotal)</td>
+                            <td style="text-align: right; width: 100px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecio)</td>
+                            @{var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                                if (sqlDB2.InitialCatalog == "ZICO_ERP01")
+                                {
+                                    <td style="text-align: right; width: 110px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecio2)</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                            <td style="text-align: right; width: 100px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecioFin)</td>
+                            <td style="text-align: right; width: 40px;" class="border border-success border-end-0">@Html.DisplayFor(modelItem => sfmTotal)</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="bg-success text-success bg-opacity-10">
+
+                </tfoot>
+            </table>
+        </div>
+        <div class="card-footer p-0 bg-dark bg-opacity-10">
+
+        </div>
+    </div>
+
+
+    var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+    decimal IgvVta;
+    decimal TotVta;
+    var igv = 0.18;
+    if (igv_bo == 0)
+    {
+
+        if (sqlDB.InitialCatalog == "ZICO_ERP04")
+        {
+            if (mostrarIGV == 0)
+            {
+                IgvVta = 0; //SubTotVta * (decimal)(igv);
+                TotVta = SubTotVta + IgvVta;
+            }
+            else
+            {
+                IgvVta = SubTotVta * (decimal)(igv);
+                TotVta = SubTotVta + IgvVta;
+            }
+
+        }
+        else
+        {
+            IgvVta = SubTotVta * (decimal)(igv);
+            TotVta = SubTotVta + IgvVta;
+        }
+
+    }
+    else
+    {
+        TotVta = SubTotVta;
+        SubTotVta = TotVta / (decimal)(igv + 1);
+        IgvVta = SubTotVta * (decimal)(igv);
+    }
 
     <a hidden id="aSubTotVta">@SubTotVta.ToString("N2")</a>
     <a hidden id="aIgvVta">@IgvVta.ToString("N2")</a>
@@ -200,31 +215,32 @@ new AjaxOptions
     setTimeout(function () {
         var tabla = document.getElementById('table-detail-cotizaciones');
         var tbody = tabla.getElementsByTagName('tbody')[0];
+        var tfoot = tabla.getElementsByTagName('tfoot')[0];
 
         if (document.getElementById("mostrarIGV_bo").value == "1") {
 
             var html1 = "<tr>"
-                + '<td colspan="10"></td>'
-                + '<td style="text-align: right;"><b>Valor Venta</b></td>'
-                + '<td style="text-align: right;">' + subtotal + '</td>'
+                + '<td colspan="10" class="border border-success border-top-0 border-start-0 border-end-0"></td>'
+                + '<td style="text-align: right;" class="border border-success border-top-0 border-start-0 border-end-0"><b>Valor Venta</b></td>'
+                + '<td style="text-align: right;" class="border border-success">' + subtotal + '</td>'
                 + '</tr>' +
                 "<tr>"
-                + '<td colspan="10"></td>'
-                + '<td style="text-align: right;"><b>IGV</b></td>'
-                + '<td style="text-align: right;">' + igv + '</td>'
+                + '<td colspan="10" class="border border-success border-top-0 border-start-0 border-end-0"></td>'
+                + '<td style="text-align: right;" class="border border-success border-top-0 border-start-0 border-end-0"><b>IGV</b></td>'
+                + '<td style="text-align: right;" class="border border-success">' + igv + '</td>'
                 + '</tr>';
 
-            tbody.insertAdjacentHTML('beforeend', html1);
+            tfoot.insertAdjacentHTML('beforeend', html1);
 
         }
 
         var html2 = "<tr>"
-            + '<td colspan="10"></td>'
-            + '<td style="text-align: right;"><b>Total</b></td>'
-            + '<td style="text-align: right;"><i>' + total + '</i></td>'
+            + '<td colspan="10" class="border border-success border-top-0 border-start-0 border-end-0 bg-dark bg-opacity-10"></td>'
+            + '<td style="text-align: right;" class="border border-success border-top-0 border-start-0 border-end-0 text-dark bg-dark bg-opacity-10"><b>Total</b></td>'
+            + '<td style="text-align: right;" class="border border-success text-dark bg-dark bg-opacity-10 fw-bold"><i>' + total + '</i></td>'
             + '</tr>';
 
-        tbody.insertAdjacentHTML('beforeend', html2);
+        tfoot.insertAdjacentHTML('beforeend', html2);
     }, 3000);
     //}, false);
 
