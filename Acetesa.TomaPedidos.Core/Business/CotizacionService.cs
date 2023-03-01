@@ -240,6 +240,11 @@ namespace Acetesa.TomaPedidos.Core.Business
             return _cotizacionRepository.RegistrarCierreCotizacionParcial(cn_proforma, idMotivo, mensajeRechazo);
         }
 
+        public List<Tuple<string, string>> ValidarTransformacionCotizacionAPedido(string CotizacionID)
+        {
+            return _cotizacionRepository.ValidarTransformacionCotizacionAPedido(CotizacionID);
+        }
+
     }
 
 }

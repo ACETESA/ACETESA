@@ -133,11 +133,12 @@
                                     string IDbtn = "btnGenerar" + item.cn_proforma;
                                     if (esPedidoValido == "1")
                                     {
-                                    <button class="btn btn-sm bg-warning bg-opacity-75 fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido"> </button>
+                                        @*<button class="btn btn-sm bg-warning bg-opacity-75 fa fa-arrow-circle-right GenerarPedido" onclick="location.href='@Url.Action("Nuevo","Pedido",new { id = item.cn_proforma })'" id="@IDbtn" title="Generar pedido"> </button>*@
+                                        <button class="btn btn-sm bg-warning bg-opacity-75 fa fa-arrow-circle-right GenerarPedido" onclick="ValidarTrnasformacionCotizacionAPedido('@item.cn_proforma');" id="@IDbtn" title="Generar pedido"> </button>
                                     }
                                     else
                                     {
-                                    <button class="btn btn-sm fa fa-exclamation-triangle bg-danger" style="color:white" onclick="mensajeValidacionArticulos(@esPedidoValido,'@mensajeValidez');" id="@IDbtn" title="Generar Pedido"> </button>
+                                        <button class="btn btn-sm fa fa-exclamation-triangle bg-danger" style="color:white" onclick="mensajeValidacionArticulos(@esPedidoValido,'@mensajeValidez');" id="@IDbtn" title="Generar Pedido"> </button>
                                     }
                                 }
                                 else

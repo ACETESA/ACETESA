@@ -58,18 +58,19 @@
                         <th class="text-center">U.M.</th>
                         <th class="text-center">Cant. Ped</th>
                         <th class="text-center">Peso TM</th>
+                        <th class="text-center">Prec. TM</th>
                         <th class="text-center">Precio Lista</th>
                         @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
                             if (sqlDB3.InitialCatalog == "ZICO_ERP01")
                             {
-                                <td class="text-center" style="text-align: right;">Precio Lista 2</td>
+                                <th class="text-center" style="text-align: right;">Precio Lista 2</th>
                             }
                             else
                             {
-                                <td></td>
+                                <th></th>
                             }
                         }
-                                <th class="text-center" style="text-align: right;">Precio Final</th>
+                        <th class="text-center" style="text-align: right;">Precio Final</th>
                         <th class="text-center" style="text-align: right;">Total</th>
                     </tr>
                 </thead>
@@ -89,6 +90,7 @@
                         var sfmPrecio2 = item.fm_precio2.ToString("N4");
                         var sfmPrecioFin = item.fm_precio_fin.ToString("N4");
                         var sfqPesoTM = item.fq_peso_teorico.ToString("N4");
+                        var sPrecioTM = item.fm_precio_tonelada.ToString("N4");
                         SubTotVta += item.fm_total;
                         //Para el editar
                         var pesoUnit = Convert.ToDecimal(sfqPesoTM.Replace(",", ""));
@@ -97,41 +99,42 @@
                         var descArticulo = s;
                         var PesoTotal = Convert.ToDecimal(sfqPesoTM.Replace(",", "")) * Convert.ToDecimal(sfqCantidad.Replace(",", ""));
 
-                        <tr class="border border-success border-end-0 border-start">
-                            <td><a title="Editar" class="btn btn-primary fa fa-pencil-square-o btn-sm editar-grilla" href="#" onclick="cargarDatosParaEditarArticulo('@item.cc_artic','@descArticulo','@sfqCantidad','@precioTM','@pesoUnit','@sfmPrecio','@sfmPrecio2','@sfmPrecioFin');"></a></td>
-                            <td class="border border-success border-start-0">
-                                @Ajax.ActionLink(" ", "EliminarFila",
-            new { id = item.cc_artic.Trim() },
-            new AjaxOptions
-            {
-                HttpMethod = "GET",
-                OnBegin = "OnBegin",
-                OnSuccess = "OnSuccessEliminar",
-                OnComplete = "OnComplete",
-                OnFailure = "OnFailure",
-                UpdateTargetId = "result"
-            }, new { @id = "btnEliminarFila" + item.cc_artic.Trim(), @class = "btn btn-danger btn-sm fa fa-times-circle", @title = "Eliminar", @onclick = "btnEliminar_click()" })
-                            </td>
-                            <td class="indexTR border border-success text-center" style="text-align: right;">@Html.DisplayFor(modelItem => item.cn_item)</td>
-                            <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cc_artic)</td>
-                            <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cd_artic)</td>
-                            <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cc_unmed)</td>
-                            <td style="text-align: right; width: 90px;" class="border border-success">@Html.DisplayFor(modelItem => sfqCantidad)</td>
-                            <td style="text-align: right; width: 80px;" class="border border-success">@Html.DisplayFor(modelItem => PesoTotal)</td>
-                            <td style="text-align: right; width: 100px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecio)</td>
-                            @{var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                                if (sqlDB2.InitialCatalog == "ZICO_ERP01")
-                                {
-                                    <td style="text-align: right; width: 110px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecio2)</td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                }
+                    <tr class="border border-success border-end-0 border-start">
+                        <td><a title="Editar" class="btn btn-primary fa fa-pencil-square-o btn-sm editar-grilla" href="#" onclick="cargarDatosParaEditarArticulo('@item.cc_artic','@descArticulo','@sfqCantidad','@precioTM','@pesoUnit','@sfmPrecio','@sfmPrecio2','@sfmPrecioFin');"></a></td>
+                        <td class="border border-success border-start-0">
+                            @Ajax.ActionLink(" ", "EliminarFila",
+        new { id = item.cc_artic.Trim() },
+        new AjaxOptions
+        {
+            HttpMethod = "GET",
+            OnBegin = "OnBegin",
+            OnSuccess = "OnSuccessEliminar",
+            OnComplete = "OnComplete",
+            OnFailure = "OnFailure",
+            UpdateTargetId = "result"
+        }, new { @id = "btnEliminarFila" + item.cc_artic.Trim(), @class = "btn btn-danger btn-sm fa fa-times-circle", @title = "Eliminar", @onclick = "btnEliminar_click()" })
+                        </td>
+                        <td class="indexTR border border-success text-center" style="text-align: right;">@Html.DisplayFor(modelItem => item.cn_item)</td>
+                        <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cc_artic)</td>
+                        <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cd_artic)</td>
+                        <td class="border border-success text-center">@Html.DisplayFor(modelItem => item.cc_unmed)</td>
+                        <td style="text-align: right; width: 90px;" class="border border-success">@Html.DisplayFor(modelItem => sfqCantidad)</td>
+                        <td style="text-align: right; width: 80px;" class="border border-success">@Html.DisplayFor(modelItem => PesoTotal)</td>
+                        <td style="text-align: right; width: 80px;" class="border border-success">@Html.DisplayFor(modelItem => sPrecioTM)</td>
+                        <td style="text-align: right; width: 100px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecio)</td>
+                        @{var sqlDB2 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                            if (sqlDB2.InitialCatalog == "ZICO_ERP01")
+                            {
+                                <td style="text-align: right; width: 110px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecio2)</td>
                             }
-                            <td style="text-align: right; width: 100px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecioFin)</td>
-                            <td style="text-align: right; width: 40px;" class="border border-success border-end-0">@Html.DisplayFor(modelItem => sfmTotal)</td>
-                        </tr>
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td style="text-align: right; width: 100px;" class="border border-success">@Html.DisplayFor(modelItem => sfmPrecioFin)</td>
+                        <td style="text-align: right; width: 40px;" class="border border-success border-end-0">@Html.DisplayFor(modelItem => sfmTotal)</td>
+                    </tr>
                     }
                 </tbody>
                 <tfoot class="bg-success text-success bg-opacity-10">
@@ -220,12 +223,12 @@
         if (document.getElementById("mostrarIGV_bo").value == "1") {
 
             var html1 = "<tr>"
-                + '<td colspan="10" class="border border-success border-top-0 border-start-0 border-end-0"></td>'
+                + '<td colspan="11" class="border border-success border-top-0 border-start-0 border-end-0"></td>'
                 + '<td style="text-align: right;" class="border border-success border-top-0 border-start-0 border-end-0"><b>Valor Venta</b></td>'
                 + '<td style="text-align: right;" class="border border-success">' + subtotal + '</td>'
                 + '</tr>' +
                 "<tr>"
-                + '<td colspan="10" class="border border-success border-top-0 border-start-0 border-end-0"></td>'
+                + '<td colspan="11" class="border border-success border-top-0 border-start-0 border-end-0"></td>'
                 + '<td style="text-align: right;" class="border border-success border-top-0 border-start-0 border-end-0"><b>IGV</b></td>'
                 + '<td style="text-align: right;" class="border border-success">' + igv + '</td>'
                 + '</tr>';
@@ -235,7 +238,7 @@
         }
 
         var html2 = "<tr>"
-            + '<td colspan="10" class="border border-success border-top-0 border-start-0 border-end-0 bg-dark bg-opacity-10"></td>'
+            + '<td colspan="11" class="border border-success border-top-0 border-start-0 border-end-0 bg-dark bg-opacity-10"></td>'
             + '<td style="text-align: right;" class="border border-success border-top-0 border-start-0 border-end-0 text-dark bg-dark bg-opacity-10"><b>Total</b></td>'
             + '<td style="text-align: right;" class="border border-success text-dark bg-dark bg-opacity-10 fw-bold"><i>' + total + '</i></td>'
             + '</tr>';

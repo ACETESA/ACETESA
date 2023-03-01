@@ -980,6 +980,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                                         cc_unmed = articulo.cc_unmed,
                                         fq_cantidad = item.fq_cantidad,
                                         fq_peso_teorico = (decimal)item.MARTICUL.fq_peso_teorico,
+                                        fm_precio_tonelada = (item.fm_precio_fin/(decimal)item.MARTICUL.fq_peso_teorico)*1000,
                                         fq_stock = item.fq_stock ?? 0,
                                         cc_lista = item.cc_lista,
                                         fm_precio = item.fm_precio,

@@ -107,9 +107,9 @@
 </div>
 
 <script title="cargarSelectCliente">
-    Cliente = $("#Cliente");
 
     function clientesActivosListar() {
+        Cliente = $("#Cliente");
         Cliente.html("");
         $.ajax({
             destroy: true,
@@ -119,16 +119,19 @@
             data: JSON.stringify({
             }),
             dataType: "json",
+            beforeSend: function () {
+            },
             success: function (result) {
                 Cliente.append("<option class='fw-bold' value=''>VENTAS EN GENERAL</option>");
-                for (var i = 0; i < result.length; i++) {
-                    Cliente.append("<option value='" + result[i].cc_analis + "'>" + result[i].cd_razsoc + "</option>");
-                }
-
+                $.each(result, function (i, item) {
+                    Cliente.append("<option value='" + item.cc_analis + "'>" + item.cd_razsoc + "</option>");
+                });
                 $('#Cliente').selectpicker('refresh');
             },
             error: function (result) {
                 alert("Error en javascript...");
+            },
+            complete: function () {
             }
         });
     }

@@ -355,6 +355,7 @@
     <Content Include="Content\images\GALPESA LOGO.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\images\Hourglass.gif" />
     <Content Include="Content\images\logo-acetesa.png" />
     <Content Include="Content\images\logo-bcp.jpg" />
     <Content Include="Content\images\logo-continental.jpg" />
@@ -841,6 +842,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_PartialMensajeConfirmacion.cshtml" />
+    <Content Include="Views\Shared\LoadingPage.cshtml" />
     <None Include="Web.Qa.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

@@ -93,4 +93,11 @@
         var urlRegistrarDocumentoOC = '@Url.Action("RegistrarDocumentoOC", "Pedido")'
         var urlSelectClientesSegunCarteraVendedor = '@Url.Action("SelectClientesSegunCarteraVendedor", "Cliente")';
     </script>
+    <script>
+        //Se ejecuta cuando la ventana ha cargado
+        window.onload = function () {
+            //Cargar el Listado
+            $("#btnEnviar").click();
+        }
+    </script>
 }

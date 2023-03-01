@@ -227,3 +227,44 @@ function mensajeValidacionArticulos(idmensaje, mensaje) {
         progressBar: true
     });
 }
+
+
+function ValidarTrnasformacionCotizacionAPedido(CotizacionID) {
+    $.ajax({
+        destroy: true,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: urlValidarTransformacionCotizacionAPedido,
+        data: JSON.stringify({
+            CotizacionID: CotizacionID,
+        }),
+        dataType: "json",
+        success: function (result) {
+            $.each(result, function (index, value) {
+                var mensajeID = value["item1"];
+                var mensaje = value["item2"];
+
+                if (mensajeID == "0") {
+                    toastr.error(mensaje, "Validación de Stock de Artículos", {
+                        closeButton: true,
+                        timeOut: 30000,
+                        progressBar: true
+                    });
+                }
+                else {
+                    var URL = "/Pedido/Nuevo/" + CotizacionID;
+                    window.location = URL;
+                }
+            });
+
+            //alert(JSON.stringify(result));
+            //for (var i = 0; i < result.length; i++) {
+            //    //Cliente.append("<option value='" + result[i].cc_analis + "'>" + result[i].cd_razsoc + "</option>");
+            //}
+            
+        },
+        error: function (result) {
+            alert("Error en javascript...");
+        }
+    });
+}

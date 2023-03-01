@@ -23,5 +23,7 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
         List<CotizacionMotivoRechazo> ListaMotivosRechazoCotizacion();
         Dictionary<string, string> RegistrarRechazoCotizacion(string cn_proforma, int idMotivo, string mensajeRechazo);
         Dictionary<string, string> RegistrarCierreCotizacionParcial(string cn_proforma, int idMotivo, string mensajeRechazo);
+        List<Tuple<string, string>> ValidarTransformacionCotizacionAPedido(string CotizacionID);
+
     }
 }

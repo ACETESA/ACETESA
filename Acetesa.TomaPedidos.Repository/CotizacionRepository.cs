@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -367,6 +368,34 @@ namespace Acetesa.TomaPedidos.Repository
                 }
             }
             return diccionario;
+        }
+
+        public List<Tuple<string,string>> ValidarTransformacionCotizacionAPedido(string CotizacionID)
+        {
+            //Dictionary<string, string> diccionario = new Dictionary<string, string>();
+            List<Tuple<string, string>> listado = new List<Tuple<string, string>>();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[uspValidarProductosPorIDCotizacion]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CotizacionID", CotizacionID);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        string idMensaje = reader["mensajeID"].ToString();
+                        string mensaje = reader["mensaje"].ToString();
+
+                        listado.Add(new Tuple<string, string>(idMensaje,mensaje));
+
+                    }
+                }
+            }
+            return listado;
         }
     }
 }

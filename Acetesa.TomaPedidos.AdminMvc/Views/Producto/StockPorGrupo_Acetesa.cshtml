@@ -77,6 +77,7 @@
 
     @section CssTop{
         @Styles.Render("~/Content/ui")
+        <link href="~/Content/toastr.min.css" rel="stylesheet" />
         <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
         <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
     }
@@ -85,6 +86,7 @@
         @Scripts.Render("~/bundles/jqueryval")
         @Scripts.Render("~/bundles/jqueryui")
         <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+        <script src="~/Scripts/toastr.min.js"></script>
         <script src="~/Scripts/lib/Ajax.js?v=1"></script>
         <script src="~/Scripts/jquery.dataTables.min.js"></script>
         <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
@@ -95,7 +97,9 @@
         <script src="~/Scripts/app/StockPorGrupo.js?v=2"></script>
         <script src="~/Scripts/jquery.fileDownload.js?v=1"></script>
         <script src="~/Scripts/bootstrap-select.min.js"></script>
-
+        <script>
+            var urlGetSubFamilias ="@Url.Action("GetSubFamilias", "Producto")";
+        </script>
 
 
         <script type="text/javascript">
@@ -115,20 +119,53 @@
                     //Muestra subgrupo
                     $(".SubFamiliaGroup").show();
                     //Recupera segun selección única
-                    var request = new Ajax("");
-                    var params = {
-                        empresa: "acetesa",
-                        codFamilia: $(this).val()
-                    };
-                    $SubFamilia.html("");
-                    request.JsonPost("GetSubFamilias", params, function (data) {
-                        $.each(data, function (index, item) {
-                            var html = "<option value='" + item.Value + "'>";
-                            html += item.Text;
-                            html += "</option>";
-                            $SubFamilia.append(html);
-                        });
+                    //var request = new Ajax("");
+                    //var params = {
+                    //    empresa: "acetesa",
+                    //    codFamilia: $(this).val()
+                    //};
+                    //$SubFamilia.html("");
+                    //request.JsonPost("GetSubFamilias", params, function (data) {
+                    //    $.each(data, function (index, item) {
+                    //        var html = "<option value='" + item.Value + "'>";
+                    //        html += item.Text;
+                    //        html += "</option>";
+                    //        $SubFamilia.append(html);
+                    //    });
+                    //});
+
+
+
+                    $.ajax({
+                        destroy: true,
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: urlGetSubFamilias,
+                        data: JSON.stringify({
+                            empresa: "acetesa",
+                            codFamilia: familiaSelected
+                        }),
+                        dataType: "json",
+                        beforeSend: function () {
+                        },
+                        success: function (result) {
+                            $SubFamilia.html("");
+                            $.each(result, function (index, item) {
+                                var html = "<option value='" + item.Value + "'>";
+                                html += item.Text;
+                                html += "</option>";
+                                $SubFamilia.append(html);
+                            });
+                        },
+                        error: function (result) {
+                            alert("Error en javascript...");
+                        },
+                        complete: function () {
+                        }
                     });
+
+
+
                 }
 
             });

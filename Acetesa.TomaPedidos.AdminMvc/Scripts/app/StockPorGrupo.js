@@ -1,12 +1,12 @@
 ﻿/// <reference path="../lib/Ajax.js" />
 
-function blockScreen() {
-    $.blockUI({ message: null, overlayCSS: { backgroundColor: '#000', opacity: 0.1, zIndex: 99999 } });
-}
+//function blockScreen() {
+//    $.blockUI({ message: null, overlayCSS: { backgroundColor: '#000', opacity: 0.1, zIndex: 99999 } });
+//}
 
-function unBlockScreen() {
-    $.unblockUI();
-}
+//function unBlockScreen() {
+//    $.unblockUI();
+//}
 
 function OnBegin() {
     blockScreen();

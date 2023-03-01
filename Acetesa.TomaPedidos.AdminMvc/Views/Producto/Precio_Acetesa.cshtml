@@ -34,8 +34,8 @@
                     </div>
                     <div class="col-12 mb-3 FamiliaGroup">
                         @Html.LabelFor(model => model.Familia, htmlAttributes: new { @class = "form-label" })
-                            @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "selectpicker" })
-                            @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(model => model.Familia, ViewBag.GetFamilias as SelectList, new { @class = "selectpicker" })
+                        @Html.ValidationMessageFor(model => model.Familia, "", new { @class = "text-danger" })
                         <script>
                             $('#Familia').prop('multiple', 'multiple');
                             $('#Familia').attr('data-width', '100%');
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white">
-                    <input type="submit" value="Buscar" class="btn btn-dark"/>
+                    <input type="submit" value="Buscar" class="btn btn-dark" />
                 </div>
             </div>
         </form>
@@ -75,6 +75,9 @@
         <script src="~/Scripts/jquery.fileDownload.js?v=1"></script>
         <script src="~/Scripts/toastr.min.js"></script>
         <script src="~/Scripts/bootstrap-select.min.js"></script>
+        <script>
+            var urlGetSubFamilias ="@Url.Action("GetSubFamilias", "Producto")";
+        </script>
         <script type="text/javascript">
 
             var $Familia = $("#Familia");
@@ -90,21 +93,39 @@
                 else {
                     //Muestra subgrupo
                     $(".SubFamiliaGroup").show();
-                    //Recupera segun selección única
-                    var request = new Ajax("");
-                    var params = {
-                        empresa: "acetesa",
-                        codFamilia: $(this).val()
-                    };
-                    $SubFamilia.html("");
-                    request.JsonPost("GetSubFamilias", params, function (data) {
-                        $.each(data, function (index, item) {
-                            var html = "<option value='" + item.Value + "'>";
-                            html += item.Text;
-                            html += "</option>";
-                            $SubFamilia.append(html);
-                        });
+                    $.ajax({
+                        destroy: true,
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: urlGetSubFamilias,
+                        data: JSON.stringify({
+                            empresa: "acetesa",
+                            codFamilia: familiaSelected
+                        }),
+                        dataType: "json",
+                        beforeSend: function () {
+                            //$('#Loading').modal('show');
+                            //var myModal = new bootstrap.Modal(document.getElementById("Loading"), {});
+                            //    myModal.show();
+                        },
+                        success: function (result) {
+                            $SubFamilia.html("");
+                            //alert(JSON.stringify(result));
+                            $.each(result, function (index, item) {
+                                var html = "<option value='" + item.Value + "'>";
+                                html += item.Text;
+                                html += "</option>";
+                                $SubFamilia.append(html);
+                            });
+                        },
+                        error: function (result) {
+                            alert("Error en javascript...");
+                        },
+                        complete: function () {
+                        }
                     });
+
+
                 }
             });
 

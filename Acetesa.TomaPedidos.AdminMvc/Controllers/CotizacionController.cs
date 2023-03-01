@@ -553,6 +553,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                                         cc_unmed = articulo.cc_unmed,
                                         fq_cantidad = item.fq_cantidad,
                                         fq_peso_teorico =(decimal) item.MARTICUL.fq_peso_teorico,
+                                        fm_precio_tonelada = (item.fm_precio_fin/(decimal)item.MARTICUL.fq_peso_teorico)*1000,
                                         fq_stock = item.fq_stock,
                                         cc_lista = item.cc_lista,
                                         fm_precio = item.fm_precio,
@@ -2073,6 +2074,11 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         {
             var listaStockArticulos = ArticuloService.ObtenerStockTodasTiendasPorArticulo(idArticulo);
             return JsonSuccess(listaStockArticulos);
+        }
+        public ActionResult ValidarTransformacionCotizacionAPedido(string CotizacionID)
+        {
+            var listado = CotizacionService.ValidarTransformacionCotizacionAPedido(CotizacionID);
+            return JsonSuccess(listado);
         }
     }
 }

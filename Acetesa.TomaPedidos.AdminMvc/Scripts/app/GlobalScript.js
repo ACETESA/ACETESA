@@ -1,10 +1,10 @@
-﻿function blockScreen() {
-    $.blockUI({ message: null, overlayCSS: { backgroundColor: "#000", opacity: 0.1, zIndex: 99999 } });
-}
+﻿//function blockScreen() {
+//    $.blockUI({ message: null, overlayCSS: { backgroundColor: "#000", opacity: 0.1, zIndex: 99999 } });
+//}
 
-function unBlockScreen() {
-    $.unblockUI();
-}
+//function unBlockScreen() {
+//    $.unblockUI();
+//}
 function scrollToScreen(idLabel, delay) {
     var heightMenuHeader = $(".navbar-header").height();
     $("html, body").animate({ scrollTop: $(idLabel).offset().top - heightMenuHeader }, delay);
@@ -257,12 +257,20 @@ function ValidaDatosSUNAT(RUC, fnc_callback, async) {
 }
 
 //Cuando inicia una solicitud Ajax Bloquea la pantalla
-$(document).ajaxSend(function (event, request, settings) {
+//$(document).ajaxSend(function (event, request, settings) {
+//    blockScreen();
+//});
+
+//Desbloquea la pantalla cuando la solicitud Ajax terminó
+//$(document).ajaxComplete(function (event, request, settings) {
+//    unBlockScreen();
+//});
+
+$(document).ajaxStart(function () {
     blockScreen();
 });
 
-//Desbloquea la pantalla cuando la solicitud Ajax terminó
-$(document).ajaxComplete(function (event, request, settings) {
+$(document).ajaxStop(function () {
     unBlockScreen();
 });
 
@@ -274,4 +282,10 @@ function ScrollToElement(element, time) {
     }, time);
 }
 
+function blockScreen() {
+    $('#Loading').modal('show');
+}
 
+function unBlockScreen() {
+    $("#btnCloseModalLoading").click();
+}
