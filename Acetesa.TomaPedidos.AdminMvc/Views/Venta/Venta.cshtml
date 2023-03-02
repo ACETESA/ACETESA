@@ -93,8 +93,9 @@
 
         <script title="URLs">
         _baseUrl = "@ViewBag.BaseUrl";
-        urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Venta")";
-        urlClienteListado = "@Url.Action("ClientesActivos", "Cliente")";
+        var urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Venta")";
+        var urlClienteListado = "@Url.Action("ClientesActivos", "Cliente")";
+        var urlClientesPorCarteraVendedor = "@Url.Action("SelectClientesSegunCarteraVendedor", "Cliente")";
         </script>
     }
 
@@ -115,7 +116,7 @@
             destroy: true,
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: urlClienteListado,
+            url: urlClientesPorCarteraVendedor,
             data: JSON.stringify({
             }),
             dataType: "json",

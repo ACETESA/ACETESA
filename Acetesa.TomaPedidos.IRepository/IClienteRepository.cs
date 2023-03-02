@@ -32,6 +32,9 @@ namespace Acetesa.TomaPedidos.IRepository
         Dictionary<string, string> ActualizarAsignacionClienteVendedor(string rucCliente, string correoVendedor, bool asignar);
         string ValidarClienteEnZonaLiberada(string ruc);
 
+        List<ClienteModel> SelectClientesSegunCarteraVendedorYLibres(string correoVendedor);
+
+
 
     }
 }

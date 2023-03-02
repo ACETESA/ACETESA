@@ -72,8 +72,8 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
                         });
                         $('#CotizacionDetailViewModel_cc_artic').selectpicker('refresh');
                         //Selecciona el articulo
-                        $('.selectpicker').selectpicker('val', [idArticulo]);
-                        $('.selectpicker').selectpicker('refresh');
+                        $('#CotizacionDetailViewModel_cc_artic').selectpicker('val', [idArticulo]);
+                        $('#CotizacionDetailViewModel_cc_artic').selectpicker('refresh');//
 
                         StockTodasTiendasPorArticulo();
                     },

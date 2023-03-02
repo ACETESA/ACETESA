@@ -41,8 +41,16 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         public JsonResult GetClientes(string codFamilia)
         {
             var list = (new List<ClienteModel>());
-                //ClienteService.GetAll();
+            //ClienteService.GetAll();
             return Json(list, JsonRequestBehavior.AllowGet);
+
+            //IList<ClienteModel> listaModel = new List<ClienteModel>();
+            //listaModel = ClienteService.SelectClientesSegunCarteraVendedorYLibres(User.Identity.Name);
+
+            //var selectList = listaModel.ToSelectList(x => x.cd_razsoc.Trim(), x => x.cc_analis,
+            //         FindTypes.Ninguno.ToString());
+
+            //return Json(selectList, JsonRequestBehavior.AllowGet);
         }
         
 
@@ -55,7 +63,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             };
             ViewBag.BaseUrl = Url.Content("~/");
             var task = await Task.Run(() => GetFamilias());
-            ViewBag.GetClientes = task;
+            //var task = await Task.Run(() => GetClientes());
             return View(model);
         }
 

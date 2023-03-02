@@ -64,147 +64,147 @@ function limpiarCamposArticulo() {
 }
 
 (function ($, toastr) {
-    $.widget("custom.combobox", {
-        _create: function () {
-            this.wrapper = $("<span>")
-                .insertAfter(this.element);
-            this.element.hide();
-            this._createAutocomplete(this.options.id);
-        },
+    //$.widget("custom.combobox", {
+    //    _create: function () {
+    //        this.wrapper = $("<span>")
+    //            .insertAfter(this.element);
+    //        this.element.hide();
+    //        this._createAutocomplete(this.options.id);
+    //    },
 
-        _createAutocomplete: function (id) {
-            var selected = this.element.children(":selected"),
-                value = selected.val() ? selected.text() : "";
+    //    _createAutocomplete: function (id) {
+    //        var selected = this.element.children(":selected"),
+    //            value = selected.val() ? selected.text() : "";
 
-            this.input = $("<input>")
-                .appendTo(this.wrapper)
-                .val(value)
-                .attr("title", "")
-                .attr("id", id)
-                .attr("data-val-required", this.options.messageRequired)
-                .addClass("form-control col-md-6")
-                .autocomplete({
-                    delay: 0,
-                    minLength: 3,
-                    source: $.proxy(this, "_source")
-                })
-                .tooltip({
-                    tooltipClass: "ui-state-highlight"
-                });
+    //        this.input = $("<input>")
+    //            .appendTo(this.wrapper)
+    //            .val(value)
+    //            .attr("title", "")
+    //            .attr("id", id)
+    //            .attr("data-val-required", this.options.messageRequired)
+    //            .addClass("form-control col-md-6")
+    //            .autocomplete({
+    //                delay: 0,
+    //                minLength: 3,
+    //                source: $.proxy(this, "_source")
+    //            })
+    //            .tooltip({
+    //                tooltipClass: "ui-state-highlight"
+    //            });
 
-            this._on(this.input, {
-                autocompleteselect: function (event, ui) {
-                    ui.item.option.selected = true;
-                    this.options.objMessage.text("");
-                    this._trigger("select", event, {
-                        item: ui.item.option
-                    });
-                    if (this.options.objCallback) {
-                        this.options.objCallback(ui.item.option.value);
-                    }
-                },
+    //        this._on(this.input, {
+    //            autocompleteselect: function (event, ui) {
+    //                ui.item.option.selected = true;
+    //                this.options.objMessage.text("");
+    //                this._trigger("select", event, {
+    //                    item: ui.item.option
+    //                });
+    //                if (this.options.objCallback) {
+    //                    this.options.objCallback(ui.item.option.value);
+    //                }
+    //            },
 
-                autocompletechange: "_removeIfInvalid"
-            });
-        },
-        ///Added lately
+    //            autocompletechange: "_removeIfInvalid"
+    //        });
+    //    },
+    //    ///Added lately
 
 
-        _createShowAllButton: function () {
-            var input = this.input,
-                wasOpen = false;
+    //    _createShowAllButton: function () {
+    //        var input = this.input,
+    //            wasOpen = false;
 
-            $("<a>")
-                .attr("tabIndex", -1)
-                .tooltip()
-                .appendTo(this.wrapper)
-                .button({
-                    icons: {
-                        primary: "ui-icon-triangle-1-s"
-                    },
-                    text: false
-                })
-                .removeClass("ui-corner-all")
-                .addClass("custom-combobox-toggle ui-corner-right")
-                .mousedown(function () {
-                    wasOpen = input.autocomplete("widget").is(":visible");
-                })
-                .click(function () {
-                    input.focus();
-                    // Close if already visible
-                    if (wasOpen) {
-                        return;
-                    }
-                    // Pass empty string as value to search for, displaying all results
-                    input.autocomplete("search", "");
-                });
-        },
+    //        $("<a>")
+    //            .attr("tabIndex", -1)
+    //            .tooltip()
+    //            .appendTo(this.wrapper)
+    //            .button({
+    //                icons: {
+    //                    primary: "ui-icon-triangle-1-s"
+    //                },
+    //                text: false
+    //            })
+    //            .removeClass("ui-corner-all")
+    //            .addClass("custom-combobox-toggle ui-corner-right")
+    //            .mousedown(function () {
+    //                wasOpen = input.autocomplete("widget").is(":visible");
+    //            })
+    //            .click(function () {
+    //                input.focus();
+    //                // Close if already visible
+    //                if (wasOpen) {
+    //                    return;
+    //                }
+    //                // Pass empty string as value to search for, displaying all results
+    //                input.autocomplete("search", "");
+    //            });
+    //    },
 
-        _source: function (request, response) {
-            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-            response(this.element.children("option").map(function () {
-                var text = $(this).text();
-                var val = $(this).val();
-                if (this.value && (!request.term || matcher.test(text) || matcher.test(val)))
-                    return {
-                        label: text,
-                        value: text,
-                        option: this
-                    };
-            }));
-        },
+    //    _source: function (request, response) {
+    //        var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+    //        response(this.element.children("option").map(function () {
+    //            var text = $(this).text();
+    //            var val = $(this).val();
+    //            if (this.value && (!request.term || matcher.test(text) || matcher.test(val)))
+    //                return {
+    //                    label: text,
+    //                    value: text,
+    //                    option: this
+    //                };
+    //        }));
+    //    },
 
-        _removeIfInvalid: function (event, ui) {
+    //    _removeIfInvalid: function (event, ui) {
 
-            // Selected an item, nothing to do
-            if (ui.item) {
-                return;
-            }
+    //        // Selected an item, nothing to do
+    //        if (ui.item) {
+    //            return;
+    //        }
 
-            // Search for a match (case-insensitive)
-            var value = this.input.val(),
-                valueLowerCase = value.toLowerCase(),
-                valid = false;
-            this.element.children("option").each(function () {
-                if ($(this).text().toLowerCase() === valueLowerCase) {
-                    this.selected = valid = true;
-                    return false;
-                }
-            });
+    //        // Search for a match (case-insensitive)
+    //        var value = this.input.val(),
+    //            valueLowerCase = value.toLowerCase(),
+    //            valid = false;
+    //        this.element.children("option").each(function () {
+    //            if ($(this).text().toLowerCase() === valueLowerCase) {
+    //                this.selected = valid = true;
+    //                return false;
+    //            }
+    //        });
 
-            // Found a match, nothing to do
-            if (valid) {
-                return;
-            }
+    //        // Found a match, nothing to do
+    //        if (valid) {
+    //            return;
+    //        }
 
-            // Remove invalid value
-            this.input
-                .val("")
-                .attr("title", value + " no encontró ningún elemento")
-                .tooltip("open");
-            this.element.val("");
-            this._delay(function () {
-                this.input.tooltip("close").attr("title", "");
-            }, 2500);
-            this.input.autocomplete("instance").term = "";
-        },
-        //allows programmatic selection of combo using the option value
-        setValue: function (value) {
-            var $input = this.input;
-            $("option", this.element).each(function () {
-                if ($(this).val() === value) {
-                    this.selected = true;
-                    $input.val(this.text);
-                    return false;
-                }
-            });
-        },
-        _destroy: function () {
-            this.wrapper.remove();
-            this.element.show();
-        }
+    //        // Remove invalid value
+    //        this.input
+    //            .val("")
+    //            .attr("title", value + " no encontró ningún elemento")
+    //            .tooltip("open");
+    //        this.element.val("");
+    //        this._delay(function () {
+    //            this.input.tooltip("close").attr("title", "");
+    //        }, 2500);
+    //        this.input.autocomplete("instance").term = "";
+    //    },
+    //    //allows programmatic selection of combo using the option value
+    //    setValue: function (value) {
+    //        var $input = this.input;
+    //        $("option", this.element).each(function () {
+    //            if ($(this).val() === value) {
+    //                this.selected = true;
+    //                $input.val(this.text);
+    //                return false;
+    //            }
+    //        });
+    //    },
+    //    _destroy: function () {
+    //        this.wrapper.remove();
+    //        this.element.show();
+    //    }
 
-    });
+    //});
 
     $.datepicker.regional["es"] = {
         closeText: "Cerrar",
@@ -235,176 +235,176 @@ function limpiarCamposArticulo() {
         return res;
     };
 
-    var callbackCliente = function (ccAnalis, callbackSucursal) {
-        validarClienteZonaLiberadaXRUC();
-        $.ajax({
-            url: urlValidarVendedorCliente,
-            data: JSON.stringify({
-                cc_analis: ccAnalis
-            }),
-            type: "POST",
-            contentType: 'application/json',
-            success: function (data) {
-                for (var key in data) {
-                    if (key === "1") {
-                        toastr.warning(data[key]);
-                        $("#txtRazonSocial").val("");
-                        $("#cc_analis").val("");
-                        return;
-                    } else if (key === "2") {
-                        toastr.info(data[key]);
-                    } else {
-                        try {
-                            var request = new Ajax();
-                            var url = _baseUrl + "Pedido/GetSucursalesJson";
-                            params = {
-                                ccAnalis: ccAnalis
-                            };
-                            request.JsonPost(url, params, function (response) {
-                                var sOption = "";
-                                $.each(response, function (inx, item) {
-                                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                                });
-                                $("#cn_suc").html(sOption);
-                                if (callbackSucursal !== undefined) {
-                                    callbackSucursal();
-                                }
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
+    //var callbackCliente = function (ccAnalis, callbackSucursal) {
+    //    validarClienteZonaLiberadaXRUC();
+    //    $.ajax({
+    //        url: urlValidarVendedorCliente,
+    //        data: JSON.stringify({
+    //            cc_analis: ccAnalis
+    //        }),
+    //        type: "POST",
+    //        contentType: 'application/json',
+    //        success: function (data) {
+    //            for (var key in data) {
+    //                if (key === "1") {
+    //                    toastr.warning(data[key]);
+    //                    $("#txtRazonSocial").val("");
+    //                    $("#cc_analis").val("");
+    //                    return;
+    //                } else if (key === "2") {
+    //                    toastr.info(data[key]);
+    //                } else {
+    //                    try {
+    //                        var request = new Ajax();
+    //                        var url = _baseUrl + "Pedido/GetSucursalesJson";
+    //                        params = {
+    //                            ccAnalis: ccAnalis
+    //                        };
+    //                        request.JsonPost(url, params, function (response) {
+    //                            var sOption = "";
+    //                            $.each(response, function (inx, item) {
+    //                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //                            });
+    //                            $("#cn_suc").html(sOption);
+    //                            if (callbackSucursal !== undefined) {
+    //                                callbackSucursal();
+    //                            }
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
 
-                        try {
-                            request = new Ajax();
-                            url = _baseUrl + "Pedido/GetCondicionesVentasJson";
-                            params = {
-                                ccAnalis: ccAnalis
-                            };
-                            request.JsonPost(url, params, function (response) {
-                                var sOption = "";
-                                $.each(response, function (inx, item) {
-                                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                                });
-                                $("#cc_vta").html(sOption);
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
+    //                    try {
+    //                        request = new Ajax();
+    //                        url = _baseUrl + "Pedido/GetCondicionesVentasJson";
+    //                        params = {
+    //                            ccAnalis: ccAnalis
+    //                        };
+    //                        request.JsonPost(url, params, function (response) {
+    //                            var sOption = "";
+    //                            $.each(response, function (inx, item) {
+    //                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //                            });
+    //                            $("#cc_vta").html(sOption);
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
 
-                        try {
-                            request = new Ajax();
-                            url = _baseUrl + "Pedido/GetLugarEntregaJson";
-                            params = {
-                                ccAnalis: ccAnalis
-                            };
-                            request.JsonPost(url, params, function (response) {
-                                var sOption = "";
-                                $.each(response, function (inx, item) {
-                                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                                });
-                                $("#Cn_lug").html(sOption);
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
+    //                    try {
+    //                        request = new Ajax();
+    //                        url = _baseUrl + "Pedido/GetLugarEntregaJson";
+    //                        params = {
+    //                            ccAnalis: ccAnalis
+    //                        };
+    //                        request.JsonPost(url, params, function (response) {
+    //                            var sOption = "";
+    //                            $.each(response, function (inx, item) {
+    //                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //                            });
+    //                            $("#Cn_lug").html(sOption);
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
 
-                        try {
-                            request = new Ajax();
-                            url = _baseUrl + "Pedido/GetContactoEntregaDirectaJson";
-                            params = {
-                                ccAnalis: ccAnalis
-                            };
-                            request.JsonPost(url, params, function (response) {
-                                var sOption = "";
-                                $.each(response, function (inx, item) {
-                                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                                });
-                                $("#IdContactoEntregaDirecta").html(sOption);
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
+    //                    try {
+    //                        request = new Ajax();
+    //                        url = _baseUrl + "Pedido/GetContactoEntregaDirectaJson";
+    //                        params = {
+    //                            ccAnalis: ccAnalis
+    //                        };
+    //                        request.JsonPost(url, params, function (response) {
+    //                            var sOption = "";
+    //                            $.each(response, function (inx, item) {
+    //                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //                            });
+    //                            $("#IdContactoEntregaDirecta").html(sOption);
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
 
-                        try {
-                            request = new Ajax();
-                            url = _baseUrl + "Pedido/GetTransporteJson";
-                            params = {
-                                ccAnalis: ccAnalis
-                            };
-                            request.JsonPost(url, params, function (response) {
-                                var sOption = "";
-                                $.each(response, function (inx, item) {
-                                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                                });
-                                $("#CC_transp").html(sOption);
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
-                    }
-                }
-            }
-        });
-    }
+    //                    try {
+    //                        request = new Ajax();
+    //                        url = _baseUrl + "Pedido/GetTransporteJson";
+    //                        params = {
+    //                            ccAnalis: ccAnalis
+    //                        };
+    //                        request.JsonPost(url, params, function (response) {
+    //                            var sOption = "";
+    //                            $.each(response, function (inx, item) {
+    //                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //                            });
+    //                            $("#CC_transp").html(sOption);
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    });
+    //}
 
     var $Cliente = $("#cc_analis");
     var $msgeCliente = $("#msgeCliente");
 
-    $Cliente.combobox({
-        id: "txtRazonSocial",
-        messageRequired: "Debe ingresar un Cliente.",
-        objMessage: $msgeCliente,
-        objCallback: callbackCliente
-    });
+    //$Cliente.combobox({
+    //    id: "txtRazonSocial",
+    //    messageRequired: "Debe ingresar un Cliente.",
+    //    objMessage: $msgeCliente,
+    //    objCallback: callbackCliente
+    //});
 
-    var $txtRazonSocial = $("#txtRazonSocial");
-    $txtRazonSocial.click(function () {
-        var input = this;
-        input.focus();
-        input.setSelectionRange(0, 999);
-    });
+    //var $txtRazonSocial = $("#txtRazonSocial");
+    //$txtRazonSocial.click(function () {
+    //    var input = this;
+    //    input.focus();
+    //    input.setSelectionRange(0, 999);
+    //});
 
-    $txtRazonSocial.on("keypress", function (e) {
-        if (e.which === 13) {
+    //$txtRazonSocial.on("keypress", function (e) {
+    //    if (e.which === 13) {
 
-            e.preventDefault();
-            e.stopPropagation();
+    //        e.preventDefault();
+    //        e.stopPropagation();
 
-            var $component = $(this);
-            var criterio = $component.val();
-            var longitud = $.trim($component.val()).length;
-            var datos = $txtRazonSocial.length
-            if (longitud === 0) {
-                return;
-            }
-            try {
-                var request = new Ajax(_baseUrl);
-                var url = "pedido/getclientesbyparam";
-                params = {
-                    param: criterio
-                };
-                request.JsonPost(url, params, function (response) {
-                    if (response.estado && response.estado === 1) {
-                        $Cliente.children().remove();
-                        $.each(response.data, function (i, state) {
-                            $("<option>", {
-                                value: $.trim(state.value)
-                            }).html($.trim(state.text)).appendTo($Cliente);
-                        });
+    //        var $component = $(this);
+    //        var criterio = $component.val();
+    //        var longitud = $.trim($component.val()).length;
+    //        var datos = $txtRazonSocial.length
+    //        if (longitud === 0) {
+    //            return;
+    //        }
+    //        try {
+    //            var request = new Ajax(_baseUrl);
+    //            var url = "pedido/getclientesbyparam";
+    //            params = {
+    //                param: criterio
+    //            };
+    //            request.JsonPost(url, params, function (response) {
+    //                if (response.estado && response.estado === 1) {
+    //                    $Cliente.children().remove();
+    //                    $.each(response.data, function (i, state) {
+    //                        $("<option>", {
+    //                            value: $.trim(state.value)
+    //                        }).html($.trim(state.text)).appendTo($Cliente);
+    //                    });
 
-                        $Cliente.combobox();
-                        var event = jQuery.Event("keypress");
-                        event.which = 40;
-                        event.keyCode = 40; //keycode to trigger this for simulating arrow bottom
-                        $component.trigger(event);
+    //                    $Cliente.combobox();
+    //                    var event = jQuery.Event("keypress");
+    //                    event.which = 40;
+    //                    event.keyCode = 40; //keycode to trigger this for simulating arrow bottom
+    //                    $component.trigger(event);
 
-                    }
-                });
-            } catch (ex) {
-                toastr.error(ex);
-            }
-        }
-    });
+    //                }
+    //            });
+    //        } catch (ex) {
+    //            toastr.error(ex);
+    //        }
+    //    }
+    //});
 
     var today = new Date();
     var dd = today.getDate();
@@ -640,7 +640,7 @@ function limpiarCamposArticulo() {
 
         var $cdRazsoc = $("#cd_razsoc");
         var $cdArtic = $("#PedidoDetailViewModel_cd_artic");
-        $cdRazsoc.val($txtRazonSocial.val());
+        $cdRazsoc.val($('#cc_analis option:selected').text());
         $cdArtic.val($('#PedidoDetailViewModel_cc_artic option:selected').text());
 
         var cantidadArtic = parseFloat($cantidad.val());
@@ -648,13 +648,31 @@ function limpiarCamposArticulo() {
 
         $("#pedidoForm").valid();
 
-        if ($.trim($txtRazonSocial.val()).length === 0) {
-            $msgeCliente.text("Debe seleccionar un cliente.");
-            $msgeCliente.show();
-        } else {
+        //if ($.trim($txtRazonSocial.val()).length === 0) {
+        //    $msgeCliente.text("Debe seleccionar un cliente.");
+        //    $msgeCliente.show();
+        //} else {
+        //    bValidRazonSocial = true;
+        //    $msgeCliente.hide();
+        //}
+
+        //Valida si cliente esta seleccionado
+        var selectedCliente = 0;
+        $('#cc_analis option').each(function () {
+            if (this.selected) {
+                selectedCliente = 1;
+            }
+        });
+
+        if (selectedCliente == 1) {
             bValidRazonSocial = true;
             $msgeCliente.hide();
         }
+        else {
+            $msgeCliente.text("Debe seleccionar un Cliente.");
+            $msgeCliente.show();
+        }
+
 
         if (cantidadArtic == 0.00) {
             toastr.error("La cantidad del artículo debe ser mayor a 0");
@@ -761,9 +779,9 @@ function limpiarCamposArticulo() {
     $btnSave.on("click", async function (e) {
 
         _tipoFormulario = "Pedido";
-        if ($.trim($txtRazonSocial.val()).length === 0) {
-            $Cliente.val("");
-        }
+        //if ($.trim($txtRazonSocial.val()).length === 0) {
+        //    $Cliente.val("");
+        //}
 
         UnselectArticles();
 
@@ -966,9 +984,9 @@ function limpiarCamposArticulo() {
     function SaveNSendPedido() {
         //Inicio: Save N Send
         _tipoFormulario = "Pedido";
-        if ($.trim($txtRazonSocial.val()).length === 0) {
-            $Cliente.val("");
-        }
+        //if ($.trim($txtRazonSocial.val()).length === 0) {
+        //    $Cliente.val("");
+        //}
 
         UnselectArticles();
 
@@ -1418,6 +1436,7 @@ function LlenarArticulosSelect() {
 //Propiedad selectPicker Articulos
 $(document).ready(function () {
     LlenarArticulosSelect();
+    //LlenarClientesSelect();
     $('.selectpicker').selectpicker({
         size: 5,
         title: 'Seleccione una opción'
@@ -1427,4 +1446,156 @@ $(document).ready(function () {
 function UnselectArticles() {
     $('#PedidoDetailViewModel_cc_artic').val('default').selectpicker('deselectAll');
     $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
+}
+
+
+function LlenarClientesSelect() {
+    Cliente = $("#cc_analis");
+    Cliente.html("");
+    $.ajax({
+        destroy: true,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: urlSelectClientesSegunCarteraVendedorYLibres,
+        data: JSON.stringify({
+        }),
+        dataType: "json",
+        success: function (result) {
+            for (var i = 0; i < result.length; i++) {
+                Cliente.append("<option value='" + result[i].cc_analis + "'>" + result[i].cd_razsoc + "</option>");
+            }
+            $('#cc_analis').selectpicker('refresh');
+        },
+        error: function (result) {
+            alert("Error en javascript...");
+        }
+    });
+}
+
+function UnselectClientes() {
+    $('#cc_analis').val('default').selectpicker('deselectAll');
+    $('#cc_analis').selectpicker('refresh');
+}
+
+var $cc_analis = $("#cc_analis");
+$cc_analis.on("change", function () {
+    try {
+        cargarDatosRelacionadosCliente(this.value)
+    } catch (e) {
+        toastr.error(e);
+    }
+});
+
+
+function cargarDatosRelacionadosCliente(ccAnalis, callbackSucursal) {
+    validarClienteZonaLiberadaXRUC();
+    $.ajax({
+        url: urlValidarVendedorCliente,
+        data: JSON.stringify({
+            cc_analis: ccAnalis
+        }),
+        type: "POST",
+        contentType: 'application/json',
+        success: function (data) {
+            for (var key in data) {
+                if (key === "1") {
+                    toastr.warning(data[key]);
+                    //$("#txtRazonSocial").val("");
+                    //$("#cc_analis").val("");
+                    UnselectClientes();
+                    return;
+                } else if (key === "2") {
+                    toastr.info(data[key]);
+                } else {
+                    try {
+                        var request = new Ajax();
+                        var url = _baseUrl + "Pedido/GetSucursalesJson";
+                        params = {
+                            ccAnalis: ccAnalis
+                        };
+                        request.JsonPost(url, params, function (response) {
+                            var sOption = "";
+                            $.each(response, function (inx, item) {
+                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $("#cn_suc").html(sOption);
+                            if (callbackSucursal !== undefined) {
+                                callbackSucursal();
+                            }
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+
+                    try {
+                        request = new Ajax();
+                        url = _baseUrl + "Pedido/GetCondicionesVentasJson";
+                        params = {
+                            ccAnalis: ccAnalis
+                        };
+                        request.JsonPost(url, params, function (response) {
+                            var sOption = "";
+                            $.each(response, function (inx, item) {
+                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $("#cc_vta").html(sOption);
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+
+                    try {
+                        request = new Ajax();
+                        url = _baseUrl + "Pedido/GetLugarEntregaJson";
+                        params = {
+                            ccAnalis: ccAnalis
+                        };
+                        request.JsonPost(url, params, function (response) {
+                            var sOption = "";
+                            $.each(response, function (inx, item) {
+                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $("#Cn_lug").html(sOption);
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+
+                    try {
+                        request = new Ajax();
+                        url = _baseUrl + "Pedido/GetContactoEntregaDirectaJson";
+                        params = {
+                            ccAnalis: ccAnalis
+                        };
+                        request.JsonPost(url, params, function (response) {
+                            var sOption = "";
+                            $.each(response, function (inx, item) {
+                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $("#IdContactoEntregaDirecta").html(sOption);
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+
+                    try {
+                        request = new Ajax();
+                        url = _baseUrl + "Pedido/GetTransporteJson";
+                        params = {
+                            ccAnalis: ccAnalis
+                        };
+                        request.JsonPost(url, params, function (response) {
+                            var sOption = "";
+                            $.each(response, function (inx, item) {
+                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $("#CC_transp").html(sOption);
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+                }
+            }
+        }
+    });
 }

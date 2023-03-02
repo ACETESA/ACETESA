@@ -32,10 +32,28 @@
 
     <div class="row ms-1 me-1">
         <hr />
-        <div class="col-9 col-lg-5 mb-3">
+        @*<div class="col-9 col-lg-5 mb-3">
             @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label" })
             @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
             @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>*@
+        <div class="col-9 col-lg-5 mb-3">
+            @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label ps-2" })
+            <div class="input-group">
+                @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
+                @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+                <script>
+                    $('#cc_analis').attr('data-show-subtext', 'true');
+                    $('#cc_analis').attr('data-live-search', 'true');
+                    $('#cc_analis').attr('data-width', '100%');
+                </script>
+                <style>
+                    .bootstrap-select .dropdown-menu {
+                        max-width: 100% !important;
+                        font-size: 100%;
+                    }
+                </style>
+            </div>
         </div>
         <div class="col-3 col-lg-1 align-self-end mb-3">
             <button type="button" class="btn btn-secondary" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>

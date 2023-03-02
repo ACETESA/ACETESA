@@ -29,250 +29,268 @@
     @Html.Hidden("sessionType", SessionTypes.Nuevo)
     @Html.HiddenFor(model => model.cd_razsoc)
     @Html.HiddenFor(model => model.PedidoDetailViewModel.cd_artic)
-    <div class="row ms-1 me-1">
-        <hr />
-        <div class="col-9 col-lg-5 mb-3">
+<div class="row ms-1 me-1">
+    <hr />
+    @*<div class="col-9 col-lg-5 mb-3">
             @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label" })
             @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
             @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+        </div>*@
+    <div class="col-9 col-lg-5 mb-3">
+        @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label ps-2" })
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
+            @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+            <script>
+                $('#cc_analis').attr('data-show-subtext', 'true');
+                $('#cc_analis').attr('data-live-search', 'true');
+                $('#cc_analis').attr('data-width', '100%');
+            </script>
+            <style>
+                .bootstrap-select .dropdown-menu {
+                    max-width: 100% !important;
+                    font-size: 100%;
+                }
+            </style>
         </div>
-        <div class="col-3 col-lg-1 align-self-end mb-3">
-            <button type="button" class="btn btn-secondary" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>
-        </div>
-        <div class="col-12 col-lg-3 mb-3">
-            @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "form-label" })
-            @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger", @id = "msgeCliente" })
-        </div>
-        <div class="col-12 col-lg-3 mb-3">
-            @Html.LabelFor(model => model.FechaEntrega, htmlAttributes: new { @class = "form-label" })
-            @Html.EditorFor(model => model.FechaEntrega, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.FechaEntrega, "", new { @class = "text-danger", @id = "msgeCliente" })
-        </div>
+    </div>
+    <div class="col-3 col-lg-1 align-self-end mb-3">
+        <button type="button" class="btn btn-secondary" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>
+    </div>
+    <div class="col-12 col-lg-3 mb-3">
+        @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "form-label" })
+        @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger", @id = "msgeCliente" })
+    </div>
+    <div class="col-12 col-lg-3 mb-3">
+        @Html.LabelFor(model => model.FechaEntrega, htmlAttributes: new { @class = "form-label" })
+        @Html.EditorFor(model => model.FechaEntrega, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.FechaEntrega, "", new { @class = "text-danger", @id = "msgeCliente" })
+    </div>
 
 
-        <div class="col-12 col-lg-4 mb-3">
-            @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-12 col-lg-4 mb-3">
-            @Html.LabelFor(model => model.igv_bo, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.igv_bo, ViewBag.GetIgv as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.igv_bo, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-12 col-lg-4 mb-3">
-            @Html.LabelFor(model => model.zonaLiberada_bo, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.zonaLiberada_bo, ViewBag.GetZonaLiberada as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.zonaLiberada_bo, "", new { @class = "text-danger" })
-        </div>
+    <div class="col-12 col-lg-4 mb-3">
+        @Html.LabelFor(model => model.Tienda, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.Tienda, ViewBag.GetTiendas as SelectList, new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.Tienda, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-12 col-lg-4 mb-3">
+        @Html.LabelFor(model => model.igv_bo, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.igv_bo, ViewBag.GetIgv as SelectList, new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.igv_bo, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-12 col-lg-4 mb-3">
+        @Html.LabelFor(model => model.zonaLiberada_bo, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.zonaLiberada_bo, ViewBag.GetZonaLiberada as SelectList, new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.zonaLiberada_bo, "", new { @class = "text-danger" })
+    </div>
 
 
-        <div class="col-12 col-lg-4 mb-3" style="display:none;">
-            @Html.LabelFor(model => model.mostrarIGV_bo, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.mostrarIGV_bo, ViewBag.GetMostrarIGV as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.mostrarIGV_bo, "", new { @class = "text-danger" })
-        </div>
+    <div class="col-12 col-lg-4 mb-3" style="display:none;">
+        @Html.LabelFor(model => model.mostrarIGV_bo, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.mostrarIGV_bo, ViewBag.GetMostrarIGV as SelectList, new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.mostrarIGV_bo, "", new { @class = "text-danger" })
+    </div>
 
 
-        <div class="col-12  mb-3">
-            @Html.LabelFor(model => model.cb_recojo, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.cb_recojo, ViewBag.GetRecojo as SelectList, new { @class = "form-select" })
-        </div>
+    <div class="col-12  mb-3">
+        @Html.LabelFor(model => model.cb_recojo, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.cb_recojo, ViewBag.GetRecojo as SelectList, new { @class = "form-select" })
+    </div>
 
-        <div class="bg-warning rounded-3 bg-opacity-25">
-            <div class="col-12 mb-3" id="pnl_Cn_lug">
-                @Html.LabelFor(model => model.Cn_lug, htmlAttributes: new { @class = "form-label" })
-                <div class="input-group">
-                    @Html.DropDownListFor(model => model.Cn_lug, ViewBag.GetLugarEntrega as SelectList, new { @class = "form-control" })
-                    <div class="input-group-addon mostrar-grilla-lugarEntrega" id="">
-                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-12 mb-3" id="pnl_cb_contactoEntregaDirecta">
-                @Html.LabelFor(model => model.IdContactoEntregaDirecta, htmlAttributes: new { @class = "form-label" })
-                <div class="input-group">
-                    @Html.DropDownListFor(model => model.IdContactoEntregaDirecta, ViewBag.GetContactoEntregaDirecta as SelectList, new { @class = "form-select" })
-                    <div class="input-group-addon mostrar-grilla-contactoEntregaDirecta" id="">
-                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="bg-warning rounded-3 bg-opacity-25">
-
-            <div class="col-12 mb-3 pnl_CC_transp">
-                @Html.LabelFor(model => model.CC_transp, htmlAttributes: new { @class = "form-label" })
-                <div class="input-group">
-                    @Html.DropDownListFor(model => model.CC_transp, ViewBag.GetTransporte as SelectList, new { @class = "form-select" })
-                    <div class="input-group-addon mostrar-grilla-transporte" id="">
-                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-12 mb-3 pnl_CC_transp">
-                @Html.LabelFor(model => model.ContactoTransporte, htmlAttributes: new { @class = "form-label" })
-                <div class="input-group">
-                    @Html.DropDownListFor(model => model.ContactoTransporte, ViewBag.GetContactoTransporte as SelectList, new { @class = "form-select" })
-                    <div class="input-group-addon mostrar-grilla-contacto-transporte" id="">
-                        <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
-                    </div>
+    <div class="bg-warning rounded-3 bg-opacity-25">
+        <div class="col-12 mb-3" id="pnl_Cn_lug">
+            @Html.LabelFor(model => model.Cn_lug, htmlAttributes: new { @class = "form-label" })
+            <div class="input-group">
+                @Html.DropDownListFor(model => model.Cn_lug, ViewBag.GetLugarEntrega as SelectList, new { @class = "form-control" })
+                <div class="input-group-addon mostrar-grilla-lugarEntrega" id="">
+                    <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-lg-3  mb-3">
-            @Html.LabelFor(model => model.cc_moneda, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.cc_moneda, ViewBag.GetMonedas as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.cc_moneda, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-12 col-lg-2  mb-3">
-            @Html.LabelFor(model => model.n_i_paralelo_venta, htmlAttributes: new { @class = "form-label" })
-            @Html.TextBoxFor(model => model.n_i_paralelo_venta, new { @class = "form-control", @readonly = "readonly" })
-        </div>
-        <div class="col-12 col-lg-4  mb-3">
-            @Html.LabelFor(model => model.cc_vta, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.cc_vta, ViewBag.GetCondicionesVentas as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.cc_vta, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-12 col-lg-3  mb-3">
-            @Html.LabelFor(model => model.cn_ocompra, htmlAttributes: new { @class = "form-label" })
-            @Html.EditorFor(model => model.cn_ocompra, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.cn_ocompra, "", new { @class = "text-danger" })
-        </div>
 
-
-        <div class="col-12  mb-3">
-            @Html.LabelFor(model => model.Vt_observacion, htmlAttributes: new { @class = "form-label" })
-            @Html.TextAreaFor(model => model.Vt_observacion, new { maxlength = 250, @class = "form-control" })
-        </div>
-
-
-
-        <div id="containerArticulo" class="col-12">
-
-            <div class="card" id="AgregarArticulos">
-                <div class="card-header bg-dark text-bg-secondary opacity-75">
-                    Agregar Artículos
+        <div class="col-12 mb-3" id="pnl_cb_contactoEntregaDirecta">
+            @Html.LabelFor(model => model.IdContactoEntregaDirecta, htmlAttributes: new { @class = "form-label" })
+            <div class="input-group">
+                @Html.DropDownListFor(model => model.IdContactoEntregaDirecta, ViewBag.GetContactoEntregaDirecta as SelectList, new { @class = "form-select" })
+                <div class="input-group-addon mostrar-grilla-contactoEntregaDirecta" id="">
+                    <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
                 </div>
-                <div class="card-body">
-                    <div id="articulo">
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_grupo, htmlAttributes: new { @class = "form-label" })
-                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_grupo, ViewBag.GetGrupo as SelectList, new { @class = "form-select" })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_grupo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bg-warning rounded-3 bg-opacity-25">
+
+        <div class="col-12 mb-3 pnl_CC_transp">
+            @Html.LabelFor(model => model.CC_transp, htmlAttributes: new { @class = "form-label" })
+            <div class="input-group">
+                @Html.DropDownListFor(model => model.CC_transp, ViewBag.GetTransporte as SelectList, new { @class = "form-select" })
+                <div class="input-group-addon mostrar-grilla-transporte" id="">
+                    <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 mb-3 pnl_CC_transp">
+            @Html.LabelFor(model => model.ContactoTransporte, htmlAttributes: new { @class = "form-label" })
+            <div class="input-group">
+                @Html.DropDownListFor(model => model.ContactoTransporte, ViewBag.GetContactoTransporte as SelectList, new { @class = "form-select" })
+                <div class="input-group-addon mostrar-grilla-contacto-transporte" id="">
+                    <button type="button" class="btn btn-secondary fa fa-search h-100"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-3  mb-3">
+        @Html.LabelFor(model => model.cc_moneda, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.cc_moneda, ViewBag.GetMonedas as SelectList, new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.cc_moneda, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-12 col-lg-2  mb-3">
+        @Html.LabelFor(model => model.n_i_paralelo_venta, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(model => model.n_i_paralelo_venta, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-12 col-lg-4  mb-3">
+        @Html.LabelFor(model => model.cc_vta, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.cc_vta, ViewBag.GetCondicionesVentas as SelectList, new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.cc_vta, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-12 col-lg-3  mb-3">
+        @Html.LabelFor(model => model.cn_ocompra, htmlAttributes: new { @class = "form-label" })
+        @Html.EditorFor(model => model.cn_ocompra, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.cn_ocompra, "", new { @class = "text-danger" })
+    </div>
+
+
+    <div class="col-12  mb-3">
+        @Html.LabelFor(model => model.Vt_observacion, htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(model => model.Vt_observacion, new { maxlength = 250, @class = "form-control" })
+    </div>
+
+
+
+    <div id="containerArticulo" class="col-12">
+
+        <div class="card" id="AgregarArticulos">
+            <div class="card-header bg-dark text-bg-secondary opacity-75">
+                Agregar Artículos
+            </div>
+            <div class="card-body">
+                <div id="articulo">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.cc_grupo, htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_grupo, ViewBag.GetGrupo as SelectList, new { @class = "form-select" })
+                            @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_grupo, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.cc_subgrupo, htmlAttributes: new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_subgrupo, ViewBag.GetSubGrupo as SelectList, new { @class = "form-select" })
+                            @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="col-12 col-lg-9 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
+                            <div class="input-group">
+                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
+                                <script>
+                                    $('#PedidoDetailViewModel_cc_artic').attr('data-show-subtext', 'true');
+                                    $('#PedidoDetailViewModel_cc_artic').attr('data-live-search', 'true');
+                                    $('#PedidoDetailViewModel_cc_artic').attr('data-width', '100%');
+                                </script>
+                                <style>
+                                    .bootstrap-select .dropdown-menu {
+                                        max-width: 100% !important;
+                                        font-size: 91%;
+                                    }
+                                </style>
                             </div>
+                        </div>
+                        <div class="col-12 col-lg-3 mb-3 rounded-3 border border-white border-3" id="datosStockTodasTiendas" style="font-size:75%;">
+
+                        </div>
 
 
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_subgrupo, htmlAttributes: new { @class = "form-label" })
-                                @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_subgrupo, ViewBag.GetSubGrupo as SelectList, new { @class = "form-select" })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
-                            </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.fq_cantidad, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.PedidoDetailViewModel.fq_cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_cantidad, "", new { @class = "text-danger" })
+                        </div>
 
 
-                            <div class="col-12 col-lg-9 mb-3 bg-success p-1 rounded-3 bg-opacity-25">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.cc_artic, htmlAttributes: new { @class = "form-label ps-2" })
-                                <div class="input-group">
-                                    @Html.DropDownListFor(model => model.PedidoDetailViewModel.cc_artic, ViewBag.GetArticulos as SelectList, new { @class = "selectpicker" })
-                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.cc_artic, "", new { @class = "text-danger", @id = "msgeArticulo" })
-                                    <script>
-                                        $('#PedidoDetailViewModel_cc_artic').attr('data-show-subtext', 'true');
-                                        $('#PedidoDetailViewModel_cc_artic').attr('data-live-search', 'true');
-                                        $('#PedidoDetailViewModel_cc_artic').attr('data-width', '100%');
-                                    </script>
-                                    <style>
-                                        .bootstrap-select .dropdown-menu {
-                                            max-width: 100% !important;
-                                            font-size: 91%;
-                                        }
-                                    </style>
+                        <div class="col-12 col-lg-6 mb-3">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, htmlAttributes: new { @class = "form-label" })
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, "", new { @class = "text-danger" })
+                                <div class="input-group-addon">
+                                    <button type="button" class="btn btn-secondary fa fa-refresh h-100" id="btnClienteNew" title="Recalcular Precio Final" onclick="calcularPrecioFinalPrecioTM(0);"></button>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-3 mb-3 rounded-3 border border-white border-3" id="datosStockTodasTiendas" style="font-size:75%;">
-
-                            </div>
-
-
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.fq_cantidad, htmlAttributes: new { @class = "form-label" })
-                                @Html.EditorFor(model => model.PedidoDetailViewModel.fq_cantidad, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_cantidad, "", new { @class = "text-danger" })
-                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 mb-3">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.fq_peso_teorico, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.PedidoDetailViewModel.fq_peso_teorico, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_peso_teorico, "", new { @class = "text-danger" })
+                        </div>
 
 
-                            <div class="col-12 col-lg-6 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, htmlAttributes: new { @class = "form-label" })
-                                <div class="input-group">
-                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_tonelada, "", new { @class = "text-danger" })
-                                    <div class="input-group-addon">
-                                        <button type="button" class="btn btn-secondary fa fa-refresh h-100" id="btnClienteNew" title="Recalcular Precio Final" onclick="calcularPrecioFinalPrecioTM(0);"></button>
-                                    </div>
+
+
+
+                        @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                            if (sqlDB3.InitialCatalog == "ZICO_ERP01")
+                            {
+                                <div class="col-12 col-lg-6 mb-3">
+                                    @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio, htmlAttributes: new { @class = "form-label" })
+                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio, "", new { @class = "text-danger" })
                                 </div>
-                            </div>
-                            <div class="col-12 col-lg-6 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.fq_peso_teorico, htmlAttributes: new { @class = "form-label" })
-                                @Html.EditorFor(model => model.PedidoDetailViewModel.fq_peso_teorico, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fq_peso_teorico, "", new { @class = "text-danger" })
-                            </div>
-
-
-
-
-
-                            @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-                                if (sqlDB3.InitialCatalog == "ZICO_ERP01")
-                                {
-                                    <div class="col-12 col-lg-6 mb-3">
-                                        @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio, htmlAttributes: new { @class = "form-label" })
-                                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-12 col-lg-6 mb-3">
-                                        @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
-                                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-12 mb-3">
-                                        @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
-                                        @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                                        @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
-                                    </div>
-                                }
+                                <div class="col-12 col-lg-6 mb-3">
+                                    @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
+                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
+                                </div>
                             }
+                            else
+                            {
+                                <div class="col-12 mb-3">
+                                    @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
+                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
+                                </div>
+                            }
+                        }
 
 
-                            <div class="col-12 mb-3">
-                                @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_fin, htmlAttributes: new { @class = "form-label" })
-                                <div class="input-group">
-                                    @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_fin, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_fin, "", new { @class = "text-danger" })
-                                    <div class="input-group-addon">
-                                        <button type="button" class="btn btn-secondary fa fa-refresh h-100" id="btnClienteNew" title="Recalcular Precio TM" onclick="calcularPrecioFinalPrecioTM(1);"></button>
-                                    </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.PedidoDetailViewModel.fm_precio_fin, htmlAttributes: new { @class = "form-label" })
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.PedidoDetailViewModel.fm_precio_fin, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.PedidoDetailViewModel.fm_precio_fin, "", new { @class = "text-danger" })
+                                <div class="input-group-addon">
+                                    <button type="button" class="btn btn-secondary fa fa-refresh h-100" id="btnClienteNew" title="Recalcular Precio TM" onclick="calcularPrecioFinalPrecioTM(1);"></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <input type="submit" value="Agregar" class="btn btn-dark opacity-75" id="btnAdd" />
-                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Agregar" class="btn btn-dark opacity-75" id="btnAdd" />
             </div>
         </div>
     </div>
+</div>
 }
 <hr />
 <div class="table-responsive" id="result">
@@ -362,6 +380,7 @@
         var urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
         var urlValidaCreditoSobregiroPorPedido = "@Url.Action("ValidaCreditoSobregiroPorPedido", "Pedido")";
         var urlStockTodasTiendasPorArticulo ="@Url.Action("StockTodasTiendasPorArticulo", "Cotizacion")";
+        var urlSelectClientesSegunCarteraVendedorYLibres ="@Url.Action("SelectClientesSegunCarteraVendedorYLibres", "Cliente")";
 
     </script>
     <script>

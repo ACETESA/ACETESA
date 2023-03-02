@@ -287,5 +287,8 @@ function blockScreen() {
 }
 
 function unBlockScreen() {
-    $("#btnCloseModalLoading").click();
+    setTimeout(
+        function () {
+            document.getElementById("btnCloseModalLoading").click();
+        }, 1000);
 }

@@ -803,8 +803,8 @@ function cargarDatosParaEditarArticulo(idArticulo, descArticulo, cantidad, preci
                         });
                         $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
                         //Selecciona el articulo
-                        $('.selectpicker').selectpicker('val', [idArticulo]);
-                        $('.selectpicker').selectpicker('refresh');
+                        $('#PedidoDetailViewModel_cc_artic').selectpicker('val', [idArticulo]);
+                        $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
                         StockTodasTiendasPorArticulo();
                     },
                     error: function (resultArt) {
@@ -848,13 +848,13 @@ $("#PedidoDetailViewModel_fm_precio_fin")
 
 
 function disableSelect() {
-    $('.selectpicker').prop('disabled', true);
-    $('.selectpicker').selectpicker('refresh');
+    $('#PedidoDetailViewModel_cc_artic').prop('disabled', true);
+    $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
 }
 
 function enableSelect() {
-    $('.selectpicker').prop('disabled', false);
-    $('.selectpicker').selectpicker('refresh');
+    $('#PedidoDetailViewModel_cc_artic').prop('disabled', false);
+    $('#PedidoDetailViewModel_cc_artic').selectpicker('refresh');
 }
 
 

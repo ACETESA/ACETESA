@@ -1983,13 +1983,23 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         private SelectList GetClientes(string ccAnalis = null)
         {
             IList<ClienteModel> listaModel = new List<ClienteModel>();
-            if (!string.IsNullOrEmpty(ccAnalis))
-            {
-                var clienteSelect = ClienteService.GetByCodigo(ccAnalis);
-                listaModel.Add(clienteSelect);
-            }
+            listaModel = ClienteService.SelectClientesSegunCarteraVendedorYLibres(User.Identity.Name);
+
             var selectList = listaModel.ToSelectList(x => x.cd_razsoc.Trim(), x => x.cc_analis,
                      FindTypes.Ninguno.ToString());
+
+            if (!string.IsNullOrEmpty(ccAnalis))
+            {
+                foreach (var item in selectList)
+                {
+                    if (item.Value == ccAnalis)
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+            }
+
             return NewSelectList(selectList);
         }
         private SelectList GetEstados()

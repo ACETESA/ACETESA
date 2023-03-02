@@ -153,6 +153,9 @@ namespace Acetesa.TomaPedidos.Core.Business
             return _clienteRepository.SelectClientesSegunCarteraVendedor(correoVendedor);
         }
 
-
+        public List<ClienteModel> SelectClientesSegunCarteraVendedorYLibres(string correoVendedor)
+        {
+            return _clienteRepository.SelectClientesSegunCarteraVendedorYLibres(correoVendedor);
+        }
     }
 }

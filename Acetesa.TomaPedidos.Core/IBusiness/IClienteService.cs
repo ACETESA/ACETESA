@@ -31,6 +31,7 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
         string ValidarClienteEnZonaLiberada(string ruc);
         List<ClienteModel> SelectClientesSegunCarteraVendedor(string correoVendedor);
 
+        List<ClienteModel> SelectClientesSegunCarteraVendedorYLibres(string correoVendedor);
 
 
     }

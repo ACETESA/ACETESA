@@ -84,140 +84,141 @@ function limpiarCamposArticulo() {
 }
 
 (function ($, toastr) {
-    $.widget("custom.combobox", {
-        _create: function () {
-            this.wrapper = $("<span>")
-                .insertAfter(this.element);
-            this.element.hide();
-            this._createAutocomplete(this.options.id);
-        },
+    //$.widget("custom.combobox", {
+    //    _create: function () {
+    //        this.wrapper = $("<span>")
+    //            .insertAfter(this.element);
+    //        this.element.hide();
+    //        this._createAutocomplete(this.options.id);
+    //    },
 
-        _createAutocomplete: function (id) {
-            var selected = this.element.children(":selected"),
-                value = selected.val() ? selected.text() : "";
+    //    _createAutocomplete: function (id) {
+    //        var selected = this.element.children(":selected"),
+    //            value = selected.val() ? selected.text() : "";
 
-            this.input = $("<input>")
-                .appendTo(this.wrapper)
-                .val(value)
-                .attr("title", "")
-                .attr("id", id)
-                .attr("data-val-required", this.options.messageRequired)
-                .addClass("form-control col-md-10")
-                .autocomplete({
-                    delay: 0,
-                    minLength: 3,
-                    source: $.proxy(this, "_source")
-                })
-                .tooltip({
-                    tooltipClass: "ui-state-highlight"
-                });
+    //        this.input = $("<input>")
+    //            .appendTo(this.wrapper)
+    //            .val(value)
+    //            .attr("title", "")
+    //            .attr("id", id)
+    //            .attr("data-val-required", this.options.messageRequired)
+    //            .addClass("form-control col-md-10")
+    //            .autocomplete({
+    //                delay: 0,
+    //                minLength: 3,
+    //                source: $.proxy(this, "_source")
+    //            })
+    //            .tooltip({
+    //                tooltipClass: "ui-state-highlight"
+    //            });
 
-            this._on(this.input, {
-                autocompleteselect: function (event, ui) {
-                    ui.item.option.selected = true;
-                    this.options.objMessage.text("");
-                    this._trigger("select", event, {
-                        item: ui.item.option
-                    });
-                    if (this.options.objCallback) {
-                        this.options.objCallback(ui.item.option.value);
-                    }
-                },
-                autocompletechange: "_removeIfInvalid"
-            });
-        },
+    //        this._on(this.input, {
+    //            autocompleteselect: function (event, ui) {
+    //                ui.item.option.selected = true;
+    //                this.options.objMessage.text("");
+    //                this._trigger("select", event, {
+    //                    item: ui.item.option
+    //                });
+    //                if (this.options.objCallback) {
+    //                    this.options.objCallback(ui.item.option.value);
+    //                }
+    //            },
+    //            autocompletechange: "_removeIfInvalid"
+    //        });
+    //    },
 
-        _createShowAllButton: function () {
-            var input = this.input,
-                wasOpen = false;
+    //    _createShowAllButton: function () {
+    //        var input = this.input,
+    //            wasOpen = false;
 
-            $("<a>")
-                .attr("tabIndex", -1)
-                .tooltip()
-                .appendTo(this.wrapper)
-                .button({
-                    icons: {
-                        primary: "ui-icon-triangle-1-s"
-                    },
-                    text: false
-                })
-                .removeClass("ui-corner-all")
-                .addClass("custom-combobox-toggle ui-corner-right")
-                .mousedown(function () {
-                    wasOpen = input.autocomplete("widget").is(":visible");
-                })
-                .click(function () {
-                    input.focus();
+    //        $("<a>")
+    //            .attr("tabIndex", -1)
+    //            .tooltip()
+    //            .appendTo(this.wrapper)
+    //            .button({
+    //                icons: {
+    //                    primary: "ui-icon-triangle-1-s"
+    //                },
+    //                text: false
+    //            })
+    //            .removeClass("ui-corner-all")
+    //            .addClass("custom-combobox-toggle ui-corner-right")
+    //            .mousedown(function () {
+    //                wasOpen = input.autocomplete("widget").is(":visible");
+    //            })
+    //            .click(function () {
+    //                input.focus();
 
-                    // Cerrar si es visible
-                    if (wasOpen) {
-                        return;
-                    }
-                    // Pasa vacio como valor de busquda para mostrar todos los resultados.
-                    input.autocomplete("search", "");
-                });
-        },
+    //                // Cerrar si es visible
+    //                if (wasOpen) {
+    //                    return;
+    //                }
+    //                // Pasa vacio como valor de busquda para mostrar todos los resultados.
+    //                input.autocomplete("search", "");
+    //            });
+    //    },
 
-        _source: function (request, response) {
-            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-            response(this.element.children("option").map(function () {
-                var text = $(this).text();
-                var val = $(this).val();
-                if (this.value && (!request.term || matcher.test(text) || matcher.test(val)))
-                    return {
-                        label: text,
-                        value: text,
-                        option: this
-                    };
-            }));
-        },
+    //    _source: function (request, response) {
+    //        var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+    //        response(this.element.children("option").map(function () {
+    //            var text = $(this).text();
+    //            var val = $(this).val();
+    //            if (this.value && (!request.term || matcher.test(text) || matcher.test(val)))
+    //                return {
+    //                    label: text,
+    //                    value: text,
+    //                    option: this
+    //                };
+    //        }));
+    //    },
 
-        _removeIfInvalid: function (event, ui) {
-            // Item seeleccionado, no hacer nada
-            if (ui.item) {
-                return;
-            }
-            // Busqueda (case-insensitive)
-            var value = this.input.val(),
-                valueLowerCase = value.toLowerCase(),
-                valid = false;
-            this.element.children("option").each(function () {
-                if ($(this).text().toLowerCase() === valueLowerCase) {
-                    this.selected = valid = true;
-                    return false;
-                }
-            });
-            // Encontro coincidencia nada que hacer
-            if (valid) {
-                return;
-            }
-            // Elimina valor invalido
-            this.input
-                .val("")
-                .attr("title", value + " no encontró ningún elemento")
-                .tooltip("open");
-            this.element.val("");
-            this._delay(function () {
-                this.input.tooltip("close").attr("title", "");
-            }, 2500);
-            this.input.autocomplete("instance").term = "";
-        },
-        //Permite seleccion del select segun el valor.
-        setValue: function (value) {
-            var $input = this.input;
-            $("option", this.element).each(function () {
-                if ($(this).val() === value) {
-                    this.selected = true;
-                    $input.val(this.text);
-                    return false;
-                }
-            });
-        },
-        _destroy: function () {
-            this.wrapper.remove();
-            this.element.show();
-        }
-    });
+    //    _removeIfInvalid: function (event, ui) {
+    //        // Item seeleccionado, no hacer nada
+    //        if (ui.item) {
+    //            return;
+    //        }
+    //        // Busqueda (case-insensitive)
+    //        var value = this.input.val(),
+    //            valueLowerCase = value.toLowerCase(),
+    //            valid = false;
+    //        this.element.children("option").each(function () {
+    //            if ($(this).text().toLowerCase() === valueLowerCase) {
+    //                this.selected = valid = true;
+    //                return false;
+    //            }
+    //        });
+    //        // Encontro coincidencia nada que hacer
+    //        if (valid) {
+    //            return;
+    //        }
+    //        // Elimina valor invalido
+    //        this.input
+    //            .val("")
+    //            .attr("title", value + " no encontró ningún elemento")
+    //            .tooltip("open");
+    //        this.element.val("");
+    //        this._delay(function () {
+    //            this.input.tooltip("close").attr("title", "");
+    //        }, 2500);
+    //        this.input.autocomplete("instance").term = "";
+    //    },
+    //    //Permite seleccion del select segun el valor.
+    //    setValue: function (value) {
+    //        var $input = this.input;
+    //        $("option", this.element).each(function () {
+    //            if ($(this).val() === value) {
+    //                this.selected = true;
+    //                $input.val(this.text);
+    //                return false;
+    //            }
+    //        });
+    //    },
+    //    _destroy: function () {
+    //        this.wrapper.remove();
+    //        this.element.show();
+    //    }
+    //});
+
     $.datepicker.regional["es"] = {
         closeText: "Cerrar",
         prevText: "Anterior",
@@ -247,153 +248,153 @@ function limpiarCamposArticulo() {
         return res;
     };
 
-    function llenarSelectVisitas(ccAnalis) {
-        //Cargar Select Condiciones de venta
-        try {
-            var request = new Ajax();
-            var url = urlGetVisitasClientesJson;
-            var params = {
-                ccAnalis: ccAnalis,
-                fechaEmision: $("#FechaEmision").val()
-            };
-            request.JsonPost(url, params, function (response) {
-                var sOption = "";
-                $.each(response, function (inx, item) {
-                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                });
-                $("#VisitaClienteID").html(sOption);
-            });
-        } catch (e) {
-            alert(e);
-        }
-    }
+    //function llenarSelectVisitas(ccAnalis) {
+    //    //Cargar Select Condiciones de venta
+    //    try {
+    //        var request = new Ajax();
+    //        var url = urlGetVisitasClientesJson;
+    //        var params = {
+    //            ccAnalis: ccAnalis,
+    //            fechaEmision: $("#FechaEmision").val()
+    //        };
+    //        request.JsonPost(url, params, function (response) {
+    //            var sOption = "";
+    //            $.each(response, function (inx, item) {
+    //                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //            });
+    //            $("#VisitaClienteID").html(sOption);
+    //        });
+    //    } catch (e) {
+    //        alert(e);
+    //    }
+    //}
 
-    var callbackCliente = function (ccAnalis) {
-        validarClienteZonaLiberadaXRUC();
+    //var callbackCliente = function (ccAnalis) {
+    //    validarClienteZonaLiberadaXRUC();
 
-        $.ajax({
-            url: urlValidarVendedorCliente,
-            data: JSON.stringify({
-                cc_analis: ccAnalis
-            }),
-            type: "POST",
-            contentType: 'application/json',
-            success: function (data) {
-                for (var key in data) {
-                    if (key === "1") {
-                        toastr.warning(data[key]);
-                        $("#txtRazonSocial").val("");
-                        $("#cc_analis").val("");
-                        return;
-                    } else {
-                        if (key === "2") {
-                            toastr.info(data[key]);
-                        }
-                        try {
-                            var request = new Ajax();
-                            var url = urlGetCondicionesVentasJson;
-                            var params = {
-                                ccAnalis: ccAnalis
-                            };
-                            request.JsonPost(url, params, function (response) {
-                                var sOption = "";
-                                $.each(response, function (inx, item) {
-                                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
-                                });
-                                $("#cc_vta").html(sOption);
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
-                        try {
-                            sSucursal = $("#cn_suc");
-                            $.ajax({
-                                destroy: true,
-                                type: "POST",
-                                contentType: "application/json; charset=utf-8",
-                                url: urlSucursales,
-                                data: JSON.stringify({
-                                    ccAnalis: ccAnalis
-                                }),
-                                dataType: "json",
-                                success: function (result) {
-                                    var sOption = "";
-                                    for (var i = 0; i < result.length; i++) {
-                                        sOption += "<option value='" + result[i].value + "'>" + result[i].text + "</option>";
-                                    }
-                                    sSucursal.html(sOption);
-                                    document.getElementById("cn_suc").setAttribute("onchange", "LlenarContactoSelect();");
-                                    OcultarMostrarSucursal(result.length);
-                                    $('#cn_suc').trigger('change');
-                                },
-                                error: function (result) {
-                                    alert("Error en javascript...");
-                                }
-                            });
-                        } catch (e) {
-                            alert(e);
-                        }
-                        //Llenar Select Visita Clientes
-                        llenarSelectVisitas(ccAnalis);
-                    }
-                }
-            }
-        });
-    }
+    //    $.ajax({
+    //        url: urlValidarVendedorCliente,
+    //        data: JSON.stringify({
+    //            cc_analis: ccAnalis
+    //        }),
+    //        type: "POST",
+    //        contentType: 'application/json',
+    //        success: function (data) {
+    //            for (var key in data) {
+    //                if (key === "1") {
+    //                    toastr.warning(data[key]);
+    //                    $("#txtRazonSocial").val("");
+    //                    $("#cc_analis").val("");
+    //                    return;
+    //                } else {
+    //                    if (key === "2") {
+    //                        toastr.info(data[key]);
+    //                    }
+    //                    try {
+    //                        var request = new Ajax();
+    //                        var url = urlGetCondicionesVentasJson;
+    //                        var params = {
+    //                            ccAnalis: ccAnalis
+    //                        };
+    //                        request.JsonPost(url, params, function (response) {
+    //                            var sOption = "";
+    //                            $.each(response, function (inx, item) {
+    //                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+    //                            });
+    //                            $("#cc_vta").html(sOption);
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
+    //                    try {
+    //                        sSucursal = $("#cn_suc");
+    //                        $.ajax({
+    //                            destroy: true,
+    //                            type: "POST",
+    //                            contentType: "application/json; charset=utf-8",
+    //                            url: urlSucursales,
+    //                            data: JSON.stringify({
+    //                                ccAnalis: ccAnalis
+    //                            }),
+    //                            dataType: "json",
+    //                            success: function (result) {
+    //                                var sOption = "";
+    //                                for (var i = 0; i < result.length; i++) {
+    //                                    sOption += "<option value='" + result[i].value + "'>" + result[i].text + "</option>";
+    //                                }
+    //                                sSucursal.html(sOption);
+    //                                document.getElementById("cn_suc").setAttribute("onchange", "LlenarContactoSelect();");
+    //                                OcultarMostrarSucursal(result.length);
+    //                                $('#cn_suc').trigger('change');
+    //                            },
+    //                            error: function (result) {
+    //                                alert("Error en javascript...");
+    //                            }
+    //                        });
+    //                    } catch (e) {
+    //                        alert(e);
+    //                    }
+    //                    //Llenar Select Visita Clientes
+    //                    llenarSelectVisitas(ccAnalis);
+    //                }
+    //            }
+    //        }
+    //    });
+    //}
 
     var $Cliente = $("#cc_analis");
     var $msgeCliente = $("#msgeCliente");
-    $Cliente.combobox({
-        id: "txtRazonSocial",
-        messageRequired: "Debe ingresar un Cliente.",
-        objMessage: $msgeCliente,
-        objCallback: callbackCliente
-    });
+    //$Cliente.combobox({
+    //    id: "txtRazonSocial",
+    //    messageRequired: "Debe ingresar un Cliente.",
+    //    objMessage: $msgeCliente,
+    //    objCallback: callbackCliente
+    //});
     
-    var $txtRazonSocial = $("#txtRazonSocial");
-    $txtRazonSocial.click(function () {
-        var input = this;
-        input.focus();
-        input.setSelectionRange(0, 999);
-    });
-    $txtRazonSocial.on("keypress", function (e) {
-        if (e.which === 13) {
-            e.preventDefault();
-            e.stopPropagation();
+    //var $txtRazonSocial = $("#txtRazonSocial");
+    //$txtRazonSocial.click(function () {
+    //    var input = this;
+    //    input.focus();
+    //    input.setSelectionRange(0, 999);
+    //});
+    //$txtRazonSocial.on("keypress", function (e) {
+    //    if (e.which === 13) {
+    //        e.preventDefault();
+    //        e.stopPropagation();
 
-            var $component = $(this);
-            var criterio = $component.val();
-            var longitud = $.trim($component.val()).length;
-            if (longitud === 0) {
-                return;
-            }
+    //        var $component = $(this);
+    //        var criterio = $component.val();
+    //        var longitud = $.trim($component.val()).length;
+    //        if (longitud === 0) {
+    //            return;
+    //        }
 
-            try {
-                var request = new Ajax("");
-                var url = urlgetclientesbyparam;
-                var params = {
-                    param: criterio
-                };
-                request.JsonPost(url, params, function (response) {
-                    if (response.estado && response.estado === 1) {
-                        $Cliente.children().remove();
-                        $.each(response.data, function (i, state) {
-                            $("<option>", {
-                                value: $.trim(state.value)
-                            }).html($.trim(state.text)).appendTo($Cliente);
-                        });
-                        $Cliente.combobox();
-                        var event = jQuery.Event("keypress");
-                        event.which = 40;
-                        event.keyCode = 40; //keycode to trigger this for simulating arrow bottom
-                        $component.trigger(event);
-                    }
-                });
-            } catch (ex) {
-                toastr.error(ex);
-            }
-        }
-    });   
+    //        try {
+    //            var request = new Ajax("");
+    //            var url = urlgetclientesbyparam;
+    //            var params = {
+    //                param: criterio
+    //            };
+    //            request.JsonPost(url, params, function (response) {
+    //                if (response.estado && response.estado === 1) {
+    //                    $Cliente.children().remove();
+    //                    $.each(response.data, function (i, state) {
+    //                        $("<option>", {
+    //                            value: $.trim(state.value)
+    //                        }).html($.trim(state.text)).appendTo($Cliente);
+    //                    });
+    //                    $Cliente.combobox();
+    //                    var event = jQuery.Event("keypress");
+    //                    event.which = 40;
+    //                    event.keyCode = 40; //keycode to trigger this for simulating arrow bottom
+    //                    $component.trigger(event);
+    //                }
+    //            });
+    //        } catch (ex) {
+    //            toastr.error(ex);
+    //        }
+    //    }
+    //});   
 
     var today = new Date();
     var dd = today.getDate();
@@ -416,6 +417,7 @@ function limpiarCamposArticulo() {
     $fechaEmision.datepicker({ dateFormat: "dd/mm/yy" });
     $fechaEmision.mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
 
+    //var $txtRazonSocial = $("#txtRazonSocial");
 
     function CargarPrecioLista(ccArtic) {
         //Obtenemos la lista seleccionada
@@ -514,21 +516,38 @@ function limpiarCamposArticulo() {
 
         var bValidRazonSocial = false;
         var bValidArticulo = false;
-        var $txtRazonSocial = $("#txtRazonSocial");
+        //var $txtRazonSocial = $("#txtRazonSocial");
 
         var $cdRazsoc = $("#cd_razsoc");
         var $cdArtic = $("#CotizacionDetailViewModel_cd_artic");
-        $cdRazsoc.val($txtRazonSocial.val());
+        $cdRazsoc.val($('#cc_analis option:selected').text());
         $cdArtic.val($('#CotizacionDetailViewModel_cc_artic option:selected').text());
 
         $("#cotizacionForm").valid();
 
-        if ($.trim($txtRazonSocial.val()).length === 0) {
-            $msgeCliente.text("Debe seleccionar un Cliente.");
-            $msgeCliente.show();
-        } else {
+        //if ($.trim($txtRazonSocial.val()).length === 0) {
+        //    $msgeCliente.text("Debe seleccionar un Cliente.");
+        //    $msgeCliente.show();
+        //} else {
+        //    bValidRazonSocial = true;
+        //    $msgeCliente.hide();
+        //}
+
+        //Valida si cliente esta seleccionado
+        var selectedCliente = 0;
+        $('#cc_analis option').each(function () {
+            if (this.selected) {
+                selectedCliente = 1;
+            }
+        });
+
+        if (selectedCliente == 1) {
             bValidRazonSocial = true;
             $msgeCliente.hide();
+        }
+        else {
+            $msgeCliente.text("Debe seleccionar un Cliente.");
+            $msgeCliente.show();
         }
 
         //Valida si articulo esta seleccionado
@@ -1039,4 +1058,145 @@ $(document).ready(function () {
 function UnselectArticles() {
     $('#CotizacionDetailViewModel_cc_artic').val('default').selectpicker('deselectAll');
     $('#CotizacionDetailViewModel_cc_artic').selectpicker('refresh');
+}
+
+
+function LlenarClientesSelect() {
+    Cliente = $("#cc_analis");
+    Cliente.html("");
+    $.ajax({
+        destroy: true,
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: urlSelectClientesSegunCarteraVendedorYLibres,
+        data: JSON.stringify({
+        }),
+        dataType: "json",
+        success: function (result) {
+            for (var i = 0; i < result.length; i++) {
+                Cliente.append("<option value='" + result[i].cc_analis + "'>" + result[i].cd_razsoc + "</option>");
+            }
+            $('#cc_analis').selectpicker('refresh');
+
+        },
+        error: function (result) {
+            alert("Error en javascript...");
+        },
+        complete: function (result) {
+            //Selecciona el articulo
+            $('#cc_analis').selectpicker('val', [ccAnalisisEditar]);
+            $('#cc_analis').selectpicker('refresh');
+        },
+    });
+}
+
+function UnselectClientes() {
+    $('#cc_analis').val('default').selectpicker('deselectAll');
+    $('#cc_analis').selectpicker('refresh');
+}
+
+var $cc_analis = $("#cc_analis");
+$cc_analis.on("change", function () {
+    try {
+        cargarDatosRelacionadosCliente(this.value)
+    } catch (e) {
+        toastr.error(e);
+    }
+});
+
+
+function cargarDatosRelacionadosCliente(ccAnalis) {
+    validarClienteZonaLiberadaXRUC();
+
+    $.ajax({
+        url: urlValidarVendedorCliente,
+        data: JSON.stringify({
+            cc_analis: ccAnalis
+        }),
+        type: "POST",
+        contentType: 'application/json',
+        success: function (data) {
+            for (var key in data) {
+                if (key === "1") {
+                    toastr.warning(data[key]);
+                    //$("#txtRazonSocial").val("");
+                    //$("#cc_analis").val("");
+                    UnselectClientes();
+                    return;
+                } else {
+                    if (key === "2") {
+                        toastr.info(data[key]);
+                    }
+                    try {
+                        var request = new Ajax();
+                        var url = urlGetCondicionesVentasJson;
+                        var params = {
+                            ccAnalis: ccAnalis
+                        };
+                        request.JsonPost(url, params, function (response) {
+                            var sOption = "";
+                            $.each(response, function (inx, item) {
+                                sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $("#cc_vta").html(sOption);
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+                    try {
+                        sSucursal = $("#cn_suc");
+                        $.ajax({
+                            destroy: true,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            url: urlSucursales,
+                            data: JSON.stringify({
+                                ccAnalis: ccAnalis
+                            }),
+                            dataType: "json",
+                            success: function (result) {
+                                var sOption = "";
+                                for (var i = 0; i < result.length; i++) {
+                                    sOption += "<option value='" + result[i].value + "'>" + result[i].text + "</option>";
+                                }
+                                sSucursal.html(sOption);
+                                document.getElementById("cn_suc").setAttribute("onchange", "LlenarContactoSelect();");
+                                OcultarMostrarSucursal(result.length);
+                                $('#cn_suc').trigger('change');
+                            },
+                            error: function (result) {
+                                alert("Error en javascript...");
+                            }
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+                    //Llenar Select Visita Clientes
+                    llenarSelectVisitas(ccAnalis);
+                }
+            }
+        }
+    });
+}
+
+
+function llenarSelectVisitas(ccAnalis) {
+        //Cargar Select Condiciones de venta
+        try {
+            var request = new Ajax();
+            var url = urlGetVisitasClientesJson;
+            var params = {
+                ccAnalis: ccAnalis,
+                fechaEmision: $("#FechaEmision").val()
+            };
+            request.JsonPost(url, params, function (response) {
+                var sOption = "";
+                $.each(response, function (inx, item) {
+                    sOption += "<option value='" + item.value + "'>" + item.text + "</option>";
+                });
+                $("#VisitaClienteID").html(sOption);
+            });
+        } catch (e) {
+            alert(e);
+        }
 }

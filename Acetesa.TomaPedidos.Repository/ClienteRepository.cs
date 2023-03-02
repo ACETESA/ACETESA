@@ -252,16 +252,17 @@ namespace Acetesa.TomaPedidos.Repository
                 }
             };
             List<ClienteModel.VendedorCliente> lista = new List<ClienteModel.VendedorCliente>();
-            lista = _dbContext.GetExecSpEnumerable<ClienteModel.VendedorCliente>("spClientesAsignadosAlVendedor", sqlParams).ToList();
+            lista = _dbContext.GetExecSpEnumerable<ClienteModel.VendedorCliente>("[web].[uspVendedorAsignadoPorClienteID]", sqlParams).ToList();
             return lista;
         }
         public List<ClienteModel> ClientesActivos()
         {
-
             List<ClienteModel> lista = new List<ClienteModel>();
-            lista = _dbContext.GetExecSpEnumerable<ClienteModel>("spTodosClientesActivos").ToList();
+            lista = _dbContext.GetExecSpEnumerable<ClienteModel>("[web].[uspSelectTodosClientesActivos]").ToList();
             return lista;
         }
+
+
         //NUEVA OPCION ALTERNATIVA NO FUNCIONAL - ANTIGUO "vparco
         //public string NuevoCliente(MCLIENTE cliente)
         //{
@@ -958,6 +959,37 @@ namespace Acetesa.TomaPedidos.Repository
                 }
             }
             return zonaLiberada;
+        }
+
+        public List<ClienteModel> SelectClientesSegunCarteraVendedorYLibres(string correoVendedor)
+        {
+            List<ClienteModel> listaClientes = new List<ClienteModel>();
+
+            string query = "[web].[uspSelectClientesSegunCarteraVendedorYLibres]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@correoVendedor", correoVendedor);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaClientes.Add(
+                                new ClienteModel
+                                {
+                                    cc_analis = reader["Ruc"].ToString(),
+                                    cd_razsoc = reader["RazonSocial"].ToString()
+                                }
+                                );
+                        }
+                    }
+                }
+            }
+            return listaClientes;
         }
 
     }
