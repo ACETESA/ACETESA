@@ -114,7 +114,7 @@ var SendEmailEstadoCuentaService = function () {
     var url;
     var getEmailByClienteEstadoCuenta = function (idCliente) {
         if (_tipoFormulario === "EstadoCuenta") {
-            url = _baseUrl + "EstadoCuenta/GetEmailCliente";
+            url = urlGetEmailCliente_EC;
             var params = {
                 id: idCliente
             };

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -37,6 +39,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             return NewSelectList(lista);
         }
 
+
+
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult GetClientes(string codFamilia)
         {
@@ -52,7 +56,39 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 
             //return Json(selectList, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult EstadoCuentaPorCliente()
+        {
+            var model = new EstadoCuentaViewModel
+            {
+                EnviarMailViewModel = new EnviarMailViewModel()
+            };
+            ViewBag.BaseUrl = Url.Content("~/");
+            var task = Task.Run(() => GetFamilias());
+            //var task = await Task.Run(() => GetClientes());
+            return View(model);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EstadoCuentaPorCliente(EstadoCuentaViewModel model)
+        {
+            string id = model.Cliente;
+
+            var Resumen = EstadoCuentaService.GetResumenByRuc(id);
+            var Detalle = EstadoCuentaService.GetDetalleByRuc(id);
+
+            model.EstadoCuentaResumenModel = Resumen;
+            model.EstadoCuentaDetalleModels = Detalle.ToList();
+            model.EnviarMailViewModel = new EnviarMailViewModel();
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_PartialEstadoCuentaInformacion", model);
+            }
+
+            return View(model);
+        }
 
         [AcceptVerbs(HttpVerbs.Get)]
         public async Task<ActionResult> Index()
@@ -97,17 +133,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     return View();
             }
         }
-
-        //[AcceptVerbs(HttpVerbs.Get)]
-        //public async Task<ActionResult> Detallado(string id)
-        //{
-        //    if (string.IsNullOrEmpty(id))
-        //    {
-        //        return RedirectToAction<EstadoCuentaController>( c => c.Index());
-        //    }
-        //    var lista = await Task.Run(() => EstadoCuentaService.GetDetalleByRuc(id));
-        //    return View(lista);
-        //}
 
         [AcceptVerbs(HttpVerbs.Get)]
         public async Task<ActionResult> Resumen(string id)
@@ -255,6 +280,17 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 if (!(string.IsNullOrEmpty(sCredencialesDocVenta)))
                 {
                     var lsCredencialesDocVenta = sCredencialesDocVenta.Split(',');
+
+                    //NetworkCredential theNetworkCredential = new NetworkCredential(lsCredencialesDocVenta[2], lsCredencialesDocVenta[3]);
+                    //CredentialCache theNetCache = new CredentialCache();
+                    //theNetCache.Add(new Uri(rutaArchivo), "Basic", theNetworkCredential);
+
+                    //string[] theFiles = Directory.GetFiles(pdfPath);
+                    //var userName = string.IsNullOrEmpty(lsCredencialesDocVenta[1]) ? lsCredencialesDocVenta[2] : string.Format(@"{0}\{1}", lsCredencialesDocVenta[1], lsCredencialesDocVenta[2]);
+                    //var net = NetworkShareAccesser.Access(lsCredencialesDocVenta[0], lsCredencialesDocVenta[1], lsCredencialesDocVenta[2], lsCredencialesDocVenta[3]);
+
+                    
+
                     using (NetworkShareAccesser.Access(lsCredencialesDocVenta[0], lsCredencialesDocVenta[1], lsCredencialesDocVenta[2], lsCredencialesDocVenta[3]))
                     {
                         var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
@@ -273,12 +309,13 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         //ClienteService.UpdateEmailByCodigo(idCliente, model.Para);
                         string sRemitente = User.Identity.Name;
                         var vendedor = VendedorService.GetByEmail(sRemitente);
+                        var credentials = VendedorService.ObtenerCredencialesCorreoVendedor(User.Identity.Name);
                         //model.Asunto = Funciones.Replace(model.Asunto, "[Nro]", id);
-                        Mail.SendMail(sRemitente, vendedor.ct_nombreCompleto, model.Asunto, sb, model.Para, null, pdfPath, esHtml: true);//Cliente
-                        Mail.SendMail(sRemitente, "Vendedor: " + vendedor.ct_nombreCompleto, model.Asunto, sb, Remite, null, pdfPath, esHtml: true);//BackOffice
+                        Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, vendedor.ct_nombreCompleto, model.Asunto, sb, model.Para, null, pdfPath, esHtml: true);//Cliente
+                        Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, "Vendedor: " + vendedor.ct_nombreCompleto, model.Asunto, sb, Remite, null, pdfPath, esHtml: true);//BackOffice
                         if (!string.IsNullOrEmpty(model.ConCopia))
                         {
-                            Mail.SendMail(sRemitente, Label, model.Asunto, sb, model.ConCopia, null, pdfPath, esHtml: true);//Vendedor
+                            Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, Label, model.Asunto, sb, model.ConCopia, null, pdfPath, esHtml: true);//Vendedor
                         }
                     }
                 }

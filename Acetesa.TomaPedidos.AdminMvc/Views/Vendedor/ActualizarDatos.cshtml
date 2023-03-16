@@ -1,0 +1,89 @@
+﻿@model Acetesa.TomaPedidos.AdminMvc.Models.VendedorViewModel
+
+@{
+    ViewBag.Title = "ActualizarDatos";
+}
+
+<div class="card mb-3">
+    <div class="card-header bg-success text-white">
+        <h3>Actualizar Datos del Vendedor</h3>
+    </div>
+</div>
+
+@*@using (Html.BeginForm())
+    {*@
+
+
+@using (Ajax.BeginForm("ActualizarDatos", "Vendedor", new AjaxOptions
+{
+    HttpMethod = "POST",
+    Url = Url.Action("ActualizarDatos", "Vendedor"),
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccess",
+    OnComplete = "OnComplete",
+    OnFailure = "OnFailure",
+}))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            Configurar Correo Electrónico <i class="fa fa-info-circle" aria-hidden="true" onclick="mostrarInformacionConfigurarCorreo();"></i>
+        </div>
+        <div class="card-body">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.correoElectronico.usuario, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.correoElectronico.usuario, new { htmlAttributes = new { @class = "form-control", autocomplete = "new-password" } })
+                            @Html.ValidationMessageFor(model => model.correoElectronico.usuario, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.LabelFor(model => model.correoElectronico.clave, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.correoElectronico.clave, new { htmlAttributes = new { @class = "form-control", autocomplete = "new-password" } })
+                            @Html.ValidationMessageFor(model => model.correoElectronico.clave, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+
+
+}
+
+@section CssTop{
+    @Styles.Render("~/Content/ui")
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/Scripts/toastr.min.js"></script>
+
+    <script>
+        function mostrarInformacionConfigurarCorreo() {
+            toastr.info("Se tomará esta cuenta de correo para enviar los Mails del sistema. De no completar los campos, los correos se enviarán desde admin@acetesa.com.pe", "Información", {
+                closeButton: true,
+                timeOut: 30000,
+                progressBar: true
+            });
+        }
+
+
+
+        $(document).ready(function () {
+            var success = "@ViewBag.Success";
+            var success = "@TempData["Success"]";
+            if ($.trim(success).length > 0) {
+                toastr.success(success);
+            }
+        });
+    </script>
+}

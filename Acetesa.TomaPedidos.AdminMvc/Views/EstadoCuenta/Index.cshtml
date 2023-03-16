@@ -12,28 +12,6 @@
     {
         @Html.AntiForgeryToken()
         @Html.Hidden("tipoEc")
-        @*<div class="form-horizontal">
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="ui-widget">
-                            @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-
-                        <a id="btnResumen" class="btn btn-primary me-2" href="@Url.Action("Resumen", "EstadoCuenta")"><i class="fa fa-search" aria-hidden="true"></i></a>
-
-                        <a class="btn btn-outline-warning" onclick="onclickEnviarCorreo();"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
-                        <a id="btnDescargar" class="btn btn-outline-success" onclick="descargar()"><i class="fa fa-download" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </div>*@
         <div class="card card-primary">
             <div class="card-header">
                 <h3>
@@ -42,15 +20,6 @@
             </div>
             <div class="card-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @*<div class="form-group">
-                        @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <div class="ui-widget">
-                                @Html.DropDownListFor(model => model.Cliente, ViewBag.GetClientes as SelectList, new { @class = "form-control" })
-                            </div>
-                            @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger", @id = "msgeCliente" })
-                        </div>
-                    </div>*@
                 <div class="col-12 mb-3">
                     @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "form-label ps-2" })
                     <div class="input-group">

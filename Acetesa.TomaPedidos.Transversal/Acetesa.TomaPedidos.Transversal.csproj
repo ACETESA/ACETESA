@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AesOperation.cs" />
     <Compile Include="Conversores.cs" />
     <Compile Include="Enums\EmpresaTypes.cs" />
     <Compile Include="Enums\EstadoCotizacionTypes.cs" />

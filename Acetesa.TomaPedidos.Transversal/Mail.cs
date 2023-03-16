@@ -8,12 +8,18 @@ namespace Acetesa.TomaPedidos.Transversal
 {
     public static class Mail
     {
+
         public static void SendMail(
-            string emailAddress, string labelAddress, string subject, StringBuilder body, string toEmail, string conCopia, string attachmentFilename, string attachmentFilename2 = null, string attachmentFilename3 = null, bool esHtml = false, string copiaOculta = null)
+            string CredentialUsername, string CredentialPassword, string CredentialKey, string emailAddress, string labelAddress, string subject, StringBuilder body, string toEmail, string conCopia, string attachmentFilename, string attachmentFilename2 = null, string attachmentFilename3 = null, bool esHtml = false, string copiaOculta = null)
         {
+            var decryptedPassword = AesOperation.DecryptString(CredentialKey, CredentialPassword);
+
             var mail = new MailMessage();
             var smtpServer = new SmtpClient();
-
+            smtpServer.Host = "smtp.gmail.com";
+            smtpServer.Port = 587;
+            smtpServer.EnableSsl = true;
+            smtpServer.Credentials = new System.Net.NetworkCredential(CredentialUsername, decryptedPassword/*CredentialPassword*/);
             try
             {
                 mail.From = new MailAddress(emailAddress, labelAddress);

@@ -5,12 +5,27 @@
     {
         @Html.AntiForgeryToken()
 
-        <ul class="navbar-nav ml-auto" >
-            <li class="nav-item">
-                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+<ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+        
+    </li>
+    <li class="nav-item dropdown root">
+        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @User.Identity.GetUserName()
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li>
+                @Html.ActionLink("Actualizar Contraseña", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "dropdown-item" })
             </li>
-            <li class="nav-item"><a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Salir del Sistema</a></li>
+            <li>
+                @Html.ActionLink("Actualizar Datos", "ActualizarDatos", "Vendedor", new { reset = 1 }, new { @class = "dropdown-item" })
+            </li>
         </ul>
+    </li>
+    <li class="nav-item">
+        <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Salir del Sistema</a>
+    </li>
+</ul>
     }
 }
 else

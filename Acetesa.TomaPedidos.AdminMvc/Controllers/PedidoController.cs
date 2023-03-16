@@ -1328,11 +1328,12 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 sb.AppendLine(model.Mensaje);
 
                 model.Asunto = Funciones.Replace(model.Asunto, "[Nro]", id);
-                Mail.SendMail(sRemitente, vendedor.ct_nombreCompleto, model.Asunto, sb, model.Para, null, pdfPath, esHtml: true);//Cliente
+                var credentials = VendedorService.ObtenerCredencialesCorreoVendedor(User.Identity.Name);
+                Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, vendedor.ct_nombreCompleto, model.Asunto, sb, model.Para, null, pdfPath, esHtml: true);//Cliente
                 //Mail.SendMail(sRemitente, "Vendedor: " + vendedor.ct_nombreCompleto, model.Asunto, sb, Remite, null, pdfPath, esHtml: true);//BackOffice
                 if (!string.IsNullOrEmpty(model.ConCopia))
                 {
-                    Mail.SendMail(sRemitente, Label, model.Asunto, sb, model.ConCopia, null, pdfPath, esHtml: true);//Vendedor
+                    Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, Label, model.Asunto, sb, model.ConCopia, null, pdfPath, esHtml: true);//Vendedor
                 }
             }
             catch (Exception ex)

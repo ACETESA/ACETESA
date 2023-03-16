@@ -82,8 +82,21 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
+                    @*<li class="nav-item">
                         @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "nav-link mx-2" })
+                    </li>*@
+                    <li class="nav-item dropdown root">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Estado de Cuenta
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            @*<li>
+                                @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "dropdown-item" })
+                            </li>*@
+                            <li>
+                                @Html.ActionLink("Estado de Cuenta por Cliente", "EstadoCuentaPorCliente", "EstadoCuenta", null, new { @class = "dropdown-item" })
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item dropdown root">
                         <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -155,6 +168,8 @@
 
     <script>
         localStorage.setItem('LSI_HABILITAR_SUNAT', '@ConfigurationManager.AppSettings["HABILITA_CONSULTA_RUC"]');
+        //Global Shared URL
+        var urlGetEmailCliente_EC = "@Url.Action("GetEmailCliente", "EstadoCuenta")";
     </script>
 
     <style>

@@ -31,5 +31,14 @@ namespace Acetesa.TomaPedidos.Domain
                 return cn_telf.Trim() + " / " + cn_telfref.Trim();
             }
         }
+
+        public class CorreoVendedor
+        {
+            public string correo { get; set; }
+            public string clave { get; set; }
+            public string llave { get; set; }
+        }
+
+        public CorreoVendedor correoVendedor = new CorreoVendedor();
     }
 }

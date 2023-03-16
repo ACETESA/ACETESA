@@ -111,5 +111,60 @@ namespace Acetesa.TomaPedidos.Repository
             }
             return resultados;
         }
+
+        public VendedorModel.CorreoVendedor ObtenerCredencialesCorreoVendedor(string correoVendedor)
+        {
+            VendedorModel.CorreoVendedor CorreoVendedor = new VendedorModel.CorreoVendedor();
+
+            string query = "[web].[uspObtenerCredencialesCorreoVendedor]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@correoVendedor", correoVendedor);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            CorreoVendedor.correo = reader["correo"].ToString();
+                            CorreoVendedor.clave = reader["clave"].ToString();
+                            CorreoVendedor.llave = reader["llave"].ToString();
+                        }
+                    }
+                }
+            }
+            return CorreoVendedor;
+        }
+
+        public Dictionary<string, string> RegistrarCredencialesCorreoVendedor(string correoVendedor, string claveCorreo, string llaveClave)
+        {
+            Dictionary<string, string> diccionario = new Dictionary<string, string>();
+
+            string query = "[web].[uspRegistrarCredencialesCorreoVendedor]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@correoVendedor", correoVendedor);
+                    cmd.Parameters.AddWithValue("@claveCorreo", claveCorreo);
+                    cmd.Parameters.AddWithValue("@llaveClave", llaveClave);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            diccionario.Add("mensajeID", reader["mensajeID"].ToString());
+                            diccionario.Add("mensaje", reader["mensaje"].ToString());
+                        }
+                    }
+                }
+            }
+            return diccionario;
+        }
     }
 }

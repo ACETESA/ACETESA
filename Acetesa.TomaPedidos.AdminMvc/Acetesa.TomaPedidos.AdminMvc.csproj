@@ -263,6 +263,8 @@
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\TransportistaController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -320,6 +322,7 @@
     <Compile Include="Models\StockPorGrupoViewModel.cs" />
     <Compile Include="Models\StockViewModel.cs" />
     <Compile Include="Models\TransportistaNewViewModel.cs" />
+    <Compile Include="Models\VendedorViewModel.cs" />
     <Compile Include="Models\VentaViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -843,6 +846,9 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_PartialMensajeConfirmacion.cshtml" />
     <Content Include="Views\Shared\LoadingPage.cshtml" />
+    <Content Include="Views\Vendedor\ActualizarDatos.cshtml" />
+    <Content Include="Views\EstadoCuenta\EstadoCuentaPorCliente.cshtml" />
+    <Content Include="Views\Shared\_PartialEstadoCuentaInformacion.cshtml" />
     <None Include="Web.Qa.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -851,6 +857,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\pdf\" />
+    <Folder Include="Views\Usuario\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

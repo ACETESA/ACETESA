@@ -38,5 +38,14 @@ namespace Acetesa.TomaPedidos.Core.Business
         {
             return _vendedorRepository.ValidarVendedorJefe(correoUsuario);
         }
+        public VendedorModel.CorreoVendedor ObtenerCredencialesCorreoVendedor(string correoVendedor)
+        {
+            return _vendedorRepository.ObtenerCredencialesCorreoVendedor(correoVendedor);
+        }
+        public Dictionary<string, string> RegistrarCredencialesCorreoVendedor(string correoVendedor, string claveCorreo, string llaveClave)
+        {
+            return _vendedorRepository.RegistrarCredencialesCorreoVendedor(correoVendedor, claveCorreo, llaveClave);
+        }
+
     }
 }
