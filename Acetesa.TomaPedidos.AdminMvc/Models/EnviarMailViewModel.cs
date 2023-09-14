@@ -21,7 +21,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Models
         public string ConCopia { get; set; }
 
         [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Debe ingresar el Mensaje.")]
+        //[Required(ErrorMessage = "Debe ingresar el Mensaje.")]
         public string Mensaje { get; set; }
     }
 }

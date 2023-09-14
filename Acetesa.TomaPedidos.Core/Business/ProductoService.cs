@@ -166,6 +166,14 @@ namespace Acetesa.TomaPedidos.Core.Business
             return _productoRepository.ListarPreciosArticulosPorGrupoEmpresa(codListaPrecio,codFamilia,codSubFamilia,Stocks,empresa);
         }
 
+        public MARTICUL RecuperarArticuloPorID(string ArticuloID)
+        {
+            return _productoRepository.RecuperarArticuloPorID(ArticuloID);
+        }
 
+        public MARTICUL RecuperarDatosArticuloByID(string ArticuloID)
+        {
+            return _productoRepository.RecuperarDatosArticuloByID(ArticuloID);
+        }
     }
 }

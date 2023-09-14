@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Data.Entity.Validation;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -17,6 +18,9 @@ using Acetesa.TomaPedidos.Repository;
 using Acetesa.TomaPedidos.Transversal;
 using Acetesa.TomaPedidos.Transversal.Enums;
 using Acetesa.TomaPedidos.Transversal.Extensions;
+using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
 using MvcRazorToPdf;
 using PagedList;
 
@@ -447,14 +451,45 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     fm_total = detail.fm_total
                 }).ToList();
 
+
+
                 CotizacionService.CotizacionDetalleServices = cotizacionDetalleList;
                 CotizacionService.Guardar(entityMaster, model.igv_bo, EmpresaSegunBD(), model.zonaLiberada_bo);
                 CotizacionService.GuardarAdicional(entityMaster, User.Identity.Name, model.Tienda, model.igv_bo, model.cn_suc, model.cn_contacto, Convert.ToBoolean(model.imprimirPrecioTN), model.observacion, model.zonaLiberada_bo);
+
+
+                //Inicio: Guardar PDF
+                var idProforma = entityMaster.cn_proforma;
+
+                var cotizacion = CotizacionService.GetById(idProforma);
+                var cotizacionAdicional = CotizacionService.GetAdicionalById(idProforma);
+
+                var cotizacionClienteVm = new CotizacionClienteViewModel
+                {
+                    Cotizacion = cotizacion,
+                    Adicional = cotizacionAdicional
+                };
+
+
+                RenderPdf(idProforma, "RenderPdfCotizacion");
+                var pdfPath = Server.MapPath(string.Format(PathFormatPdf, idProforma));
+
+                byte[] filedata = System.IO.File.ReadAllBytes(pdfPath);
+
+
+                CotizacionService.RegistrarDocumentoProforma(idProforma,filedata);
+
+                //Fin: Guardar PDF
+
+
                 SetSessionNull();
                 TempData["Guardado"] = true;
                 emailModel.Asunto = Funciones.Replace(emailModel.Asunto, "[Nro]", entityMaster.cn_proforma);
                 TempData["EmailModel"] = emailModel;
                 TempData["CnProforma"] = entityMaster.cn_proforma;
+
+
+
                 return RedirectToAction<CotizacionController>(x => x.Nuevo(0));
             }
             catch (DbEntityValidationException e)
@@ -684,9 +719,34 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     fm_total = detail.fm_total
                 }).ToList();
 
+
                 CotizacionService.CotizacionDetalleServices = cotizacionDetalleList;
                 CotizacionService.Guardar(entityMaster, model.igv_bo, EmpresaSegunBD(), model.zonaLiberada_bo);
                 CotizacionService.GuardarAdicional(entityMaster, User.Identity.Name, model.Tienda, model.igv_bo, model.cn_suc, model.cn_contacto, Convert.ToBoolean(model.imprimirPrecioTN),model.observacion, model.zonaLiberada_bo);
+
+                //Inicio: Guardar PDF
+                var idProforma = entityMaster.cn_proforma;
+
+                var cotizacion = CotizacionService.GetById(idProforma);
+                var cotizacionAdicional = CotizacionService.GetAdicionalById(idProforma);
+
+                var cotizacionClienteVm = new CotizacionClienteViewModel
+                {
+                    Cotizacion = cotizacion,
+                    Adicional = cotizacionAdicional
+                };
+
+
+                RenderPdf(idProforma, "RenderPdfCotizacion");
+                var pdfPath = Server.MapPath(string.Format(PathFormatPdf, idProforma));
+
+                byte[] filedata = System.IO.File.ReadAllBytes(pdfPath);
+
+
+                CotizacionService.RegistrarDocumentoProforma(idProforma, filedata);
+
+                //Fin: Guardar PDF
+
                 SetSessionNull();
                 TempData["Guardado"] = true;
 
@@ -917,6 +977,71 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 
             return JsonSuccess(1);
         }
+
+
+
+        public byte[] RenderPdfToBytes(string id, string viewName)
+        {
+
+            var cotizacion = CotizacionService.GetById(id);
+            var cotizacionAdicional = CotizacionService.GetAdicionalById(id);
+            var cotizacionClienteVm = new CotizacionClienteViewModel
+            {
+                Cotizacion = cotizacion,
+                Adicional = cotizacionAdicional
+            };
+
+            var pdfOutput = ControllerContext.GeneratePdf(cotizacionClienteVm, "RenderPdfCotizacion");
+
+
+
+            //var cotizacion = CotizacionService.GetById(id);
+            //var cotizacionAdicional = CotizacionService.GetAdicionalById(id);
+            //var cotizacionClienteVm = new CotizacionClienteViewModel
+            //{
+            //    Cotizacion = cotizacion,
+            //    Adicional = cotizacionAdicional
+            //};
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document document = new Document();
+                PdfWriter writer = PdfWriter.GetInstance(document, ms);
+                document.Open();
+
+                // Obtén el contenido HTML de la vista RenderPdfCotizacion
+                string htmlContent = RenderViewToString(viewName, cotizacionClienteVm);
+
+                // Puedes utilizar HTMLWorker para parsear el contenido HTML y agregarlo al documento
+                HTMLWorker htmlWorker = new HTMLWorker(document);
+                StringReader sr = new StringReader(htmlContent);
+                htmlWorker.Parse(sr);
+
+                // Cerrar el documento
+                document.Close();
+
+                // Devolver los bytes del PDF
+                return ms.ToArray();
+            }
+        }
+
+
+        public string RenderViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.ToString();
+            }
+        }
+
+
+
+
 
         public ActionResult RenderPdf(string id, string viewName)
         {
@@ -1363,7 +1488,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             {
                 ccAnalis = "";
             }
-            var lista = CondicionesVentasService.GetAll(ccAnalis).ToSelectList(x => x.cd_vta.Trim(), x => x.cc_vta,
+            //var lista = CondicionesVentasService.GetAll(ccAnalis).ToSelectList(x => x.cd_vta.Trim(), x => x.cc_vta,
+            //        FindTypes.Ninguno.ToString());
+            var lista = CondicionesVentasService.RecuperarCondicionVentaPorClienteID(ccAnalis).ToSelectList(x => x.cd_vta.Trim(), x => x.cc_vta,
                     FindTypes.Ninguno.ToString());
             return NewSelectList(lista);
         }
@@ -1378,46 +1505,53 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         {
             if (!string.IsNullOrWhiteSpace(ccAnalis) && !string.IsNullOrEmpty(ccAnalis))
             {
-                //var lista = SucursalClienteService
-                //.GetByCcAnalis(ccAnalis)
-                //.ToSelectList(x => x.cn_suc.Trim() + " - " + x.cd_direc.Trim(), x => x.cn_suc,
-                //    FindTypes.Ninguno.ToString());
                 var lista = PlanificacionVisitasService
                     .getSelectVisitasClientes(ccAnalis, fechaEmision)
                     .ToSelectList(x => x.Descripcion, x=> x.VisitaClienteID.ToString());
                 return NewSelectList(lista);
             }
-            var listaVacia = new List<SelectListItem>
+            else
             {
-                new SelectListItem
+                var listaVacia = new List<SelectListItem>
                 {
-                    Text = FindTypes.Ninguno.ToString(),
-                    Value = "0",
-                    Selected = true
-                }
-            };
-            return NewSelectList(listaVacia);
+                    new SelectListItem
+                    {
+                        Text = FindTypes.Ninguno.ToString(),
+                        Value = "0",
+                        Selected = true
+                    }
+                };
+                return NewSelectList(listaVacia);
+            }
+
         }
         private SelectList GetSucursalesCliente(string ccAnalis)
         {
             if (!string.IsNullOrWhiteSpace(ccAnalis) && !string.IsNullOrEmpty(ccAnalis))
             {
                 var lista = SucursalClienteService
-                .GetByCcAnalis(ccAnalis)
-                .ToSelectList(x => x.cn_suc.Trim() + " - " + x.cd_direc.Trim(), x => x.cn_suc,
+                    .RecuperarSucursalPorClienteID(ccAnalis)
+                    .ToSelectList(x => x.cn_suc.Trim() + " - " + x.cd_direc.Trim(), x => x.cn_suc,
                     FindTypes.Ninguno.ToString());
+
                 return NewSelectList(lista);
+
             }
-            var listaVacia = new List<SelectListItem>
+            else
             {
-                new SelectListItem
+                var listaVacia = new List<SelectListItem>
                 {
-                    Text = FindTypes.Ninguno.ToString(),
-                    Value = FindTypes.Ninguno.ToString(),
-                    Selected = true
-                }
-            };
-            return NewSelectList(listaVacia);
+                    new SelectListItem
+                    {
+                        Text = FindTypes.Ninguno.ToString(),
+                        Value = FindTypes.Ninguno.ToString(),
+                        Selected = true
+                    }
+                };
+
+                return NewSelectList(listaVacia);
+            }
+
         }
         private SelectList GetArticulos()
         {
@@ -1774,6 +1908,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 cd_razsoc = _cdRazsoc,
                 cc_moneda = _ccMoneda,
                 FechaEmision = _cFechaEmision,
+                df_emision = Convert.ToDateTime(_cFechaEmision),
                 cn_suc = _cnSuc,
                 VisitaClienteID = _VisitaClienteID,
                 cn_contacto = _cnContacto,
@@ -1855,9 +1990,32 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     fm_total = detail.fm_total
                 }).ToList();
 
+
                 CotizacionService.CotizacionDetalleServices = cotizacionDetalleList;
                 CotizacionService.Guardar(entityMaster, model.igv_bo, EmpresaSegunBD(), model.zonaLiberada_bo);
                 CotizacionService.GuardarAdicional(entityMaster, User.Identity.Name, model.Tienda, model.igv_bo, model.cn_suc, model.cn_contacto,Convert.ToBoolean(model.imprimirPrecioTN),model.observacion,model.zonaLiberada_bo);
+
+                //Inicio: Guardar PDF
+                var idProforma = entityMaster.cn_proforma;
+
+                var cotizacion = CotizacionService.GetById(idProforma);
+                var cotizacionAdicional = CotizacionService.GetAdicionalById(idProforma);
+
+                var cotizacionClienteVm = new CotizacionClienteViewModel
+                {
+                    Cotizacion = cotizacion,
+                    Adicional = cotizacionAdicional
+                };
+
+
+                RenderPdf(idProforma, "RenderPdfCotizacion");
+                var pdfPath = Server.MapPath(string.Format(PathFormatPdf, idProforma));
+
+                byte[] filedata = System.IO.File.ReadAllBytes(pdfPath);
+
+
+                CotizacionService.RegistrarDocumentoProforma(idProforma, filedata);
+                //Fin: Guardar PDF
 
                 TempData["Guardado"] = true;
 

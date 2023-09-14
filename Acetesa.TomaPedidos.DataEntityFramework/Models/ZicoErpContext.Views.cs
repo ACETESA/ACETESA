@@ -11,7 +11,7 @@ using System.Data.Entity.Infrastructure.MappingViews;
 
 [assembly: DbMappingViewCacheTypeAttribute(
     typeof(Acetesa.TomaPedidos.DataEntityFramework.Models.ZicoErpContext),
-    typeof(Edm_EntityMappingGeneratedViews.ViewsForBaseEntitySetsca2674fbf75a2001ed108ae1f5d06992037c63c19d30b6cbcd2108558be1b9cb))]
+    typeof(Edm_EntityMappingGeneratedViews.ViewsForBaseEntitySets020ccc7b53554ac7f3d12559893e752fb9d8ca7898917b7d99fe78e5230f8020))]
 
 namespace Edm_EntityMappingGeneratedViews
 {
@@ -23,14 +23,14 @@ namespace Edm_EntityMappingGeneratedViews
     /// Implements a mapping view cache.
     /// </summary>
     [GeneratedCode("Entity Framework 6 Power Tools", "0.9.5.0")]
-    internal sealed class ViewsForBaseEntitySetsca2674fbf75a2001ed108ae1f5d06992037c63c19d30b6cbcd2108558be1b9cb : DbMappingViewCache
+    internal sealed class ViewsForBaseEntitySets020ccc7b53554ac7f3d12559893e752fb9d8ca7898917b7d99fe78e5230f8020 : DbMappingViewCache
     {
         /// <summary>
         /// Gets a hash value computed over the mapping closure.
         /// </summary>
         public override string MappingHashValue
         {
-            get { return "ca2674fbf75a2001ed108ae1f5d06992037c63c19d30b6cbcd2108558be1b9cb"; }
+            get { return "020ccc7b53554ac7f3d12559893e752fb9d8ca7898917b7d99fe78e5230f8020"; }
         }
 
         /// <summary>
@@ -570,7 +570,7 @@ namespace Edm_EntityMappingGeneratedViews
         {
             return new DbMappingView(@"
     SELECT VALUE -- Constructing MCLIENTE
-        [CodeFirstDatabaseSchema.MCLIENTE](T1.[MCLIENTE.cc_tipana], T1.[MCLIENTE.cc_analis], T1.[MCLIENTE.cc_pais], T1.[MCLIENTE.cc_dpto], T1.[MCLIENTE.cc_prov], T1.[MCLIENTE.cc_sector], T1.[MCLIENTE.cc_catclie], T1.[MCLIENTE.cc_distrito], T1.[MCLIENTE.cd_razsoc], T1.[MCLIENTE.cc_zona], T1.[MCLIENTE.cb_proced], T1.[MCLIENTE.cd_direc], T1.[MCLIENTE.cn_regind], T1.[MCLIENTE.cn_sanit], T1.[MCLIENTE.cn_regmerc], T1.[MCLIENTE.ct_giro], T1.[MCLIENTE.dt_constit], T1.[MCLIENTE.dt_registro], T1.[MCLIENTE.cn_telf1], T1.[MCLIENTE.cn_telf2], T1.[MCLIENTE.cn_telf3], T1.[MCLIENTE.cn_fax1], T1.[MCLIENTE.cn_fax2], T1.[MCLIENTE.cn_fax3], T1.[MCLIENTE.cb_monfac], T1.[MCLIENTE.cb_limcred], T1.[MCLIENTE.cb_cheque], T1.[MCLIENTE.cb_sucursal], T1.[MCLIENTE.cb_sector], T1.[MCLIENTE.cb_activo], T1.[MCLIENTE.dt_ultcomp], T1.[MCLIENTE.ct_legal], T1.[MCLIENTE.cn_rucleg], T1.[MCLIENTE.dt_ultdeuda], T1.[MCLIENTE.fm_compmn], T1.[MCLIENTE.cd_direcleg], T1.[MCLIENTE.fm_compme], T1.[MCLIENTE.cn_telfleg], T1.[MCLIENTE.fm_acummn], T1.[MCLIENTE.cn_faxleg], T1.[MCLIENTE.fm_acumme], T1.[MCLIENTE.fm_saldomn], T1.[MCLIENTE.fm_saldome], T1.[MCLIENTE.fq_descto], T1.[MCLIENTE.fm_cantporc], T1.[MCLIENTE.fm_desctomn], T1.[MCLIENTE.fm_montporcmn], T1.[MCLIENTE.fm_desctome], T1.[MCLIENTE.fm_montporcme], T1.[MCLIENTE.cb_cheqdif], T1.[MCLIENTE.fm_diferidomn], T1.[MCLIENTE.fm_diferidome], T1.[MCLIENTE.cb_flete], T1.[MCLIENTE.cb_embalaje], T1.[MCLIENTE.cb_moncred], T1.[MCLIENTE.fm_limcred], T1.[MCLIENTE.cd_nomcom], T1.[MCLIENTE.cd_appaterno], T1.[MCLIENTE.cd_apmaterno], T1.[MCLIENTE.cd_nombre1], T1.[MCLIENTE.cd_nombre2], T1.[MCLIENTE.c_fl_agente_percepcion], T1.[MCLIENTE.cc_proyecto], T1.[MCLIENTE.c_cod_documento_identidad], T1.[MCLIENTE.c_fl_vinculacion], T1.[MCLIENTE.ct_email])
+        [CodeFirstDatabaseSchema.MCLIENTE](T1.[MCLIENTE.cc_tipana], T1.[MCLIENTE.cc_analis], T1.[MCLIENTE.cc_pais], T1.[MCLIENTE.cc_dpto], T1.[MCLIENTE.cc_prov], T1.[MCLIENTE.cc_sector], T1.[MCLIENTE.cc_catclie], T1.[MCLIENTE.cc_distrito], T1.[MCLIENTE.cd_razsoc], T1.[MCLIENTE.cc_zona], T1.[MCLIENTE.cb_proced], T1.[MCLIENTE.cd_direc], T1.[MCLIENTE.cn_regind], T1.[MCLIENTE.cn_sanit], T1.[MCLIENTE.cn_regmerc], T1.[MCLIENTE.ct_giro], T1.[MCLIENTE.dt_constit], T1.[MCLIENTE.dt_registro], T1.[MCLIENTE.cn_telf1], T1.[MCLIENTE.cn_telf2], T1.[MCLIENTE.cn_telf3], T1.[MCLIENTE.cn_fax1], T1.[MCLIENTE.cn_fax2], T1.[MCLIENTE.cn_fax3], T1.[MCLIENTE.cb_monfac], T1.[MCLIENTE.cb_limcred], T1.[MCLIENTE.cb_cheque], T1.[MCLIENTE.cb_sucursal], T1.[MCLIENTE.cb_sector], T1.[MCLIENTE.cb_activo], T1.[MCLIENTE.dt_ultcomp], T1.[MCLIENTE.ct_legal], T1.[MCLIENTE.cn_rucleg], T1.[MCLIENTE.dt_ultdeuda], T1.[MCLIENTE.fm_compmn], T1.[MCLIENTE.cd_direcleg], T1.[MCLIENTE.fm_compme], T1.[MCLIENTE.cn_telfleg], T1.[MCLIENTE.fm_acummn], T1.[MCLIENTE.cn_faxleg], T1.[MCLIENTE.fm_acumme], T1.[MCLIENTE.fm_saldomn], T1.[MCLIENTE.fm_saldome], T1.[MCLIENTE.fq_descto], T1.[MCLIENTE.fm_cantporc], T1.[MCLIENTE.fm_desctomn], T1.[MCLIENTE.fm_montporcmn], T1.[MCLIENTE.fm_desctome], T1.[MCLIENTE.fm_montporcme], T1.[MCLIENTE.cb_cheqdif], T1.[MCLIENTE.fm_diferidomn], T1.[MCLIENTE.fm_diferidome], T1.[MCLIENTE.cb_flete], T1.[MCLIENTE.cb_embalaje], T1.[MCLIENTE.cb_moncred], T1.[MCLIENTE.fm_limcred], T1.[MCLIENTE.cd_nomcom], T1.[MCLIENTE.cd_appaterno], T1.[MCLIENTE.cd_apmaterno], T1.[MCLIENTE.cd_nombre1], T1.[MCLIENTE.cd_nombre2], T1.[MCLIENTE.c_fl_agente_percepcion], T1.[MCLIENTE.cc_proyecto], T1.[MCLIENTE.c_cod_documento_identidad], T1.[MCLIENTE.c_fl_vinculacion], T1.[MCLIENTE.ct_email], T1.MCLIENTE_Corporativo)
     FROM (
         SELECT 
             T.cc_tipana AS [MCLIENTE.cc_tipana], 
@@ -639,6 +639,7 @@ namespace Edm_EntityMappingGeneratedViews
             T.c_cod_documento_identidad AS [MCLIENTE.c_cod_documento_identidad], 
             T.c_fl_vinculacion AS [MCLIENTE.c_fl_vinculacion], 
             T.ct_email AS [MCLIENTE.ct_email], 
+            T.Corporativo AS MCLIENTE_Corporativo, 
             True AS _from0
         FROM ZicoErpContext.Mclientes AS T
     ) AS T1");
@@ -961,7 +962,7 @@ namespace Edm_EntityMappingGeneratedViews
         {
             return new DbMappingView(@"
     SELECT VALUE -- Constructing Mclientes
-        [Acetesa.TomaPedidos.DataEntityFramework.Models.MCLIENTE](T1.[MCLIENTE.cc_tipana], T1.[MCLIENTE.cc_analis], T1.[MCLIENTE.cc_pais], T1.[MCLIENTE.cc_dpto], T1.[MCLIENTE.cc_prov], T1.[MCLIENTE.cc_sector], T1.[MCLIENTE.cc_catclie], T1.[MCLIENTE.cc_distrito], T1.[MCLIENTE.cd_razsoc], T1.[MCLIENTE.cc_zona], T1.[MCLIENTE.cb_proced], T1.[MCLIENTE.cd_direc], T1.[MCLIENTE.cn_regind], T1.[MCLIENTE.cn_sanit], T1.[MCLIENTE.cn_regmerc], T1.[MCLIENTE.ct_giro], T1.[MCLIENTE.dt_constit], T1.[MCLIENTE.dt_registro], T1.[MCLIENTE.cn_telf1], T1.[MCLIENTE.cn_telf2], T1.[MCLIENTE.cn_telf3], T1.[MCLIENTE.cn_fax1], T1.[MCLIENTE.cn_fax2], T1.[MCLIENTE.cn_fax3], T1.[MCLIENTE.cb_monfac], T1.[MCLIENTE.cb_limcred], T1.[MCLIENTE.cb_cheque], T1.[MCLIENTE.cb_sucursal], T1.[MCLIENTE.cb_sector], T1.[MCLIENTE.cb_activo], T1.[MCLIENTE.dt_ultcomp], T1.[MCLIENTE.ct_legal], T1.[MCLIENTE.cn_rucleg], T1.[MCLIENTE.dt_ultdeuda], T1.[MCLIENTE.fm_compmn], T1.[MCLIENTE.cd_direcleg], T1.[MCLIENTE.fm_compme], T1.[MCLIENTE.cn_telfleg], T1.[MCLIENTE.fm_acummn], T1.[MCLIENTE.cn_faxleg], T1.[MCLIENTE.fm_acumme], T1.[MCLIENTE.fm_saldomn], T1.[MCLIENTE.fm_saldome], T1.[MCLIENTE.fq_descto], T1.[MCLIENTE.fm_cantporc], T1.[MCLIENTE.fm_desctomn], T1.[MCLIENTE.fm_montporcmn], T1.[MCLIENTE.fm_desctome], T1.[MCLIENTE.fm_montporcme], T1.[MCLIENTE.cb_cheqdif], T1.[MCLIENTE.fm_diferidomn], T1.[MCLIENTE.fm_diferidome], T1.[MCLIENTE.cb_flete], T1.[MCLIENTE.cb_embalaje], T1.[MCLIENTE.cb_moncred], T1.[MCLIENTE.fm_limcred], T1.[MCLIENTE.cd_nomcom], T1.[MCLIENTE.cd_appaterno], T1.[MCLIENTE.cd_apmaterno], T1.[MCLIENTE.cd_nombre1], T1.[MCLIENTE.cd_nombre2], T1.[MCLIENTE.c_fl_agente_percepcion], T1.[MCLIENTE.cc_proyecto], T1.[MCLIENTE.c_cod_documento_identidad], T1.[MCLIENTE.c_fl_vinculacion], T1.[MCLIENTE.ct_email])
+        [Acetesa.TomaPedidos.DataEntityFramework.Models.MCLIENTE](T1.[MCLIENTE.cc_tipana], T1.[MCLIENTE.cc_analis], T1.[MCLIENTE.cc_pais], T1.[MCLIENTE.cc_dpto], T1.[MCLIENTE.cc_prov], T1.[MCLIENTE.cc_sector], T1.[MCLIENTE.cc_catclie], T1.[MCLIENTE.cc_distrito], T1.[MCLIENTE.cd_razsoc], T1.[MCLIENTE.cc_zona], T1.[MCLIENTE.cb_proced], T1.[MCLIENTE.cd_direc], T1.[MCLIENTE.cn_regind], T1.[MCLIENTE.cn_sanit], T1.[MCLIENTE.cn_regmerc], T1.[MCLIENTE.ct_giro], T1.[MCLIENTE.dt_constit], T1.[MCLIENTE.dt_registro], T1.[MCLIENTE.cn_telf1], T1.[MCLIENTE.cn_telf2], T1.[MCLIENTE.cn_telf3], T1.[MCLIENTE.cn_fax1], T1.[MCLIENTE.cn_fax2], T1.[MCLIENTE.cn_fax3], T1.[MCLIENTE.cb_monfac], T1.[MCLIENTE.cb_limcred], T1.[MCLIENTE.cb_cheque], T1.[MCLIENTE.cb_sucursal], T1.[MCLIENTE.cb_sector], T1.[MCLIENTE.cb_activo], T1.[MCLIENTE.dt_ultcomp], T1.[MCLIENTE.ct_legal], T1.[MCLIENTE.cn_rucleg], T1.[MCLIENTE.dt_ultdeuda], T1.[MCLIENTE.fm_compmn], T1.[MCLIENTE.cd_direcleg], T1.[MCLIENTE.fm_compme], T1.[MCLIENTE.cn_telfleg], T1.[MCLIENTE.fm_acummn], T1.[MCLIENTE.cn_faxleg], T1.[MCLIENTE.fm_acumme], T1.[MCLIENTE.fm_saldomn], T1.[MCLIENTE.fm_saldome], T1.[MCLIENTE.fq_descto], T1.[MCLIENTE.fm_cantporc], T1.[MCLIENTE.fm_desctomn], T1.[MCLIENTE.fm_montporcmn], T1.[MCLIENTE.fm_desctome], T1.[MCLIENTE.fm_montporcme], T1.[MCLIENTE.cb_cheqdif], T1.[MCLIENTE.fm_diferidomn], T1.[MCLIENTE.fm_diferidome], T1.[MCLIENTE.cb_flete], T1.[MCLIENTE.cb_embalaje], T1.[MCLIENTE.cb_moncred], T1.[MCLIENTE.fm_limcred], T1.[MCLIENTE.cd_nomcom], T1.[MCLIENTE.cd_appaterno], T1.[MCLIENTE.cd_apmaterno], T1.[MCLIENTE.cd_nombre1], T1.[MCLIENTE.cd_nombre2], T1.[MCLIENTE.c_fl_agente_percepcion], T1.[MCLIENTE.cc_proyecto], T1.[MCLIENTE.c_cod_documento_identidad], T1.[MCLIENTE.c_fl_vinculacion], T1.[MCLIENTE.ct_email], T1.MCLIENTE_Corporativo)
     FROM (
         SELECT 
             T.cc_tipana AS [MCLIENTE.cc_tipana], 
@@ -1030,6 +1031,7 @@ namespace Edm_EntityMappingGeneratedViews
             T.c_cod_documento_identidad AS [MCLIENTE.c_cod_documento_identidad], 
             T.c_fl_vinculacion AS [MCLIENTE.c_fl_vinculacion], 
             T.ct_email AS [MCLIENTE.ct_email], 
+            T.Corporativo AS MCLIENTE_Corporativo, 
             True AS _from0
         FROM CodeFirstDatabase.MCLIENTE AS T
     ) AS T1");

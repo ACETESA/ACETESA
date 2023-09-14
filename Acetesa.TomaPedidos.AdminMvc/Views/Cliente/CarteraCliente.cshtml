@@ -5,38 +5,68 @@
 
 <div class="container">
 
-    <div class="card mb-3">
-        <div class="card-header bg-success text-white">
-            <h3>
-                Gestión de Cartera de Clientes
-            </h3>
+
+    <form>
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3>
+                    Cartera de Clientes
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="sAsignado" class="form-label">Tipo de Clientes</label>
+                    <select class="form-select" aria-label="Default select example" id="sAsignado">
+                        <option value="%">Todos</option>
+                        <option value="1" selected>Asignados</option>
+                        <option value="0">No Asignados</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="card-footer bg-white">
+                <input type="button" value="Buscar" class="btn btn-dark" onclick="buscarCliente();" />
+                <input type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-gestion-cliente" value="Nuevo" onclick="OpcionesAbrirNuevoModal();">
+            </div>
         </div>
-        <div class="card-body bg-light">
-            <a class="btn btn-success" onclick="tableToExcel();"><i class="fa fa-file-excel-o"></i> Excel</a>
+    </form>
+
+
+    <div class="card">
+        <div class="card-header">
+            <a class="btn btn-success" onclick="tableToExcel();"><i class="fa fa-file-excel-o"></i> Descargar Excel</a>
         </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="table-clientesAsignadosLibres" class="table table-striped w-100">
+                    <thead class="bg-secondary text-white">
+                        <tr style="font-weight:bold;">
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Asignado</td>
+                            <td style="display:none;">Asignado</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">#</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Ruc</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Razón Social</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Sector</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Aseguradora</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Límite</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Departamento</td>
+                            <td style="text-align:center; border-right:dashed 0.2px #214820;">Provincia</td>
+                            <td style="text-align:center;">Distrito</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody style=""></tbody>
+                </table>
+            </div>
+        </div>
+        @*<div class="card-footer">
+
+            </div>*@
     </div>
 
-    <div class="table-responsive">
-        <table id="table-clientesAsignadosLibres" class="table table-striped w-100">
-            <thead class="bg-secondary text-white">
-                <tr style="font-weight:bold;">
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Asignado</td>
-                    <td style="display:none;">Asignado</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">#</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Ruc</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Razón Social</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Sector</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Aseguradora</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Límite</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Departamento</td>
-                    <td style="text-align:center; border-right:dashed 0.2px #214820;">Provincia</td>
-                    <td style="text-align:center;">Distrito</td>
-                </tr>
-            </thead>
-            <tbody style=""></tbody>
-        </table>
-    </div>
 </div>
+
+@{Html.RenderPartial("_PartialClienteEditar");}
 
 
 @section CssTop{
@@ -53,54 +83,39 @@
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/lib/Ajax.js?v=1"></script>
     <script src="~/Scripts/app/email-service.js?v=1"></script>
+    <script src="~/Scripts/app/ClienteGestionScript.js?v=1"></script>
     @*<script src="~/Scripts/bootstrap-select.min.js"></script>*@
     <script type="text/javascript">
-    urlClienteAsignadoLibre = "@Url.Action("ClientesAsignadosLibresSelect", "Cliente")";
-    urlBuscarCliente = "@Url.Action("ClientesAsignadosLibres", "Cliente")";
-        urlActualizarCartera = "@Url.Action("ActualizarAsignacionClienteVendedor", "Cliente")";
+        var urlClienteAsignadoLibre = "@Url.Action("ClientesAsignadosLibresSelect", "Cliente")";
+        var urlBuscarCliente = "@Url.Action("ClientesAsignadosLibres", "Cliente")";
+        var urlActualizarCartera = "@Url.Action("ActualizarAsignacionClienteVendedor", "Cliente")";
+        var urlSelectTipoDocumentoIdentidad = "@Url.Action("SelectTipoDocumentoIdentidad", "Cliente")";
+        var urlSelectProcedencias = "@Url.Action("SelectProcedencias", "Cliente")";
+        var urlSelectDepartamento = "@Url.Action("SelectDepartamento", "Cliente")";
+        var urlSelectProvincia = "@Url.Action("SelectProvincia", "Cliente")";
+        var urlSelectDistrito = "@Url.Action("SelectDistrito", "Cliente")";
+        var urlSelectPais = "@Url.Action("SelectPais", "Cliente")";
+        var urlSelectZonas = "@Url.Action("SelectZonas", "Cliente")";
+        var urlSelectSector = "@Url.Action("SelectSector", "Cliente")";
+        var urlSelectCategorias = "@Url.Action("SelectCategorias", "Cliente")";
+        var urlSelectEstadosCliente = "@Url.Action("SelectEstadosCliente", "Cliente")";
+        var urlSelectMonedaFacturacion = "@Url.Action("SelectMonedaFacturacion", "Cliente")";
+        var urlRegistrarCliente = "@Url.Action("RegistrarCliente", "Cliente")";
+        
         var ls_table;
-    //sClientes = $("#sClientes");
-    //LISTAR DEPARTAMENTOS
-    //function clientesActivosListar() {
-    //    sClientes.html("");//limpiar todas las filas o rows
-    //    $.ajax({
-    //        destroy: true,
-    //        type: "POST",
-    //        contentType: "application/json; charset=utf-8",
-    //        url: urlClienteAsignadoLibre,
-    //        data: JSON.stringify({
-    //        }),
-    //        dataType: "json",
-    //        success: function (result) {
-    //            sClientes.append("<option value=''>" + "TODOS LOS CLIENTES" + "</option>");
-    //            for (var i = 0; i < result.length; i++) {
-    //                sClientes.append("<option value='" + result[i].ruc + "'>" + result[i].razonSocial + "</option>");
-    //            }
-    //            //document.getElementById("sClientes").setAttribute("onchange", "buscarCliente();");
-    //            $('#sClientes').selectpicker({
-    //                maxOptions: 2
-    //            });
-    //            $('#sClientes').selectpicker('refresh');
-    //        },
-    //        error: function (result) {
-    //            alert("Error en javascript...");
-    //        }
-    //    });
-    //    }
 
 
         $(document).ready(function () {
-        //clientesActivosListar();
-        //$('.selectpicker').selectpicker({
-        //    size: 5,
-        //    title: 'Seleccione una opción'
-        //});
-
         buscarCliente();
-
         });
 
         function buscarCliente() {
+        //Destruyendo Datatable
+        if ($("#table-clientesAsignadosLibres") != null) {
+            $("#table-clientesAsignadosLibres").DataTable().clear();
+            $("#table-clientesAsignadosLibres").DataTable().destroy();
+        }
+
         //Limpiando la tabla
             $("#table-clientesAsignadosLibres tbody").empty();
 
@@ -110,7 +125,7 @@
             contentType: "application/json; charset=utf-8",
             url: urlBuscarCliente,
             data: JSON.stringify({
-                rucCliente: ""//$("#sClientes option:selected").val()
+                EsAsignado: $("#sAsignado option:selected").val()
             }),
             dataType: "json",
             success: function (result) {
@@ -139,11 +154,14 @@
                         //'<td style="text-align:right; border-right:dashed 0.2px #214820; vertical-align:middle;">' + creditoDisponible.toLocaleString() + '</td>' +
                         '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].departamento + '</td>' +
                         '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].provincia + '</td>' +
-                        '<td style="text-align:center; vertical-align:middle;">' + result[i].distrito + '</td>' +
+                        '<td style="text-align:center; border-right:dashed 0.2px #214820; vertical-align:middle;">' + result[i].distrito + '</td>' +
+                        '<td style="vertical-align:middle;">' + '<button class="btn btn-sm btn-outline-primary fa fa-pencil-square-o" data-bs-toggle="modal" data-bs-target="#modal-gestion-cliente"></button>' + '</td>' +
                         //'<td style="text-align:center; vertical-align:middle;">' + result[i].fechaUltVenta + '</td>' +
                         '</tr > ');
                 }
                 ls_table = $('#table-clientesAsignadosLibres');
+
+                //Destroy the old Datatable
 
                 $('#table-clientesAsignadosLibres').DataTable({
                         order: [[2, 'asc']],
@@ -162,7 +180,6 @@
                             }
                         }
                     });
-
 
                 //$('#table-clientesAsignadosLibres').DataTable({
                 //    columnDefs: [
@@ -234,7 +251,7 @@
 
         function tableToExcel() {
             // Get the column API object
-            var column = ls_table.column(0);
+            var column = $('#table-clientesAsignadosLibres').DataTable().column(0);
 
             // Toggle the visibility
             column.visible(!column.visible());
@@ -268,9 +285,6 @@
             //Revert action
             column.visible(!column.visible());
         }
-
-
-
 
     </script>
 }

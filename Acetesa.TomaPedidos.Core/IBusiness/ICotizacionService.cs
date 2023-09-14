@@ -24,6 +24,12 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
         Dictionary<string, string> RegistrarRechazoCotizacion(string cn_proforma, int idMotivo, string mensajeRechazo);
         Dictionary<string, string> RegistrarCierreCotizacionParcial(string cn_proforma, int idMotivo, string mensajeRechazo);
         List<Tuple<string, string>> ValidarTransformacionCotizacionAPedido(string CotizacionID);
+        LCPROF_WEB RecuperarDatosProformaByID(string ProformaID);
+        void EliminarProformaByID(string ProformaID);
+        void GuardarCabeceraProforma(LCPROF_WEB Proforma);
+        void GuardarDetalleProforma(LDPROF_WEB DetalleProforma);
+
+        void RegistrarDocumentoProforma(string ProformaID, byte[] Documento);
 
     }
 }

@@ -77,5 +77,6 @@ namespace Acetesa.TomaPedidos.Entity
         public string c_fl_vinculacion { get; set; }
         public virtual ICollection<LCPROF_WEB> LCPROF_WEB { get; set; }
         public string ct_email { get; set; }
+        public string Corporativo { get; set; }
     }
 }

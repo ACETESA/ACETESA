@@ -1,0 +1,178 @@
+﻿<div class="modal fade" id="modal-gestion-cliente" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <form id="registrarEditarForm">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="staticBackdropLabel">Actualizar Datos de Clientes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> @*btn-close-white*@
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-4 mb-3">
+                            <label class="form-label">Tipo Documento <span class="text-danger">*</span></label>
+                            <select class="form-select" id="sTipoDocumento">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-lg-2 mb-3">
+                            <label class="form-label">Nro Documento <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="iNumeroDocumento"/>
+                        </div>
+                        <div class="col-12 col-lg-3 mb-3">
+                            <label class="form-label">Fecha de Consitución <span class="text-danger">*</span></label>
+                            <input class="form-control hasDatepicker" data-val="true" id="iFechaConstitucion" name="" type="date">
+                        </div>
+                        <div class="col-12 col-lg-3 mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="sEstado"></select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-6 mb-3">
+                            <label class="form-label">Razón Social <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="iRazonSocial" />
+                        </div>
+                        <div class="col-12 col-lg-6 mb-3">
+                            <label class="form-label">Nombre Comercial</label>
+                            <input class="form-control" type="text" id="iNombreComercial" />
+                        </div>
+
+                        <div class="row bg-warning rounded-3 bg-opacity-25 w-100 m-0" id="divDatosPersonaNatural">
+                            <div class="col-12 col-lg-3 mb-3">
+                                <label class="form-label">Apellido Paterno</label>
+                                <input class="form-control" type="text" id="iApellidoPaterno" />
+                            </div>
+                            <div class="col-12 col-lg-3 mb-3">
+                                <label class="form-label">Apellido Materno</label>
+                                <input class="form-control" type="text" id="iApellidoMaterno" />
+                            </div>
+                            <div class="col-12 col-lg-3 mb-3">
+                                <label class="form-label">Primer Nombre</label>
+                                <input class="form-control" type="text" id="iNombre1" />
+                            </div>
+                            <div class="col-12 col-lg-3 mb-3">
+                                <label class="form-label">Segundo Nombre</label>
+                                <input class="form-control" type="text" id="iNombre2" />
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-12 col-lg-12 mb-3 mt-3">
+                            <label class="form-label">Procedencia</label>
+                            <select class="form-select" id="sProcedencias">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-3 mb-3">
+                            <label class="form-label">Pais <span class="text-danger">*</span></label>
+                            <select class="form-select" id="sPais"></select>
+                        </div>
+                        <div class="col-12 col-lg-3 mb-3">
+                            <label class="form-label">Departamento <span class="text-danger">*</span></label>
+                            <select class="form-select" id="sDepartamento"></select>
+                        </div>
+                        <div class="col-12 col-lg-3 mb-3">
+                            <label class="form-label">Provincia <span class="text-danger">*</span></label>
+                            <select class="form-select" id="sProvincia"></select>
+                        </div>
+                        <div class="col-12 col-lg-3 mb-3">
+                            <label class="form-label">Distrito <span class="text-danger">*</span></label>
+                            <select class="form-select" id="sDistrito"></select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-12 mb-3">
+                            <label class="form-label">Zona <span class="text-danger">*</span></label>
+                            <select class="form-select" id="sZona"></select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-12 mb-3">
+                            <label class="form-label">Dirección <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="iDirecccion" rows="3" required></textarea>
+                        </div>
+
+
+                        <div class="col-12 col-lg-6 mb-3">
+                            <label class="form-label">Giro del Negocio <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" id="iGiroNegocio" />
+                        </div>
+                        <div class="col-12 col-lg-6 mb-3">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-select" id="sCategoria"></select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-6 mb-3">
+                            <label class="form-label">Tipo de Sector</label> <br />
+                            <div class="form-check-inline">
+                                <input class="form-check-input" type="radio" name="rTipoSector" id="rTipoSectorPublico" value="0" checked>
+                                <label class="form-check-label" for="rTipoSectorPublico">
+                                    Público
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <input class="form-check-input" type="radio" name="rTipoSector" id="rTipoSectorPrivado" value="1">
+                                <label class="form-check-label" for="rTipoSectorPrivado">
+                                    Privado
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-lg-6 mb-3">
+                            <label class="form-label">Sector</label>
+                            <select class="form-select" id="sSector"></select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-12 mb-3">
+                            <label class="form-label">Moneda de Facturación</label>
+                            <select class="form-select" id="sMonedaFacturacion"></select>
+                        </div>
+
+
+                        <div class="col-12 col-lg-12 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="cSucursal">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tiene Sucursales
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="cVinculado">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Es Vinculado
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="cAgentePercExon">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Agente de Percepción y Exon.
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="cCorporativo">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Cliente Corporativo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="btnCloseModal">Cerrar</button>
+                    <button type="button" class="btn btn-success" id="btnGuardarCliente">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -8,6 +8,8 @@ namespace Acetesa.TomaPedidos.Entity
 {
     public partial class UBIGEO
     {
+        public string cc_pais { get; set; }
+        public string cd_pais { get; set; }
         public string cc_dpto { get; set; }
         public string cd_dpto { get; set; }
         public string cc_prov { get; set; }

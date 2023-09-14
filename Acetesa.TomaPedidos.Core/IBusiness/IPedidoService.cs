@@ -22,5 +22,8 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
         Dictionary<string, string> RegistrarDocumentoOCPorPedido(string idPedido, string usuarioRegistro, byte[] documento);
         Dictionary<string, string> ValidaCreditoSobregiroPorPedido(string ruc, decimal total, string moneda);
         Dictionary<string, string> RegistrarNotaPedidoVenta(LCPEDIDO_WEB Pedido, LCPEDIDOADICIONAL_WEB PedidoAdicional, string DetallePedido, string correoVendedor);
+        string RecuperarNumeroPedidoByProformaID(string ProformaID);
+        string AsignarNumeroProformaAPedido(string ProformaID, string PedidoID);
+
     }
 }

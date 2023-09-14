@@ -24,7 +24,6 @@ namespace Acetesa.TomaPedidos.IRepository
         Dictionary<string, string> ValidarRelacionVendedorCliente(string cc_analis, string emailUsuario);
         Dictionary<string, string> ValidarExistenciaClientePorRUC(string cc_analis);
         void ActualizarMailContacto(int tipoMail, string id, string emailPara);
-        List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor);
         List<CarteraCliente> CarteraClientesAsignados(string correoVendedor, string departamentoId, string provinciaId, string distritoId);
         List<ClienteModel> SelectClientesSegunCarteraVendedor(string correoVendedor);
 
@@ -34,6 +33,13 @@ namespace Acetesa.TomaPedidos.IRepository
 
         List<ClienteModel> SelectClientesSegunCarteraVendedorYLibres(string correoVendedor);
 
+        List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor, string EsAsignado);
+        List<TDOCUMENTOIDENTIDAD> SelectTipoDocumentoIdentidad();
+        List<UBIGEO> ListarPaises();
+        List<TZONA> ListarZonas(string cc_distrito, string cc_dpto, string cc_prov);
+        List<TCATCLIE> ListarCategorias();
+        List<Dictionary<string, string>> ListarEstadosCliente();
+        Dictionary<string, string> RegistrarCliente(MCLIENTE cliente);
 
 
     }

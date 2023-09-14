@@ -20,6 +20,5 @@ namespace Acetesa.TomaPedidos.IRepository
         Dictionary<string, string> ValidarStockPedido(string cnPedido, string listaArtic, string listaStockSolicitado, string ccTienda);
         List<ArticuloModel.Stock> ObtenerStockTodasTiendasPorArticulo(string IdArticulo);
 
-
     }
 }

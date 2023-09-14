@@ -402,5 +402,49 @@ namespace Acetesa.TomaPedidos.Repository
             return diccionario;
         }
 
+        public string RecuperarNumeroPedidoByProformaID(string ProformaID)
+        {
+            string ProformaIDs = "";
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("web.spRecuperarNumeroPedidoByProformaID", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@ProformaID", ProformaID);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        ProformaIDs = reader["ProformaIDs"].ToString();
+
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return ProformaIDs;
+        }
+
+
+        public string AsignarNumeroProformaAPedido(string ProformaID, string PedidoID)
+        {
+            string ProformaIDs = "";
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("web.spAsignarNumeroProformaAPedido", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@sproforma", ProformaID);
+                sqlCommand.Parameters.AddWithValue("@spedido", PedidoID);
+                sqlConnection.Open();
+
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+            return ProformaIDs;
+        }
+
     }
 }

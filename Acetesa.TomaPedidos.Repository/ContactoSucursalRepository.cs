@@ -15,28 +15,33 @@ namespace Acetesa.TomaPedidos.Repository
         public List<TCONTACLIE> ListarContactoPorSucursal(string cn_suc, string cc_analis)
         {
             List<TCONTACLIE> lista = new List<TCONTACLIE>();
-            var cn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            var conexion = new SqlConnection(cn);
-            using (conexion)
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
             {
-                SqlCommand cmd = new SqlCommand("spContactoPorSucursal", conexion);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@cn_suc", cn_suc);
-                cmd.Parameters.AddWithValue("@cc_analis", cc_analis);
-                conexion.Open();
-                var da = new SqlDataAdapter(cmd);
-                var dt = new DataTable();
-                da.Fill(dt);
-                foreach (DataRow fila  in dt.Rows)
+                SqlCommand sqlCommand = new SqlCommand("spContactoPorSucursal", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@cn_suc", cn_suc);
+                sqlCommand.Parameters.AddWithValue("@cc_analis", cc_analis);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
                 {
-                    TCONTACLIE c = new TCONTACLIE();
-                    c.cn_contacto = fila["cn_contacto"].ToString();
-                    c.cd_contacto = fila["cd_contacto"].ToString();
-                    lista.Add(c);
+                    while (reader.Read())
+                    {
+                        TCONTACLIE Contacto = new TCONTACLIE();
+                        Contacto.cn_contacto = reader["cn_contacto"].ToString();
+                        Contacto.cd_contacto = reader["cd_contacto"].ToString();
+
+                        lista.Add(Contacto);
+
+                    }
                 }
+                sqlConnection.Close();
             }
             return lista;
         }
+
         public List<TCONTACLIE> GetContactoParaEditar(string cc_analis, string cn_suc, string cn_contacto)
         {
             List<TCONTACLIE> lista = new List<TCONTACLIE>();

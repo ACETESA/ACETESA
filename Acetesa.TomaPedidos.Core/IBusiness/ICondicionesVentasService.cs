@@ -7,5 +7,7 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
     {
         IEnumerable<CondicionVentaModel> GetAll();
         IEnumerable<CondicionVentaModel> GetAll(string ccAnalis);
+        List<CondicionVentaModel> RecuperarCondicionVentaPorClienteID(string cc_analis);
+        
     }
 }

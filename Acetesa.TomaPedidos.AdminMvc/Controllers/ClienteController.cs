@@ -67,29 +67,29 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             return View();
         }
 
-        public ActionResult ClientesAsignadosLibres(string rucCliente)
+        public ActionResult ClientesAsignadosLibres(string EsAsignado)
         {
-            var listaClientes = ClienteService.ClientesAsignadosLibres(User.Identity.Name);
+            var listaClientes = ClienteService.ClientesAsignadosLibres(User.Identity.Name, EsAsignado);
 
-            var listaFiltrada = listaClientes;
+            //var listaFiltrada = listaClientes;
 
-            if (rucCliente == "")
-            {
-                listaFiltrada = listaClientes;
-            }
-            else
-            {
-                listaFiltrada = listaClientes
-                    .Where(m => m.Ruc == rucCliente)
-                    .ToList();
-            }
+            //if (rucCliente == "")
+            //{
+            //    listaFiltrada = listaClientes;
+            //}
+            //else
+            //{
+            //    listaFiltrada = listaClientes
+            //        .Where(m => m.Ruc == rucCliente)
+            //        .ToList();
+            //}
 
-            return JsonSuccess(listaFiltrada);
+            return JsonSuccess(listaClientes);
         }
 
         public ActionResult ClientesAsignadosLibresSelect()
         {
-            var listaClientes = ClienteService.ClientesAsignadosLibres(User.Identity.Name);
+            var listaClientes = ClienteService.ClientesAsignadosLibres(User.Identity.Name,"%");
 
             var selectClientes = (from model in listaClientes
                                  select new { model.Ruc, model.RazonSocial}).ToList();
@@ -133,6 +133,94 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 
             return JsonSuccess(diccionario);
         }
+
+        public ActionResult SelectTipoDocumentoIdentidad()
+        {
+            var listaTipoDocumentos = ClienteService.SelectTipoDocumentoIdentidad();
+
+            return JsonSuccess(listaTipoDocumentos);
+        }
+
+
+        public ActionResult SelectProcedencias()
+        {
+            List<Dictionary<string, string>> Procedencias = new List<Dictionary<string, string>>();
+            Procedencias.Add(new Dictionary<string, string> { { "idProcedencia", "N" }, { "procedencia", "Nacional" } });
+            Procedencias.Add(new Dictionary<string, string> { { "idProcedencia", "R" }, { "procedencia", "Regional" } });
+            Procedencias.Add(new Dictionary<string, string> { { "idProcedencia", "E" }, { "procedencia", "Extranjera" } });
+
+            return JsonSuccess(Procedencias);
+        }
+
+        public ActionResult SelectDistrito(string departamentoID, string provinciaID)
+        {
+            var listaDistrito = ClienteService.ListarDistrito(departamentoID,provinciaID);
+
+            return JsonSuccess(listaDistrito);
+        }
+
+        public ActionResult SelectProvincia(string departamentoID)
+        {
+            var listaProvincia = ClienteService.ListarProvincia(departamentoID);
+
+            return JsonSuccess(listaProvincia);
+        }
+
+        public ActionResult SelectDepartamento()
+        {
+            var listaDepartamento = ClienteService.ListarDepartamento();
+
+            return JsonSuccess(listaDepartamento);
+        }
+
+        public ActionResult SelectPais()
+        {
+            var listaPaises = ClienteService.ListarPaises();
+
+            return JsonSuccess(listaPaises);
+        }
+
+        public ActionResult SelectZonas(string cc_distrito, string cc_dpto, string cc_prov)
+        {
+            var listaZonas = ClienteService.ListarZonas(cc_distrito, cc_dpto, cc_prov);
+
+            return JsonSuccess(listaZonas);
+        }
+
+        public ActionResult SelectSector()
+        {
+            var listaSector = ClienteService.ListarSector();
+
+            return JsonSuccess(listaSector);
+        }
+        public ActionResult SelectCategorias()
+        {
+            var listaCategoria = ClienteService.ListarCategorias();
+            return JsonSuccess(listaCategoria);
+        }
+
+        public ActionResult SelectEstadosCliente()
+        {
+            var listaEstado = ClienteService.ListarEstadosCliente();
+            return JsonSuccess(listaEstado);
+        }
+
+        public ActionResult SelectMonedaFacturacion()
+        {
+            List<Dictionary<string, string>> MonedaFacturacion = new List<Dictionary<string, string>>();
+            MonedaFacturacion.Add(new Dictionary<string, string> { { "cb_monfac", "N" }, { "cd_monfac", "Nacional" } });
+            MonedaFacturacion.Add(new Dictionary<string, string> { { "cb_monfac", "E" }, { "cd_monfac", "Extranjera" } });
+            MonedaFacturacion.Add(new Dictionary<string, string> { { "cb_monfac", "A" }, { "cd_monfac", "Ambas" } });
+
+            return JsonSuccess(MonedaFacturacion);
+        }
+
+        public ActionResult RegistrarCliente(MCLIENTE cliente)
+        {
+            var listaEstado = ClienteService.RegistrarCliente(cliente);
+            return JsonSuccess(listaEstado);
+        }
+
 
     }
 }

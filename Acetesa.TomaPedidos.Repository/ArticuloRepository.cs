@@ -8,6 +8,7 @@ using Acetesa.TomaPedidos.IRepository;
 using Acetesa.TomaPedidos.Transversal;
 using System.Data.Linq.SqlClient;
 using System.Configuration;
+using System;
 
 namespace Acetesa.TomaPedidos.Repository
 {
@@ -192,35 +193,6 @@ namespace Acetesa.TomaPedidos.Repository
             lista = _dbContext.GetExecSpEnumerable<ArticuloModel.Stock>("spStockPorCodigoArticulo", sqlParams).ToList();
             return lista;
         }
-        //public Dictionary<string,string> ValidarProductoPorStockYProduccion(string grupo, string subGrupo, string cc_artic, string cc_tienda, string cn_proforma)
-        //{
-        //    Dictionary<string, string> diccionario = new Dictionary<string, string>();
-        //    var cn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        //    var conexion = new SqlConnection(cn);
-        //    using (conexion)
-        //    {
-        //        SqlCommand cmd = new SqlCommand("spValidarProductoAlCrearPedido", conexion);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-        //        cmd.Parameters.AddWithValue("@grupo", grupo);
-        //        cmd.Parameters.AddWithValue("@subGrupo", subGrupo);
-        //        cmd.Parameters.AddWithValue("@cc_artic", cc_artic);
-        //        cmd.Parameters.AddWithValue("@cc_tienda", cc_tienda);
-        //        cmd.Parameters.AddWithValue("@cn_proforma", cn_proforma);
-        //        conexion.Open();
-        //        var da = new SqlDataAdapter(cmd);
-        //        var dt = new DataTable();
-        //        da.Fill(dt);
-        //        foreach (DataRow fila in dt.Rows)
-        //        {
-        //            string idRespuesta =fila["idRespuesta"].ToString();
-        //            string respuesta = fila["respuesta"].ToString();
-
-        //            diccionario.Add("id", idRespuesta);
-        //            diccionario.Add("mensaje", respuesta);
-        //        }
-        //    }
-        //    return diccionario;
-        //}
 
         public Dictionary<string, string> ValidaStockArticulo_LCPEDIDOWEB(string cc_artic, string cc_tienda, decimal StockSolicitado, bool EsProforma, string cn_proforma, string cn_pedido)
         {
@@ -338,5 +310,7 @@ namespace Acetesa.TomaPedidos.Repository
             }
             return listaStockArticulo;
         }
+
+
     }
 }

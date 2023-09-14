@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Acetesa.TomaPedidos.Transversal;
 using System;
+using System.Configuration;
 
 namespace Acetesa.TomaPedidos.Repository
 {
@@ -433,39 +434,72 @@ namespace Acetesa.TomaPedidos.Repository
             return listaMensajes;
         }
 
+        //public List<PlanificacionVisita> getSelectVisitasClientes(string ClienteID, string fechaEmision)
+        //{
+        //    List<PlanificacionVisita> ListaPlanificacionVisita = new List<PlanificacionVisita>();
+        //    using (var oConex = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+        //    {
+        //        using (var sqlCommand = new SqlCommand("[dbo].[spObtenerPlanificacionVisitasPorCliente]", oConex))
+        //        {
+        //            sqlCommand.CommandType = CommandType.StoredProcedure;
+        //            oConex.Open();
+        //            sqlCommand.CommandType = CommandType.StoredProcedure;
+        //            sqlCommand.Parameters.AddWithValue("@ClienteID", ClienteID);
+        //            sqlCommand.Parameters.AddWithValue("@FechaEmision", Convert.ToDateTime(fechaEmision));
+        //            var dr = sqlCommand.ExecuteReader();
+        //            using (dr)
+        //            {
+        //                while (dr.Read())
+        //                {
+        //                    PlanificacionVisita planificacionVisita = new PlanificacionVisita();
+
+        //                    planificacionVisita.VisitaClienteID = int.Parse(dr["VisitaClienteID"].ToString());
+        //                    planificacionVisita.Descripcion = dr["VisitaCliente"].ToString();
+
+        //                    ListaPlanificacionVisita.Add(planificacionVisita);
+
+        //                }
+        //            }
+
+        //            oConex.Close();
+        //        }
+        //    }
+        //    return ListaPlanificacionVisita;
+        //}
+
+        
+
         public List<PlanificacionVisita> getSelectVisitasClientes(string ClienteID, string fechaEmision)
         {
             List<PlanificacionVisita> ListaPlanificacionVisita = new List<PlanificacionVisita>();
-            using (var oConex = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+
+
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
             {
-                using (var sqlCommand = new SqlCommand("[dbo].[spObtenerPlanificacionVisitasPorCliente]", oConex))
+                SqlCommand sqlCommand = new SqlCommand("[dbo].[spObtenerPlanificacionVisitasPorCliente]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@ClienteID", ClienteID);
+                sqlCommand.Parameters.AddWithValue("@FechaEmision", Convert.ToDateTime(fechaEmision));
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
                 {
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    oConex.Open();
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@ClienteID", ClienteID);
-                    sqlCommand.Parameters.AddWithValue("@FechaEmision", Convert.ToDateTime(fechaEmision));
-                    var dr = sqlCommand.ExecuteReader();
-                    using (dr)
+                    while (reader.Read())
                     {
-                        while (dr.Read())
-                        {
-                            PlanificacionVisita planificacionVisita = new PlanificacionVisita();
+                        PlanificacionVisita planificacionVisita = new PlanificacionVisita();
 
-                            planificacionVisita.VisitaClienteID = int.Parse(dr["VisitaClienteID"].ToString());
-                            planificacionVisita.Descripcion = dr["VisitaCliente"].ToString();
+                        planificacionVisita.VisitaClienteID = int.Parse(reader["VisitaClienteID"].ToString());
+                        planificacionVisita.Descripcion = reader["VisitaCliente"].ToString();
 
-                            ListaPlanificacionVisita.Add(planificacionVisita);
-
-                        }
+                        ListaPlanificacionVisita.Add(planificacionVisita);
                     }
-
-                    oConex.Close();
                 }
+                sqlConnection.Close();
             }
             return ListaPlanificacionVisita;
         }
-
 
 
     }

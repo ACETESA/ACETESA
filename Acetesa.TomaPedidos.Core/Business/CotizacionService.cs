@@ -17,12 +17,14 @@ namespace Acetesa.TomaPedidos.Core.Business
     public class CotizacionService : ICotizacionService
     {
         private readonly ICotizacionRepository _cotizacionRepository;
+        private readonly IPedidoRepository _pedidoRepository;
         private readonly ICotizacionDetalleRepository _cotizacionDetalleRepository;
         private readonly IProductoRepository _productoRepository;
         private readonly IDbContext _dbContext;
 
         public CotizacionService(
             ICotizacionRepository cotizacionRepository,
+            IPedidoRepository pedidoRepository,
             ICotizacionDetalleRepository cotizacionDetalleRepository,
             IProductoRepository productoRepository,
             IDbContext dbContext)
@@ -32,6 +34,7 @@ namespace Acetesa.TomaPedidos.Core.Business
                 throw new ArgumentNullException("cotizacionRepository");
             }
             _cotizacionRepository = cotizacionRepository;
+            _pedidoRepository = pedidoRepository;
             _cotizacionDetalleRepository = cotizacionDetalleRepository;
             _productoRepository = productoRepository;
             _dbContext = dbContext;
@@ -55,29 +58,144 @@ namespace Acetesa.TomaPedidos.Core.Business
             {
                 throw new ArgumentNullException("cnProforma");
             }
-            var query = _cotizacionRepository.GetById(cnProforma.Trim());
-            return query;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required))
+            {
+                var query = _cotizacionRepository.GetById(cnProforma.Trim());
+                scope.Complete(); // Commit the transaction
+                return query;
+            }
+
+            //var query = _cotizacionRepository.GetById(cnProforma.Trim());
+            //return query;
         }
 
         public LCPROF_WEB GetLastCnProforma()
         {
-            //var query = _cotizacionRepository.GetLastCotizacion();
-            //if (query == null) return (1).ToString().PadLeft(8, '0');
-            //var sCnProforma = query.cn_proforma;
-            //var nCnProforma = Convert.ToInt32(sCnProforma);
-            //var sCnProformaNew = (nCnProforma + 1).ToString().PadLeft(8, '0');
-            //return sCnProformaNew;
             var query = _cotizacionRepository.GetLastCotizacion();
             return query;
         }
+
+        //public void Guardar(LCPROF_WEB entity, int igv_bo, string empresa, int zonaLiberada)
+        //{
+        //    try
+        //    {
+        //        string sPedidos = "";
+        //        using (var scope = new TransactionScope(TransactionScopeOption.Required))
+        //        {
+        //            var cnProforma = entity.cn_proforma;
+        //            DateTime? dFechaProceso = null;
+        //            string cbEstado = null;
+        //            if (string.IsNullOrEmpty(cnProforma) || string.IsNullOrWhiteSpace(cnProforma))
+        //            {
+        //                LCPROF_WEB proforma = GetLastCnProforma();
+        //                cnProforma = proforma.cn_proforma;
+        //            }
+        //            else
+        //            {
+        //                var entityExiste = _cotizacionRepository.GetById(cnProforma);
+        //                dFechaProceso = entityExiste.df_proceso;
+        //                cbEstado = entityExiste.cb_estado;
+        //            }
+        //            var dFechaActual = DateTimeExtension.GetDateTimeNow();
+        //            entity.cn_proforma = cnProforma;
+        //            entity.df_proceso = dFechaProceso ?? dFechaActual;
+        //            entity.cb_estado = cbEstado ?? "1";
+
+
+        //            var SubTotVta = CotizacionDetalleServices.Sum(x => x.fm_total);
+        //            decimal IgvVta;
+        //            decimal TotVta;
+        //            if (empresa == "ACETESA")
+        //            {
+        //                /*Nuevo: Calcula IGV segun seleccion usuario*/
+
+        //                var igv = 0.18;
+        //                if (igv_bo == 0)
+        //                {
+        //                    IgvVta = SubTotVta * (decimal)(igv);
+        //                    TotVta = SubTotVta + IgvVta;
+        //                }
+        //                else
+        //                {
+        //                    TotVta = SubTotVta;
+        //                    SubTotVta = TotVta / (decimal)(igv + 1);
+        //                    IgvVta = SubTotVta * (decimal)(igv);
+        //                }
+        //                /*Fin: Calcula IGV segun seleccion usuario*/
+        //            }
+        //            else
+        //            {
+        //                var igv = 0.18;
+        //                if (zonaLiberada == 0)
+        //                {
+        //                    IgvVta = SubTotVta * (decimal)(igv);
+        //                    TotVta = SubTotVta + IgvVta;
+        //                }
+        //                else
+        //                {
+        //                    IgvVta = 0;
+        //                    TotVta = SubTotVta;
+        //                }
+        //            }
+
+        //            entity.fm_valvta = SubTotVta;
+        //            entity.fm_igv = IgvVta;
+        //            entity.fm_totvta = TotVta;
+
+        //            entity.fm_valvta = Math.Round(entity.fm_valvta, 2);
+        //            entity.fm_igv = Math.Round(entity.fm_igv, 2);
+        //            entity.fm_totvta = Math.Round(entity.fm_totvta, 2);
+
+        //            if (!string.IsNullOrEmpty(cnProforma) && !string.IsNullOrWhiteSpace(cnProforma))
+        //            {
+        //                sPedidos = PedidoRepository.getCotizaciones(cnProforma);
+        //                DeleteMasterAndDetail(entity);
+        //            }
+
+        //            _cotizacionRepository.Add(entity);
+
+        //            foreach (var item in CotizacionDetalleServices)
+        //            {
+        //                item.cn_proforma = cnProforma;
+        //                item.fm_total = Math.Round(item.fm_total, 2);
+        //                //var articuloModel = _productoRepository.GetById(item.cc_artic);
+        //                var articuloModel = _productoRepository.RecuperarArticuloPorID(item.cc_artic);
+        //                item.fq_peso = (decimal)(articuloModel.fq_peso_teorico * (double)item.fq_cantidad ?? 0);
+        //                item.fq_peso = Math.Round(item.fq_peso, 2);
+        //                _cotizacionDetalleRepository.Add(item);
+        //            }
+
+        //            _dbContext.Commit();
+
+
+
+        //            scope.Complete();
+        //        }
+        //        if (sPedidos != "")
+        //        {
+        //            foreach (var pedido in sPedidos.Split(','))
+        //            {
+        //                if (!string.IsNullOrEmpty(pedido))
+        //                {
+        //                    PedidoRepository.setCotizaciones(entity.cn_proforma, pedido);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        var a = e;
+        //        Console.WriteLine(e);
+        //    }
+
+        //}
 
         public void Guardar(LCPROF_WEB entity, int igv_bo, string empresa, int zonaLiberada)
         {
             try
             {
                 string sPedidos = "";
-                using (var scope = new TransactionScope(TransactionScopeOption.Required))
-                {
+
                     var cnProforma = entity.cn_proforma;
                     DateTime? dFechaProceso = null;
                     string cbEstado = null;
@@ -88,7 +206,13 @@ namespace Acetesa.TomaPedidos.Core.Business
                     }
                     else
                     {
-                        var entityExiste = _cotizacionRepository.GetById(cnProforma);
+                        LCPROF_WEB entityExiste = new LCPROF_WEB();
+                        entityExiste = _cotizacionRepository.RecuperarDatosProformaByID(cnProforma); /*--ok*/
+                        //using (var scope = new TransactionScope(TransactionScopeOption.Required))
+                        //{
+                        //    entityExiste = _cotizacionRepository.GetById(cnProforma);
+                        //    scope.Complete(); // Commit the transaction
+                        //}
                         dFechaProceso = entityExiste.df_proceso;
                         cbEstado = entityExiste.cb_estado;
                     }
@@ -144,33 +268,60 @@ namespace Acetesa.TomaPedidos.Core.Business
 
                     if (!string.IsNullOrEmpty(cnProforma) && !string.IsNullOrWhiteSpace(cnProforma))
                     {
-                        sPedidos = PedidoRepository.getCotizaciones(cnProforma);
-                        DeleteMasterAndDetail(entity);
+                    //using (var scope = new TransactionScope(TransactionScopeOption.Required))
+                    //{
+                    //    sPedidos = PedidoRepository.getCotizaciones(cnProforma);
+                    //    scope.Complete(); // Commit the transaction
+                    //}
+                    sPedidos = _pedidoRepository.RecuperarNumeroPedidoByProformaID(cnProforma); /*OK*/
+
+                    _cotizacionRepository.EliminarProformaByID(cnProforma);
+                        //DeleteMasterAndDetail(entity);
                     }
 
-                    _cotizacionRepository.Add(entity);
+                    //using (var scope = new TransactionScope(TransactionScopeOption.Required))
+                    //{
+                    //    _cotizacionRepository.Add(entity);
+                    //    scope.Complete(); // Commit the transaction
+                    //}
+                    _cotizacionRepository.GuardarCabeceraProforma(entity); /*OK*/
+
+
 
                     foreach (var item in CotizacionDetalleServices)
                     {
                         item.cn_proforma = cnProforma;
                         item.fm_total = Math.Round(item.fm_total, 2);
-                        var articuloModel = _productoRepository.GetById(item.cc_artic);
+
+                        MARTICUL articuloModel = new MARTICUL();
+                        //using (var scope = new TransactionScope(TransactionScopeOption.Required))
+                        //{
+                        //    articuloModel = _productoRepository.GetById(item.cc_artic);
+                        //    scope.Complete(); // Commit the transaction
+                        //}
+                        articuloModel = _productoRepository.RecuperarDatosArticuloByID(item.cc_artic);
+                        //var articuloModel = _productoRepository.RecuperarArticuloPorID(item.cc_artic);
                         item.fq_peso = (decimal)(articuloModel.fq_peso_teorico * (double)item.fq_cantidad ?? 0);
                         item.fq_peso = Math.Round(item.fq_peso, 2);
-                        _cotizacionDetalleRepository.Add(item);
+
+                        //using (var scope = new TransactionScope(TransactionScopeOption.Required))
+                        //{
+                        //    _cotizacionDetalleRepository.Add(item);
+                        //    scope.Complete(); // Commit the transaction
+                        //}
+
+                        _cotizacionRepository.GuardarDetalleProforma(item); /*OK*/
                     }
+                    //_dbContext.Commit();
 
-                    _dbContext.Commit();
-
-                    scope.Complete();
-                }
                 if (sPedidos != "")
                 {
                     foreach (var pedido in sPedidos.Split(','))
                     {
                         if (!string.IsNullOrEmpty(pedido))
                         {
-                            PedidoRepository.setCotizaciones(entity.cn_proforma, pedido);
+                            //PedidoRepository.setCotizaciones(entity.cn_proforma, pedido);
+                            _pedidoRepository.AsignarNumeroProformaAPedido(entity.cn_proforma, pedido); /*Ok*/
                         }
                     }
                 }
@@ -180,19 +331,26 @@ namespace Acetesa.TomaPedidos.Core.Business
                 var a = e;
                 Console.WriteLine(e);
             }
- 
-        }
+
+         }
 
         public void DeleteMasterAndDetail(LCPROF_WEB master)
         {
-            var entityMaster = _cotizacionRepository.GetById(master.cn_proforma);
-            if (entityMaster == null) return;
-            foreach (var entityDetail in entityMaster.LDPROF_WEB.ToList())
+            using (var scope = new TransactionScope(TransactionScopeOption.Required))
             {
-                _cotizacionDetalleRepository.Delete(entityDetail);
+                var entityMaster = _cotizacionRepository.GetById(master.cn_proforma);
+                if (entityMaster == null) return;
+                foreach (var entityDetail in entityMaster.LDPROF_WEB.ToList())
+                {
+                    _cotizacionDetalleRepository.Delete(entityDetail);
+                }
+                _cotizacionRepository.Delete(entityMaster);
+
+                _dbContext.Commit();
+
+                scope.Complete();
             }
-            _cotizacionRepository.Delete(entityMaster);
-            _dbContext.Commit();
+
         }
 
         public IEnumerable<LDPROF_WEB> CotizacionDetalleServices { get; set; }
@@ -243,6 +401,30 @@ namespace Acetesa.TomaPedidos.Core.Business
         public List<Tuple<string, string>> ValidarTransformacionCotizacionAPedido(string CotizacionID)
         {
             return _cotizacionRepository.ValidarTransformacionCotizacionAPedido(CotizacionID);
+        }
+
+        public LCPROF_WEB RecuperarDatosProformaByID(string ProformaID)
+        {
+            return _cotizacionRepository.RecuperarDatosProformaByID(ProformaID);
+        }
+
+        public void EliminarProformaByID(string ProformaID)
+        {
+            _cotizacionRepository.EliminarProformaByID(ProformaID);
+        }
+
+        public void GuardarCabeceraProforma(LCPROF_WEB Proforma)
+        {
+            _cotizacionRepository.GuardarCabeceraProforma(Proforma);
+        }
+        public void GuardarDetalleProforma(LDPROF_WEB DetalleProforma)
+        {
+            _cotizacionRepository.GuardarDetalleProforma(DetalleProforma);
+        }
+
+        public void RegistrarDocumentoProforma(string ProformaID, byte[] Documento)
+        {
+            _cotizacionRepository.RegistrarDocumentoProforma(ProformaID, Documento);
         }
 
     }

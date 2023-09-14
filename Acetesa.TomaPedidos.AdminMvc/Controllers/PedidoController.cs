@@ -28,6 +28,8 @@ using System.IO;
 using System.Web;
 using System.Xml.Serialization;
 using System.Xml.Linq;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 {
@@ -1345,6 +1347,43 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             return JsonSuccess(1);
         }
 
+
+
+
+        public byte[] RenderPdfToBytes(string id, string viewName)
+        {
+            var pedido = PedidoService.GetById(id);
+            var pedidoAdicional = PedidoService.GetAdicionalById(id);
+            var cliente = ClienteService.GetByCodigo(pedido.cc_analis);
+            var pedidoClienteVm = new PedidoClienteViewModel
+            {
+                Pedido = pedido,
+                Cliente = cliente,
+                Adicional = pedidoAdicional
+            };
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document document = new Document();
+                PdfWriter writer = PdfWriter.GetInstance(document, ms);
+                document.Open();
+
+                // Aquí generas el contenido del PDF, reemplaza con tu lógica
+                // Puedes usar XMLWorkerHelper para agregar contenido HTML si es necesario
+                // Por ejemplo:
+                // XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, new StringReader(htmlString));
+
+                // Cerrar el documento
+                document.Close();
+
+                // Devolver los bytes del PDF
+                return ms.ToArray();
+            }
+        }
+
+
+
+
         public ActionResult RenderPdf(string id, string viewName)
         {
             var pedido = PedidoService.GetById(id);
@@ -1365,8 +1404,11 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 System.IO.File.Delete(fullPath);
             }
             System.IO.File.WriteAllBytes(fullPath, pdfOutput);
+
             return View(viewName);
         }
+
+
         public ActionResult Descargar(string cn_pedido)
         {
             RenderPdf(cn_pedido, "RenderPdfPedido");
@@ -1378,6 +1420,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             string filename = "Pedido Nro." + cn_pedido + ".pdf";
             return File(filedata, contentType, filename);
         }
+
+
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HttpPost]

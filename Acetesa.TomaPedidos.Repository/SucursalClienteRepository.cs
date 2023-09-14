@@ -6,6 +6,8 @@ using Acetesa.TomaPedidos.Entity;
 using Acetesa.TomaPedidos.IRepository;
 using Acetesa.TomaPedidos.Transversal;
 using System;
+using System.Configuration;
+using Acetesa.TomaPedidos.Domain;
 
 namespace Acetesa.TomaPedidos.Repository
 {
@@ -23,6 +25,36 @@ namespace Acetesa.TomaPedidos.Repository
             var query = _dbContext.Query<TSUCCLIE>().Where(x => x.cc_analis == ccAnalis.Trim());
             return query;
         }
+
+        public List<SucursalClienteModel> RecuperarSucursalPorClienteID(string cc_analis)
+        {
+            List<SucursalClienteModel> ListaSucursal = new List<SucursalClienteModel>();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[spRecuperarSucursalPorClienteID]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@cc_analis", cc_analis);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        SucursalClienteModel Sucursal = new SucursalClienteModel();
+                        Sucursal.cc_analis = reader["cc_analis"].ToString();
+                        Sucursal.cd_direc = reader["cd_direc"].ToString();
+                        Sucursal.cn_suc = reader["cn_suc"].ToString();
+
+                        ListaSucursal.Add(Sucursal);
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return ListaSucursal;
+        }
+
 
         public IQueryable<TSUCCLIE> GetByCcAnalisCnSuc(string ccAnalis, string cnSuc)
         {

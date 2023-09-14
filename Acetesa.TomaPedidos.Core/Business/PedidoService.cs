@@ -212,5 +212,14 @@ namespace Acetesa.TomaPedidos.Core.Business
             return _pedidoRepository.RegistrarNotaPedidoVenta(Pedido,PedidoAdicional,DetallePedido,correoVendedor);
         }
 
+        public string RecuperarNumeroPedidoByProformaID(string ProformaID)
+        {
+            return _pedidoRepository.RecuperarNumeroPedidoByProformaID(ProformaID);
+        }
+        public string AsignarNumeroProformaAPedido(string ProformaID, string PedidoID)
+        {
+            return _pedidoRepository.AsignarNumeroProformaAPedido(ProformaID, PedidoID);
+        }
+
     }
 }

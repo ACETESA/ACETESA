@@ -31,6 +31,7 @@
     var tienda = Model.Adicional.cd_tienda;
     var zonaLiberada = Model.Adicional.zonaLiberada;
     var mostrarIGV = zonaLiberada == 1 ? 0 : 1;
+    var ordenCompra = Model.Adicional.cn_ocompra;
 
     var fechaHora = DateTime.Now.AddMinutes(0).ToString("dd'/'MM'/'yyyy HH':'mm':'ss");
 
@@ -173,8 +174,8 @@
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Cn_lug) ? "" : pedidoAdicional.cd_direc))</td>
             @*<td>Teléfono</td>
-        <td>:</td>
-        <td style="border-bottom: 1px solid #000000;">@telefono</td>*@
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@telefono</td>*@
             <td>Fecha</td>
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;" colspan="3">@fecha</td>
@@ -186,6 +187,14 @@
             <td>Vendedor</td>
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;" colspan="3">@oVendedor.ct_nombreCompleto</td>
+        </tr>
+        <tr>
+            <td>Orden Compra</td>
+            <td>:</td>
+            <td style="border-bottom: 1px solid #000000;">@ordenCompra</td>
+            <td></td>
+            <td></td>
+            <td style="border-bottom: 1px solid #000000;" colspan="3"></td>
         </tr>
 
         @if (!string.IsNullOrWhiteSpace(pedidoAdicional.CC_transp))
@@ -222,11 +231,11 @@
         }
     </table>
 
-    <table style="margin-top: 20px; width:100%;">
+    <table style="margin-top: 20px; width:100%; table-layout: fixed;">
         <tr>
             <th style="text-align: center; width: 15px;">N°</th>
-            <th style="text-align: left">Código</th>
-            <th style="text-align: left">Descripción</th>
+            <th style="text-align: left; width:47px;">Código</th>
+            <th style="text-align: left; width:270px;">Descripción</th>
             <th style="text-align: left">UM</th>
             <th style="text-align: right">Cantidad</th>
             <th style="text-align: right">Peso</th>
@@ -241,7 +250,7 @@
             precioTON = (item.fm_precio_fin * 1000) / (item.fq_peso / item.fq_cantidad);
             <tr>
                 <td style="text-align: center">@Convert.ToInt16(item.cn_item)</td>
-                <td>@item.MARTICUL.cc_artic</td>
+                <td>@item.MARTICUL.cc_artic.Trim()</td>
                 <td>@item.MARTICUL.cd_artic</td>
                 <td>@item.MARTICUL.cc_unmed</td>
                 <td style="text-align: right">@item.fq_cantidad.ToString("N2")</td>
@@ -270,8 +279,8 @@
                         @totalSon
                     </td>
                     <td></td>
-                    <td></td>
-                    <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                    <td>Peso total:</td>
+                    <td style="text-align: right">@pesoTotal.ToString("N2")</td>
                     <td></td>
                     <td style="text-align: right">
                         TOTAL
@@ -288,8 +297,8 @@
                         @totalSon
                     </td>
                     <td></td>
-                    <td></td>
-                    <td style="text-align: right">Peso total: @pesoTotal.ToString("N2")</td>
+                    <td>Peso total:</td>
+                    <td style="text-align: right">@pesoTotal.ToString("N2")</td>
                     <td></td>
                     <td style="text-align: right">
                         Sub Total

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Acetesa.TomaPedidos.Entity;
 using System.Collections.Generic;
+using Acetesa.TomaPedidos.Domain;
 
 namespace Acetesa.TomaPedidos.IRepository
 {
@@ -11,5 +12,7 @@ namespace Acetesa.TomaPedidos.IRepository
 
         IEnumerable<TLUGCLIE> GetLugarEntregaByCcAnalis(string ccAnalis);
         IEnumerable<TTRASPORTE> GetTransporteByCcAnalis(string ccAnalis);
+        List<SucursalClienteModel> RecuperarSucursalPorClienteID(string cc_analis);
+
     }
 }

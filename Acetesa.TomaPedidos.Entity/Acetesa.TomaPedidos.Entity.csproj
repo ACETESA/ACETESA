@@ -79,8 +79,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SARTICXALMACEN.cs" />
     <Compile Include="TALMACEN.cs" />
+    <Compile Include="TCATCLIE.cs" />
     <Compile Include="TCONDVTA.cs" />
     <Compile Include="TCONTACLIE.cs" />
+    <Compile Include="TDOCUMENTOIDENTIDAD.cs" />
     <Compile Include="TESTADO.cs" />
     <Compile Include="TFAMIART.cs" />
     <Compile Include="TLISTAPREC.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="TTIENDA.cs" />
     <Compile Include="TTIPOARTIC.cs" />
     <Compile Include="TTRASPORTE.cs" />
+    <Compile Include="TZONA.cs" />
     <Compile Include="UBIGEO.cs" />
     <Compile Include="USUARIO.cs" />
   </ItemGroup>

@@ -10,5 +10,8 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
 
         IEnumerable<SucursalClienteModel> GetLugarEntregaByCcAnalis(string ccAnalis);
         IEnumerable<SucursalClienteModel> GetTransporteByCcAnalis(string ccAnalis);
+
+        List<SucursalClienteModel> RecuperarSucursalPorClienteID(string cc_analis);
+
     }
 }

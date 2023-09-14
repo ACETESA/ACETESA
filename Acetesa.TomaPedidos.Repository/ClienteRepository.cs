@@ -810,7 +810,7 @@ namespace Acetesa.TomaPedidos.Repository
             return diccionario;
         }
 
-        public List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor)
+        public List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor, string EsAsignado)
         {
             List<CarteraCliente> listaCartera = new List<CarteraCliente>();
             var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
@@ -819,6 +819,7 @@ namespace Acetesa.TomaPedidos.Repository
                 SqlCommand sqlCommand = new SqlCommand("spCarteraClientesAsignadosLibres", sqlConnection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@CorreoVendedor", correoVendedor);
+                sqlCommand.Parameters.AddWithValue("@EsAsignado", EsAsignado);
                 sqlCommand.CommandTimeout=0;
                 sqlConnection.Open();
 
@@ -835,12 +836,7 @@ namespace Acetesa.TomaPedidos.Repository
                         cc.Provincia = reader["Provincia"].ToString();
                         cc.Distrito = reader["Distrito"].ToString();
                         cc.Asignado = (reader["Asignado"].ToString().Equals("1") ? true : false);
-                        //cc.MontoLimiteCoberturado =  (decimal)reader["MontoLimiteCoberturado"];
-                        //cc.MontoLimiteDiscrecional = (decimal)reader["MontoLimiteDiscrecional"];
-                        //cc.MontoLimiteInterno = (decimal)reader["MontoLimiteInterno"];
                         cc.MontoTotalLimite = (decimal)reader["MontoTotalLimite"];
-                        //cc.FechaUltVenta = (string)reader["FechaUltVenta"];
-                        //cc.MontoDeuda = (decimal)reader["MontoDeuda"];
                         cc.Aseguradora = reader["Aseguradora"].ToString();
 
                         listaCartera.Add(cc);
@@ -990,6 +986,201 @@ namespace Acetesa.TomaPedidos.Repository
                 }
             }
             return listaClientes;
+        }
+
+        public List<TDOCUMENTOIDENTIDAD> SelectTipoDocumentoIdentidad()
+        {
+            List<TDOCUMENTOIDENTIDAD> listaTipoDocumento = new List<TDOCUMENTOIDENTIDAD>();
+
+            string query = "web.spSelectTipoDocumentoIdentidad";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaTipoDocumento.Add(
+                                new TDOCUMENTOIDENTIDAD
+                                {
+                                    TipoDocumentoID = reader["TipoDocumentoID"].ToString(),
+                                    TipoDocumento = reader["TipoDocumento"].ToString()
+                                }
+                                );
+                        }
+                    }
+                }
+            }
+            return listaTipoDocumento;
+        }
+
+        public List<UBIGEO> ListarPaises()
+        {
+            List<UBIGEO> listaPaises = new List<UBIGEO>();
+
+            string query = "[web].[spListaSelectPaises]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaPaises.Add(new UBIGEO
+                            {
+                                cc_pais = reader["paisID"].ToString(),
+                                cd_pais = reader["pais"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            return listaPaises;
+        }
+
+        public List<TZONA> ListarZonas(string cc_distrito, string cc_dpto, string cc_prov)
+        {
+            List<TZONA> listaZona = new List<TZONA>();
+
+            string query = "[web].[spListaSelectZonas]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc_distrito", cc_distrito);
+                    cmd.Parameters.AddWithValue("@cc_dpto", cc_dpto);
+                    cmd.Parameters.AddWithValue("@cc_prov", cc_prov);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaZona.Add(new TZONA
+                            {
+                                cc_zona = reader["cc_zona"].ToString(),
+                                cd_zona = reader["cd_zona"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            return listaZona;
+        }
+        public List<TCATCLIE> ListarCategorias()
+        {
+            List<TCATCLIE> listaCategoria = new List<TCATCLIE>();
+
+            string query = "[web].[spListaSelectCategoria]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaCategoria.Add(new TCATCLIE
+                            {
+                                cc_catclie = reader["cc_catclie"].ToString(),
+                                cd_catclie = reader["cd_catclie"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            return listaCategoria;
+        }
+
+        public List<Dictionary<string,string>> ListarEstadosCliente()
+        {
+            List<Dictionary<string, string>> listaCategoria = new List<Dictionary<string, string>>();
+
+            string query = "[web].[spListaSelectEstadoCliente]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            listaCategoria.Add(new Dictionary<string, string>
+                            {
+                                {"estadoID" , reader["estadoID"].ToString()},
+                                {"estado" , reader["estado"].ToString() }
+                            });
+                        }
+                    }
+                }
+            }
+            return listaCategoria;
+        }
+
+        public Dictionary<string,string> RegistrarCliente(MCLIENTE cliente)
+        {
+            Dictionary<string, string> respuesta = new Dictionary<string, string>();
+
+            string query = "[web].[spRegistrarNuevoCliente]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc_analis", cliente.cc_analis);
+                    cmd.Parameters.AddWithValue("@cc_pais", cliente.cc_pais);
+                    cmd.Parameters.AddWithValue("@cc_dpto", cliente.cc_dpto);
+                    cmd.Parameters.AddWithValue("@cc_prov", cliente.cc_prov);
+                    cmd.Parameters.AddWithValue("@cc_sector", cliente.cc_sector);
+                    cmd.Parameters.AddWithValue("@cc_catclie", cliente.cc_catclie);
+                    cmd.Parameters.AddWithValue("@cc_distrito", cliente.cc_distrito);
+                    cmd.Parameters.AddWithValue("@cd_razsoc", cliente.cd_razsoc);
+                    cmd.Parameters.AddWithValue("@cc_zona", cliente.cc_zona);
+                    cmd.Parameters.AddWithValue("@cb_proced", cliente.cb_proced);
+                    cmd.Parameters.AddWithValue("@cd_direc", cliente.cd_direc);
+                    cmd.Parameters.AddWithValue("@ct_giro", cliente.ct_giro);
+                    cmd.Parameters.AddWithValue("@dt_constit", cliente.dt_constit);
+                    cmd.Parameters.AddWithValue("@cb_monfac", cliente.cb_monfac);
+                    cmd.Parameters.AddWithValue("@cb_sucursal", cliente.cb_sucursal);
+                    cmd.Parameters.AddWithValue("@cb_sector", cliente.cb_sector);
+                    cmd.Parameters.AddWithValue("@cb_activo", cliente.cb_activo);
+                    cmd.Parameters.AddWithValue("@cd_nomcom", cliente.cd_nomcom);
+                    cmd.Parameters.AddWithValue("@cd_appaterno", cliente.cd_appaterno);
+                    cmd.Parameters.AddWithValue("@cd_apmaterno", cliente.cd_apmaterno);
+                    cmd.Parameters.AddWithValue("@cd_nombre1", cliente.cd_nombre1);
+                    cmd.Parameters.AddWithValue("@cd_nombre2", cliente.cd_nombre2);
+                    cmd.Parameters.AddWithValue("@c_fl_agente_percepcion", cliente.c_fl_agente_percepcion);
+                    cmd.Parameters.AddWithValue("@c_cod_documento_identidad", cliente.c_cod_documento_identidad);
+                    cmd.Parameters.AddWithValue("@c_fl_vinculacion", cliente.c_fl_vinculacion);
+                    cmd.Parameters.AddWithValue("@Corporativo", cliente.Corporativo);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        while (reader.Read())
+                        {
+                            respuesta.Add("mensajeID", reader["mensajeID"].ToString());
+                            respuesta.Add("mensaje", reader["mensaje"].ToString());
+                        }
+                    }
+                }
+            }
+            return respuesta;
         }
 
     }

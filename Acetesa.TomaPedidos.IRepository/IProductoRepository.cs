@@ -27,6 +27,10 @@ namespace Acetesa.TomaPedidos.IRepository
         List<Tlistaprec> ListarPreciosArticulosPorEmpresa(string empresa);
         List<PrecioModel> ListarPreciosArticulosPorGrupoEmpresa(string codListaPrecio, string codFamilia, string codSubFamilia, int Stocks, string empresa);
 
+        MARTICUL RecuperarArticuloPorID(string ArticuloID);
+
+        MARTICUL RecuperarDatosArticuloByID(string ArticuloID);
+
 
     }
 }

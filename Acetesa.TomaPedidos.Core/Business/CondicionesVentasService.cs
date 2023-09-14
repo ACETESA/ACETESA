@@ -25,5 +25,9 @@ namespace Acetesa.TomaPedidos.Core.Business
             var query = _condicionesVentasRepository.GetAll(ccAnalis);
             return query;
         }
+        public List<CondicionVentaModel> RecuperarCondicionVentaPorClienteID(string cc_analis)
+        {
+            return _condicionesVentasRepository.RecuperarCondicionVentaPorClienteID(cc_analis);
+        }
     }
 }

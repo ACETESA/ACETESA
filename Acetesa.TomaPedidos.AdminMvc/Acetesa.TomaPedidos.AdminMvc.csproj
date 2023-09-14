@@ -464,6 +464,7 @@
     <None Include="Properties\PublishProfiles\AcetesaQA Local.pubxml" />
     <None Include="Properties\PublishProfiles\Carpeta Local.pubxml" />
     <None Include="Properties\PublishProfiles\Server AD - Acetesa TomaPedidos.pubxml" />
+    <Content Include="Scripts\app\ClienteGestionScript.js" />
     <Content Include="Scripts\app\PlanificacionVisitasCancelScript.js" />
     <Content Include="Scripts\app\PlanificacionVisitasMainScript.js" />
     <Content Include="Scripts\app\PlanificacionVisitasNewScript.js" />
@@ -849,6 +850,7 @@
     <Content Include="Views\Vendedor\ActualizarDatos.cshtml" />
     <Content Include="Views\EstadoCuenta\EstadoCuentaPorCliente.cshtml" />
     <Content Include="Views\Shared\_PartialEstadoCuentaInformacion.cshtml" />
+    <Content Include="Views\Shared\_PartialClienteEditar.cshtml" />
     <None Include="Web.Qa.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

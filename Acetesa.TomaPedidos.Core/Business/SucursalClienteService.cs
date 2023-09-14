@@ -30,6 +30,11 @@ namespace Acetesa.TomaPedidos.Core.Business
             return query;
         }
 
+        public List<SucursalClienteModel> RecuperarSucursalPorClienteID(string cc_analis)
+        {
+            return _sucursalClienteRepository.RecuperarSucursalPorClienteID(cc_analis);
+        }
+
         public IEnumerable<SucursalClienteModel> GetByCcAnalisCnSuc(string ccAnalis, string cnSuc)
         {
             var query = _sucursalClienteRepository

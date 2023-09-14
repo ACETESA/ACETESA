@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Transactions;
 using Acetesa.TomaPedidos.Domain;
 using Acetesa.TomaPedidos.Entity;
 using Acetesa.TomaPedidos.IRepository;
@@ -683,5 +684,159 @@ namespace Acetesa.TomaPedidos.Repository
                 return query;
             }
         }
+
+
+
+        public MARTICUL RecuperarArticuloPorID(string ArticuloID)
+        {
+            MARTICUL Articulo = new MARTICUL();
+
+            string query = "[web].[spRecuperarArticuloByID]";
+            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connect))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cc_artic", ArticuloID);
+                    conn.Open();
+                    //CommandBehavior.CloseConnection
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Articulo.cc_gruart = reader["cc_gruart"].ToString();
+                            Articulo.cc_artic = reader["cc_artic"].ToString();
+                            Articulo.cc_famiart = reader["cc_famiart"].ToString();
+                            Articulo.cc_marca = reader["cc_marca"].ToString();
+                            Articulo.cc_gruartec = reader["cc_gruartec"].ToString();
+                            Articulo.cc_subgruart = reader["cc_subgruart"].ToString();
+                            Articulo.cc_modelo = reader["cc_modelo"].ToString();
+                            Articulo.cd_artic = reader["cd_artic"].ToString();
+                            Articulo.cn_parara = reader["cn_parara"].ToString();
+                            Articulo.cd_artictc = reader["cd_artictc"].ToString();
+                            Articulo.cc_unmed = reader["cc_unmed"].ToString();
+                            Articulo.df_ultcom = DateTime.Parse(reader["df_ultcom"].ToString());
+                            Articulo.fm_ultcom = double.Parse(reader["fm_ultcom"].ToString());
+                            Articulo.df_ultven = DateTime.Parse(reader["df_ultven"].ToString());
+                            Articulo.fm_ultven = double.Parse(reader["fm_ultven"].ToString());
+                            Articulo.cb_undalt = reader["cb_undalt"].ToString();
+                            Articulo.cb_activo = reader["cb_activo"].ToString();
+                            Articulo.cb_stocks = reader["cb_stocks"].ToString();
+                            Articulo.fq_smin = double.Parse(reader["fq_smin"].ToString());
+                            Articulo.fq_smax = double.Parse(reader["fq_smax"].ToString());
+                            Articulo.fq_nivrepos = double.Parse(reader["fq_nivrepos"].ToString());
+                            Articulo.cb_standard = reader["cb_standard"].ToString();
+                            Articulo.ci_consig = reader["ci_consig"].ToString();
+                            Articulo.cb_nacional = reader["cb_nacional"].ToString();
+                            Articulo.cb_critico = reader["cb_critico"].ToString();
+                            Articulo.cb_obsleto = reader["cb_obsleto"].ToString();
+                            Articulo.cc_barras = reader["cc_barras"].ToString();
+                            Articulo.fm_precprom = double.Parse(reader["fm_precprom"].ToString());
+                            Articulo.ct_graf = reader["ct_graf"].ToString();
+                            Articulo.fm_ulco_d = double.Parse(reader["fm_ulco_d"].ToString());
+                            Articulo.fm_ulve_d = double.Parse(reader["fm_ulve_d"].ToString());
+                            Articulo.fm_precprom_d = double.Parse(reader["fm_precprom_d"].ToString());
+                            Articulo.ci_abc = reader["ci_abc"].ToString();
+                            Articulo.cb_catart = reader["cb_catart"].ToString();
+                            Articulo.fm_ultpu = double.Parse(reader["fm_ultpu"].ToString());
+                            Articulo.fm_ultpu_d = double.Parse(reader["fm_ultpu_d"].ToString());
+                            Articulo.fd_stock_cero = DateTime.Parse(reader["fd_stock_cero"].ToString());
+                            Articulo.fm_consumo = double.Parse(reader["fm_consumo"].ToString());
+                            Articulo.fq_sinicial = double.Parse(reader["fq_sinicial"].ToString());
+                            Articulo.cb_estado = reader["cb_estado"].ToString();
+                            Articulo.cb_rotacion = reader["cb_rotacion"].ToString();
+                            Articulo.cn_partnumber = reader["cn_partnumber"].ToString();
+                            Articulo.cb_uso = reader["cb_uso"].ToString();
+                            Articulo.cn_item = reader["cn_item"].ToString();
+                            Articulo.fq_embalaje = double.Parse(reader["fq_embalaje"].ToString());
+                            Articulo.cc_catalogo = reader["cc_catalogo"].ToString();
+                            Articulo.cc_tipoartic = reader["cc_tipoartic"].ToString();
+                            Articulo.fq_espesor = double.Parse(reader["fq_espesor"].ToString());
+                            Articulo.fq_ancho = double.Parse(reader["fq_ancho"].ToString());
+                            Articulo.fq_largo = double.Parse(reader["fq_largo"].ToString());
+                            Articulo.cc_costeo = reader["cc_costeo"].ToString();
+                            Articulo.cb_eval_precio = reader["cb_eval_precio"].ToString();
+                            Articulo.cc_tipArt = reader["cc_tipArt"].ToString();
+                            Articulo.cc_costo_kardexpaqbobi = reader["cc_costo_kardexpaqbobi"].ToString();
+                            Articulo.df_creacion = DateTime.Parse(reader["df_creacion"].ToString());
+                            Articulo.fq_sku = double.Parse(reader["fq_sku"].ToString());
+                            Articulo.cc_articant = reader["cc_articant"].ToString();
+                            Articulo.cc_color = reader["cc_color"].ToString();
+                            Articulo.cb_peso_pt = reader["cb_peso_pt"].ToString();
+                            Articulo.cb_mprima = reader["cb_mprima"].ToString();
+                            Articulo.cc_simbolo = reader["cc_simbolo"].ToString();
+                            Articulo.cc_costeo_pocl = reader["cc_costeo_pocl"].ToString();
+                            Articulo.cc_codpeso = reader["cc_codpeso"].ToString();
+                            Articulo.cc_gruartecduf = reader["cc_gruartecduf"].ToString();
+                            Articulo.cc_subgruartduf = reader["cc_subgruartduf"].ToString();
+                            Articulo.c_fl_afecto_percepcion = reader["c_fl_afecto_percepcion"].ToString();
+                            Articulo.fq_peso_teorico = double.Parse(reader["fq_peso_teorico"].ToString());
+
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            return Articulo;
+        }
+
+        //public MARTICUL RecuperarArticuloPorID(string ArticuloID)
+        //{
+        //    MARTICUL Articulo = new MARTICUL();
+
+        //    // Assuming you have access to a shared IDbContext
+        //    using (var scope = new TransactionScope(TransactionScopeOption.Required))
+        //    {
+        //        try
+        //        {
+        //            // Your transactional code here
+
+        //            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+        //            {
+        //                using (SqlCommand cmd = new SqlCommand("[web].[spRecuperarArticuloByID]", conn))
+        //                {
+        //                    // ... your data retrieval code here ...
+        //                }
+        //            }
+
+        //            // Commit the transaction
+        //            scope.Complete();
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //        }
+        //    }
+
+        //    return Articulo;
+        //}
+
+
+
+        public MARTICUL RecuperarDatosArticuloByID(string ArticuloID)
+        {
+            MARTICUL Articulo = new MARTICUL();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("web.spRecuperarDatosArticuloByID", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@ArticuloID", ArticuloID);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        Articulo.fq_peso_teorico = double.Parse(reader["fq_peso_teorico"].ToString());
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return Articulo;
+        }
+
     }
 }

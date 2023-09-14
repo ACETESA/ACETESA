@@ -128,9 +128,9 @@ namespace Acetesa.TomaPedidos.Core.Business
         {
             return _clienteRepository.ValidarExistenciaClientePorRUC(cc_analis);
         }
-        public List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor)
+        public List<CarteraCliente> ClientesAsignadosLibres(string correoVendedor, string EsAsignado)
         {
-            return _clienteRepository.ClientesAsignadosLibres(correoVendedor);
+            return _clienteRepository.ClientesAsignadosLibres(correoVendedor, EsAsignado);
         }
 
         public List<CarteraCliente> CarteraClientesAsignados(string correoVendedor, string departamentoId, string provinciaId, string distritoId)
@@ -156,6 +156,30 @@ namespace Acetesa.TomaPedidos.Core.Business
         public List<ClienteModel> SelectClientesSegunCarteraVendedorYLibres(string correoVendedor)
         {
             return _clienteRepository.SelectClientesSegunCarteraVendedorYLibres(correoVendedor);
+        }
+        public List<TDOCUMENTOIDENTIDAD> SelectTipoDocumentoIdentidad()
+        {
+            return _clienteRepository.SelectTipoDocumentoIdentidad();
+        }
+        public List<UBIGEO> ListarPaises()
+        {
+            return _clienteRepository.ListarPaises();
+        }
+        public List<TZONA> ListarZonas(string cc_distrito, string cc_dpto, string cc_prov)
+        {
+            return _clienteRepository.ListarZonas(cc_distrito,cc_dpto,cc_prov);
+        }
+        public List<TCATCLIE> ListarCategorias()
+        {
+            return _clienteRepository.ListarCategorias();
+        }
+        public List<Dictionary<string, string>> ListarEstadosCliente()
+        {
+            return _clienteRepository.ListarEstadosCliente();
+        }
+        public Dictionary<string, string> RegistrarCliente(MCLIENTE cliente)
+        {
+            return _clienteRepository.RegistrarCliente(cliente);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Acetesa.TomaPedidos.Domain;
@@ -44,5 +45,34 @@ namespace Acetesa.TomaPedidos.Repository
             var query = _dbContext.GetExecSpEnumerable<CondicionVentaModel>("sp_ventas_cliente_acondvta", sqlParams);
             return query;
         }
+
+
+        public List<CondicionVentaModel> RecuperarCondicionVentaPorClienteID(string cc_analis)
+        {
+            List<CondicionVentaModel> ListaCondicion = new List<CondicionVentaModel>();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[spRecuperarCondicionVentaPorClienteID]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@cc_analis", cc_analis);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        CondicionVentaModel Condicion = new CondicionVentaModel();
+                        Condicion.cc_vta = reader["cc_vta"].ToString();
+                        Condicion.cd_vta = reader["cd_vta"].ToString();
+                        ListaCondicion.Add(Condicion);
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return ListaCondicion;
+        }
+
     }
 }
