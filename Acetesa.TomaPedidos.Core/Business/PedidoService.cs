@@ -33,7 +33,7 @@ namespace Acetesa.TomaPedidos.Core.Business
         }
 
         public IEnumerable<PedidoListadoModel> GetPedidosByClienteFecInicioFecFinal(
-            string cliente, DateTime fechaInicio, DateTime fechaFinal,string estado)
+            string cliente, DateTime fechaInicio, DateTime fechaFinal, string estado)
         {
             var query = _pedidoRepository.GetPedidosByClienteFecInicioFecFinal(cliente, fechaInicio, fechaFinal, estado);
             return query;
@@ -78,18 +78,20 @@ namespace Acetesa.TomaPedidos.Core.Business
 
         public void Guardar(LCPEDIDO_WEB entity, int igv_bo, string empresa, int zonaLiberada)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required))
-            {
+            //using (var scope = new TransactionScope(TransactionScopeOption.Required))
+            //{
                 var cnPedido = entity.cn_pedido;
                 DateTime? dFechaProceso = null;
                 string cbEstado = null;
                 if (string.IsNullOrEmpty(cnPedido) || string.IsNullOrWhiteSpace(cnPedido))
                 {
-                    cnPedido = GetLastId();
+                    LCPEDIDO_WEB Pedido = _pedidoRepository.GetLastPedido();//GetLastId();
+                    cnPedido = Pedido.cn_pedido;
                 }
                 else
                 {
-                    var entityExiste = _pedidoRepository.GetById(cnPedido);
+                    //var entityExiste = _pedidoRepository.GetById(cnPedido);
+                    var entityExiste = _pedidoRepository.RecuperarDatosPedidoByID(cnPedido);
                     dFechaProceso = entityExiste.df_proceso;
                     cbEstado = entityExiste.cb_estado;
                 }
@@ -138,7 +140,6 @@ namespace Acetesa.TomaPedidos.Core.Business
                 }
 
 
-
                 entity.fm_valvta = SubTotVta;
                 entity.fm_igv = IgvVta;
                 entity.fm_totvta = TotVta;
@@ -149,27 +150,34 @@ namespace Acetesa.TomaPedidos.Core.Business
 
                 if (!string.IsNullOrEmpty(cnPedido) && !string.IsNullOrWhiteSpace(cnPedido))
                 {
-                    DeleteMasterAndDetail(entity);
+                    //DeleteMasterAndDetail(entity);
+                    _pedidoRepository.EliminarPedidoByID(cnPedido);
                 }
 
-                _pedidoRepository.Add(entity);
+                //_pedidoRepository.Add(entity);
+                _pedidoRepository.GuardarCabeceraPedido(entity);
 
                 foreach (var item in PedidoDetalleServices)
                 {
                     item.cn_pedido = cnPedido;
                     item.fm_total = Math.Round(item.fm_total, 2);
-                    var articuloModel = _productoRepository.GetById(item.cc_artic);
+
+                    //var articuloModel = _productoRepository.GetById(item.cc_artic);
+
+                    MARTICUL articuloModel = new MARTICUL();
+                    articuloModel = _productoRepository.RecuperarDatosArticuloByID(item.cc_artic);
+
                     item.fq_peso = (decimal)(articuloModel.fq_peso_teorico * (double)item.fq_cantidad ?? 0);
                     item.fq_peso = Math.Round(item.fq_peso, 2);
 
-
-                    _pedidoDetalleRepository.Add(item);
+                    //_pedidoDetalleRepository.Add(item);
+                    _pedidoRepository.GuardarDetallePedido(item);
                 }
 
-                _dbContext.Commit();
+            //    _dbContext.Commit();
 
-                scope.Complete();
-            }
+            //    scope.Complete();
+            //}
         }
         public void DeleteMasterAndDetail(LCPEDIDO_WEB master)
         {
@@ -198,18 +206,18 @@ namespace Acetesa.TomaPedidos.Core.Business
             {
                 cn_ocompra = "";
             }
-            _pedidoRepository.GuardarAdicional(entityMaster, email, Lugar, Transporte, Observacion, contacto, IdContactoEntregaDirecta, Tienda, FechaEntrega, IncluyeIGV, cn_ocompra,zonaLiberada);
+            _pedidoRepository.GuardarAdicional(entityMaster, email, Lugar, Transporte, Observacion, contacto, IdContactoEntregaDirecta, Tienda, FechaEntrega, IncluyeIGV, cn_ocompra, zonaLiberada);
         }
         public Dictionary<string, string> RegistrarDocumentoOCPorPedido(string idPedido, string usuarioRegistro, byte[] documento)
         {
-            return _pedidoRepository.RegistrarDocumentoOCPorPedido(idPedido,usuarioRegistro,documento);
+            return _pedidoRepository.RegistrarDocumentoOCPorPedido(idPedido, usuarioRegistro, documento);
         }
         public Dictionary<string, string> ValidaCreditoSobregiroPorPedido(string ruc, decimal total, string moneda)
         {
-            return _pedidoRepository.ValidaCreditoSobregiroPorPedido(ruc,total,moneda);
+            return _pedidoRepository.ValidaCreditoSobregiroPorPedido(ruc, total, moneda);
         }
-        public Dictionary<string, string> RegistrarNotaPedidoVenta(LCPEDIDO_WEB Pedido, LCPEDIDOADICIONAL_WEB PedidoAdicional, string DetallePedido, string correoVendedor)        {
-            return _pedidoRepository.RegistrarNotaPedidoVenta(Pedido,PedidoAdicional,DetallePedido,correoVendedor);
+        public Dictionary<string, string> RegistrarNotaPedidoVenta(LCPEDIDO_WEB Pedido, LCPEDIDOADICIONAL_WEB PedidoAdicional, string DetallePedido, string correoVendedor) {
+            return _pedidoRepository.RegistrarNotaPedidoVenta(Pedido, PedidoAdicional, DetallePedido, correoVendedor);
         }
 
         public string RecuperarNumeroPedidoByProformaID(string ProformaID)
@@ -221,5 +229,31 @@ namespace Acetesa.TomaPedidos.Core.Business
             return _pedidoRepository.AsignarNumeroProformaAPedido(ProformaID, PedidoID);
         }
 
+        public LCPEDIDO_WEB GetLastPedido()
+        {
+            return _pedidoRepository.GetLastPedido();
+        }
+        public LCPEDIDO_WEB RecuperarDatosPedidoByID(string PedidoID)
+        {
+            return _pedidoRepository.RecuperarDatosPedidoByID(PedidoID);
+        }
+        public void EliminarPedidoByID(string PedidoID)
+        {
+            _pedidoRepository.EliminarPedidoByID(PedidoID);
+        }
+
+        public void GuardarCabeceraPedido(LCPEDIDO_WEB Pedido)
+        {
+            _pedidoRepository.GuardarCabeceraPedido(Pedido);
+        }
+
+        public void GuardarDetallePedido(LDPEDIDO_WEB DetallePedido)
+        {
+            _pedidoRepository.GuardarDetallePedido(DetallePedido);
+        }
+        public void RegistrarDocumentoPedido(string PedidoID, byte[] Documento)
+        {
+            _pedidoRepository.RegistrarDocumentoPedido(PedidoID,Documento);
+        }
     }
 }

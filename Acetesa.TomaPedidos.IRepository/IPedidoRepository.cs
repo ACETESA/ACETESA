@@ -23,6 +23,13 @@ namespace Acetesa.TomaPedidos.IRepository
         Dictionary<string, string> RegistrarNotaPedidoVenta(LCPEDIDO_WEB Pedido, LCPEDIDOADICIONAL_WEB PedidoAdicional, string DetallePedido, string correoVendedor);
         string RecuperarNumeroPedidoByProformaID(string ProformaID);
         string AsignarNumeroProformaAPedido(string ProformaID, string PedidoID);
+        LCPEDIDO_WEB GetLastPedido();
+        LCPEDIDO_WEB RecuperarDatosPedidoByID(string PedidoID);
+        void EliminarPedidoByID(string PedidoID);
+        void GuardarCabeceraPedido(LCPEDIDO_WEB Pedido);
+        void GuardarDetallePedido(LDPEDIDO_WEB DetallePedido);
+        void RegistrarDocumentoPedido(string PedidoID, byte[] Documento);
+
 
     }
 }

@@ -74,9 +74,9 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             {
                 var fechaInicio = (model.FechaInicio + " 00:00:00").ConvertDateTime();
                 var fechaFinal = (model.FechaFinal + " 23:59:59").ConvertDateTime();
-                var estadoTodos = "0";//((int)EstadoCotizacionTypes.Por_Enviar).ToString();
+                var estadoTodos = "0";
                 var result = CotizacionService.GetCotizacionesByClienteFecInicioFecFinal(model.Cliente, fechaInicio, fechaFinal, User.Identity.Name, estadoTodos);
-                //model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                
                 model.CotizacionModels = result;
             }
             catch (Exception ex)
@@ -177,9 +177,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var estadoPorEnviar = ((int)model.Estado).ToString();
 
                 var result = CotizacionService.GetCotizacionesByClienteFecInicioFecFinal(model.Cliente, fechaInicio, fechaFinal, User.Identity.Name, estadoPorEnviar);
-                //model.PagedListListaEntity = result.ToPagedList(pageNumber, PageSize);
+                
                 model.CotizacionModels = result;
-                //var model = result;//.ToPagedList(pageNumber, PageSize);
             }
             catch (Exception ex)
             {
@@ -346,12 +345,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             }
             var dFechaEmision = (vm.FechaEmision).ConvertDateTime();
             vm.n_i_val_venta = TipoCambioDiarioService.GetByFechaTipoCambio(dFechaEmision);
-
-            //if (vm.n_i_val_venta == 0.00)
-            //{
-            //    TempData["message"] = "No hay T.C registrado. No se pueden generar cotizaciones.";
-            //    return RedirectToAction("Listado", "Cotizacion");
-            //}
 
             return View(vm);
         }
@@ -807,8 +800,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 
                 var estadoRechazado = ((int)EstadoCotizacionTypes.Rechazado).ToString();
                 CotizacionService.UpdateEstado(id, estadoRechazado);
-                //CotizacionService.AnularRestablecerProforma(id);
-
+                
                 if (!Request.IsAjaxRequest()) return View(id);
                 const string success = "Cambio de estado a rechazado.";
                 return JsonSuccess(new { estado = success, id });
@@ -859,7 +851,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 string mensaje = CotizacionService.AnularRestablecerProforma(id);
 
                 if (!Request.IsAjaxRequest()) return View(id);
-                string success = mensaje; //const
+                string success = mensaje; 
                 return JsonSuccess(new { estado = success, id });
             }
             catch (DbEntityValidationException e)
@@ -935,11 +927,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             }
 
             var sb = new StringBuilder();
-            //sb.AppendLine(model.Mensaje);
             try
             {
-                //ClienteService.UpdateEmailByCodigo(idCliente, model.Para);
-
                 //Actualizamos el ct_email de TCONTACLIE
                 ClienteService.ActualizarMailContacto(tipoMail, id, model.Para);
 
@@ -963,7 +952,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 var credentials = VendedorService.ObtenerCredencialesCorreoVendedor(User.Identity.Name);
 
                 Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, vendedor.ct_nombreCompleto, model.Asunto, sb, model.Para, null, pdfPath,esHtml:true);//Cliente
-                //Mail.SendMail(sRemitente, "Vendedor: " + vendedor.ct_nombreCompleto, model.Asunto, sb, Remite, null, pdfPath,esHtml:true);//BackOffice
+                
                 if (!string.IsNullOrEmpty(model.ConCopia))
                 {
                     Mail.SendMail(credentials.correo, credentials.clave, credentials.llave, sRemitente, Label, model.Asunto, sb, model.ConCopia, null, pdfPath, esHtml: true);//Vendedor
@@ -980,52 +969,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 
 
 
-        public byte[] RenderPdfToBytes(string id, string viewName)
-        {
-
-            var cotizacion = CotizacionService.GetById(id);
-            var cotizacionAdicional = CotizacionService.GetAdicionalById(id);
-            var cotizacionClienteVm = new CotizacionClienteViewModel
-            {
-                Cotizacion = cotizacion,
-                Adicional = cotizacionAdicional
-            };
-
-            var pdfOutput = ControllerContext.GeneratePdf(cotizacionClienteVm, "RenderPdfCotizacion");
-
-
-
-            //var cotizacion = CotizacionService.GetById(id);
-            //var cotizacionAdicional = CotizacionService.GetAdicionalById(id);
-            //var cotizacionClienteVm = new CotizacionClienteViewModel
-            //{
-            //    Cotizacion = cotizacion,
-            //    Adicional = cotizacionAdicional
-            //};
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                Document document = new Document();
-                PdfWriter writer = PdfWriter.GetInstance(document, ms);
-                document.Open();
-
-                // Obtén el contenido HTML de la vista RenderPdfCotizacion
-                string htmlContent = RenderViewToString(viewName, cotizacionClienteVm);
-
-                // Puedes utilizar HTMLWorker para parsear el contenido HTML y agregarlo al documento
-                HTMLWorker htmlWorker = new HTMLWorker(document);
-                StringReader sr = new StringReader(htmlContent);
-                htmlWorker.Parse(sr);
-
-                // Cerrar el documento
-                document.Close();
-
-                // Devolver los bytes del PDF
-                return ms.ToArray();
-            }
-        }
-
-
         public string RenderViewToString(string viewName, object model)
         {
             ViewData.Model = model;
@@ -1038,9 +981,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 return sw.ToString();
             }
         }
-
-
-
 
 
         public ActionResult RenderPdf(string id, string viewName)
@@ -1187,7 +1127,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 }
 
                 var lista = ArticuloService
-                .GetByNombreOrCodigoYGrupo(grupo, subGrupo, /*param,*/ cc_tienda)
+                .GetByNombreOrCodigoYGrupo(grupo, subGrupo, cc_tienda)
                 .Select(x => new SelectListItem
                 {
                     Text = x.cd_artic,
@@ -1391,15 +1331,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         }
         private SelectList GetClientes(string ccAnalis = null)
         {
-            //IList<ClienteModel> listaModel = new List<ClienteModel>();
-            //if (!string.IsNullOrEmpty(ccAnalis))
-            //{
-            //    var clienteSelect = ClienteService.GetByCodigo(ccAnalis);
-            //    listaModel.Add(clienteSelect);
-            //}
-            //var selectList = listaModel.ToSelectList(x => x.cd_razsoc.Trim(), x => x.cc_analis,
-            //         FindTypes.Ninguno.ToString());
-            //return NewSelectList(selectList);
 
             IList<ClienteModel> listaModel = new List<ClienteModel>();
             listaModel = ClienteService.SelectClientesSegunCarteraVendedorYLibres(User.Identity.Name);
@@ -1425,12 +1356,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         {
             var lista = new List<SelectListItem>
                 {
-                    //new SelectListItem
-                    //{
-                    //    Text = FindTypes.Ninguno.ToString(),
-                    //    Value = FindTypes.Ninguno.ToString(),
-                    //    Selected = true
-                    //},
                     new SelectListItem{
                         Text = "Todos",
                         Value = "0",
@@ -1450,25 +1375,11 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         Text = EstadoCotizacionTypes.Compra_Parcial.ToString().Replace("_"," "),
                         Value = EstadoCotizacionTypes.Compra_Parcial.ToString(),
                     },
-
                     new SelectListItem
                     {
                         Text = "Compras Cerradas",
                         Value = "9",
                     },
-
-                    //new SelectListItem
-                    //{
-                    //    Text = EstadoCotizacionTypes.Compra_Parcial_Cerrada.ToString().Replace("_"," "),
-                    //    Value = EstadoCotizacionTypes.Compra_Parcial_Cerrada.ToString(),
-                    //},
-                    //new SelectListItem
-                    //{
-                    //    Text = EstadoCotizacionTypes.Compra_Total_Cerrada.ToString().Replace("_"," "),
-                    //    Value = EstadoCotizacionTypes.Compra_Total_Cerrada.ToString(),
-                    //},
-
-
                     new SelectListItem
                     {
                         Text = EstadoCotizacionTypes.Rechazado.ToString(),
@@ -1488,8 +1399,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             {
                 ccAnalis = "";
             }
-            //var lista = CondicionesVentasService.GetAll(ccAnalis).ToSelectList(x => x.cd_vta.Trim(), x => x.cc_vta,
-            //        FindTypes.Ninguno.ToString());
             var lista = CondicionesVentasService.RecuperarCondicionVentaPorClienteID(ccAnalis).ToSelectList(x => x.cd_vta.Trim(), x => x.cc_vta,
                     FindTypes.Ninguno.ToString());
             return NewSelectList(lista);
@@ -1555,7 +1464,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         }
         private SelectList GetArticulos()
         {
-            var lista = //ArticuloService.GetAllCodDes()
+            var lista =
                 (new List<ArticuloModel>())
                 .ToSelectList(x => x.cd_artic.Trim(), x => x.cc_artic,
                     FindTypes.Ninguno.ToString());
@@ -1563,8 +1472,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         }
         private SelectList GetGrupo()
         {
-            //var lista = ProductoService.GetFamiliasSp().ToSelectList(x => x.cd_gruart, x => x.cc_gruartec,
-            //        FindTypes.Ninguno.ToString());
             string empresa = "";
             var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
             if (sqlDB.InitialCatalog == "ZICO_ERP01")
@@ -1583,14 +1490,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         }
         private SelectList GetSubGrupo(string codSubGrupo = null)
         {
-            //if (string.IsNullOrEmpty(codSubGrupo))
-            //{
-            //    return NewSelectList(null);
-            //}
-            //var lista = ProductoService.GetSubFamiliasByCodFamiliaSp(codSubGrupo)
-            //    .ToSelectList(x => x.cd_subgruart, x => x.cc_subgruart,
-            //        FindTypes.Ninguno.ToString());
-            //return NewSelectList(lista);
             string empresa = "";
             var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
             if (sqlDB.InitialCatalog == "ZICO_ERP01")
@@ -1809,10 +1708,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     }
                     return View();
                 }
-                //Peso Unit. x 1000 = Peso TM
-                //var pesoTeorico = model.CotizacionDetailViewModel.fq_peso_teorico;
-                //model.CotizacionDetailViewModel.fq_peso_teorico = pesoTeorico * 1000;
-                //
 
                 //Valida que la cantidad sea mayor a 0
                 if (model.CotizacionDetailViewModel.fq_cantidad <= (decimal)0.00)
@@ -2045,43 +1940,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             var lista = TiendaRepository.getTiendas().ToSelectList(x => x.descri.Trim(), x => x.codigo);
             return NewSelectList(lista);
         }
-        //public ActionResult TiendaSegunVendedor()
-        //{
-        //    var lista = TiendaService.GetTiendaSegunVendedor(User.Identity.Name);
-        //    return JsonSuccess(lista);
-        //}
-        //private SelectList GetIgv()
-        //{
-        //    var listaVacia = new List<SelectListItem>();
-        //    var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
-        //    ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-        //    if (sqlDB.InitialCatalog == "ZICO_ERP04")
-        //    {
-        //        listaVacia = new List<SelectListItem> {
-        //            new SelectListItem
-        //            {
-        //                Text = "Sin IGV",
-        //                Value = "0",
-        //            }
-        //        };
-        //    }
-        //    else
-        //    {
-        //        listaVacia = new List<SelectListItem> {
-        //            new SelectListItem {
-        //                Text = "Sin IGV",
-        //                Value = "0",
-        //            },
-        //            new SelectListItem {
-        //                Text = "Con IGV",
-        //                Value = "1"
-        //            }
-        //        };
-        //    }
-
-
-        //    return NewSelectList(listaVacia);
-        //}
 
 
         private SelectList GetIgv()
@@ -2089,18 +1947,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             var listaVacia = new List<SelectListItem>();
             var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
             ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-            //if (sqlDB.InitialCatalog == "ZICO_ERP04")
-            //{
-            //    listaVacia = new List<SelectListItem> {
-            //        new SelectListItem
-            //        {
-            //            Text = "Sin IGV",
-            //            Value = "0",
-            //        }
-            //    };
-            //}
-            //else
-            //{
+
             listaVacia = new List<SelectListItem> {
                     new SelectListItem {
                         Text = "Con IGV",
@@ -2112,8 +1959,6 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     }
 
                 };
-            //}
-
 
             return NewSelectList(listaVacia);
         }

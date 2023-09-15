@@ -17,16 +17,12 @@ using Acetesa.TomaPedidos.Transversal;
 using Acetesa.TomaPedidos.Transversal.Enums;
 using Acetesa.TomaPedidos.Transversal.Extensions;
 using MvcRazorToPdf;
-using PagedList;
-using System.Net;
 using System.Net.Http;
 using Acetesa.TomaPedidos.AdminMvc.Helpers;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using System.IO;
 using System.Web;
-using System.Xml.Serialization;
 using System.Xml.Linq;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -786,6 +782,31 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
 
                 PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
 
+
+                //Inicio: Guardar PDF
+                var idPedido = entityMaster.cn_pedido;
+
+                var pedido = PedidoService.GetById(idPedido);
+                var pedidoAdicional = PedidoService.GetAdicionalById(idPedido);
+
+                var pedidoClienteVm = new PedidoClienteViewModel
+                {
+                    Pedido = pedido,
+                    Adicional = pedidoAdicional
+                };
+
+
+                RenderPdf(idPedido, "RenderPdfPedido");
+                var pdfPath = Server.MapPath(string.Format(PathFormatPdf, idPedido));
+
+                byte[] filedata = System.IO.File.ReadAllBytes(pdfPath);
+
+
+                PedidoService.RegistrarDocumentoPedido(idPedido, filedata);
+                //Fin: Guardar PDF
+
+
+
                 //Inicio: Registra la Nota de Pedido Tortuga
                 LCPEDIDOADICIONAL_WEB PedidoAdicional = new LCPEDIDOADICIONAL_WEB();
                 PedidoAdicional.Cn_lug = model.Cn_lug;
@@ -1155,7 +1176,27 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 }
                 PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
 
+                //Inicio: Guardar PDF
+                var idPedido = entityMaster.cn_pedido;
 
+                var pedido = PedidoService.GetById(idPedido);
+                var pedidoAdicional = PedidoService.GetAdicionalById(idPedido);
+
+                var pedidoClienteVm = new PedidoClienteViewModel
+                {
+                    Pedido = pedido,
+                    Adicional = pedidoAdicional
+                };
+
+
+                RenderPdf(idPedido, "RenderPdfPedido");
+                var pdfPath = Server.MapPath(string.Format(PathFormatPdf, idPedido));
+
+                byte[] filedata = System.IO.File.ReadAllBytes(pdfPath);
+
+
+                PedidoService.RegistrarDocumentoPedido(idPedido, filedata);
+                //Fin: Guardar PDF
 
                 SetSessionNull();
                 TempData["Guardado"] = true;
@@ -2807,6 +2848,28 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         break;
                 }
                 PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+
+                //Inicio: Guardar PDF
+                var idPedido = entityMaster.cn_pedido;
+
+                var pedido = PedidoService.GetById(idPedido);
+                var pedidoAdicional = PedidoService.GetAdicionalById(idPedido);
+
+                var pedidoClienteVm = new PedidoClienteViewModel
+                {
+                    Pedido = pedido,
+                    Adicional = pedidoAdicional
+                };
+
+
+                RenderPdf(idPedido, "RenderPdfPedido");
+                var pdfPath = Server.MapPath(string.Format(PathFormatPdf, idPedido));
+
+                byte[] filedata = System.IO.File.ReadAllBytes(pdfPath);
+
+
+                PedidoService.RegistrarDocumentoPedido(idPedido, filedata);
+                //Fin: Guardar PDF
 
                 //Inicio: Registra la Nota de Pedido Tortuga
                 LCPEDIDOADICIONAL_WEB PedidoAdicional = new LCPEDIDOADICIONAL_WEB();

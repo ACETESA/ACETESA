@@ -67,8 +67,6 @@ namespace Acetesa.TomaPedidos.Repository
                     cc_analis = s.cc_analis,
                     cd_razsoc = s.cd_razsoc,
                     cd_direc = s.cd_direc,
-                    //ct_email = s.ct_email,
-                    //cn_telf1 = s.cn_telf1
                 }).FirstOrDefault(x => x.cc_analis == ccAnalis.Trim());
             return query;
         }
@@ -112,27 +110,9 @@ namespace Acetesa.TomaPedidos.Repository
             }
             return cliente;
 
-            //var query = _dbContext.Query<MCLIENTE>()
-            //    .Select(s => new ClienteModel
-            //    {
-            //        cc_analis = s.cc_analis,
-            //        ct_email = s.ct_email,
-            //        cd_razsoc = s.cd_razsoc
-            //    }).FirstOrDefault(x => x.cc_analis == ccAnalis.Trim());
-            //return query;
         }
 
-        //public void UpdateEmailByCodigo(string ccAnalis, string email)
-        //{
-        //    var cliente = _dbContext.Query<MCLIENTE>()
-        //        .FirstOrDefault(x => x.cc_analis == ccAnalis.Trim());
-        //    if (cliente == null) return;
-        //    if (string.IsNullOrEmpty(cliente.ct_email) || string.IsNullOrWhiteSpace(cliente.ct_email))
-        //    {
-        //        cliente.ct_email = email;
-        //    }
-        //}
-
+        
         public void ActualizarMailContacto(int tipoMail, string id, string emailPara)
         {
             var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
@@ -191,10 +171,6 @@ namespace Acetesa.TomaPedidos.Repository
         }
         public static string addContactoEntregaDirecta(dynamic entity)
         {
-            //if (ExisteContactoEntregaDirecta(entity))
-            //{
-            //    throw new ApplicationException("Dirección ya existente");
-            //}
             string codigo = "0";
             using (var oMapper = new Mapper())
             {
@@ -217,28 +193,7 @@ namespace Acetesa.TomaPedidos.Repository
             }
             return codigo;
         }
-        //public static bool ExisteContactoEntregaDirecta(dynamic entity)
-        //{
-        //    long? item = -1;
-        //    using (var oMapper = new Mapper())
-        //    {
-        //        using (var oComando = Mapper.getComando("EXISTE_LUGARENTREGA"))
-        //        {
-        //            oComando.setParamValue("sAnalisis", entity.Analisis);
-        //            oComando.setParamValue("sDireccion", entity.Direccion);
 
-        //            item = oMapper.BuscarPrimero<long>(oComando);
-        //        }
-        //    }
-        //    if (item != null && item.Value > 0)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
         public List<ClienteModel.VendedorCliente> VendedorAsignadoPorCliente(string ClienteID)
         {
             object[] sqlParams =
@@ -262,359 +217,8 @@ namespace Acetesa.TomaPedidos.Repository
             return lista;
         }
 
-
-        //NUEVA OPCION ALTERNATIVA NO FUNCIONAL - ANTIGUO "vparco
-        //public string NuevoCliente(MCLIENTE cliente)
-        //{
-        //    object[] sqlParams =
-        //    {
-        //        new SqlParameter
-        //        {
-        //            ParameterName = "@cc_analis",
-        //            SqlDbType = SqlDbType.VarChar,
-        //            Size = 50,
-        //            Value = cliente.cc_analis
-        //        },
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_pais",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_pais
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_dpto",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_dpto
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_prov",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_prov
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_sector",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_sector
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_catclie",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_catclie
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_distrito",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_distrito
-        //        //},
-        //        new SqlParameter
-        //        {
-        //            ParameterName = "@cd_razsoc",
-        //            SqlDbType = SqlDbType.VarChar,
-        //            Size = 250,
-        //            Value = cliente.cd_razsoc
-        //        },
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_zona",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 2,
-        //        //    Value = cliente.cc_zona
-        //        //},
-        //        new SqlParameter
-        //        {
-        //            ParameterName = "@cd_direc",
-        //            SqlDbType = SqlDbType.VarChar,
-        //            Size = 45,
-        //            Value = cliente.cd_direc
-        //        },
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cn_regind",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 15,
-        //        //    Value = cliente.cn_regind
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cn_sanit",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 15,
-        //        //    Value = cliente.cn_sanit
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cn_regmerc",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 15,
-        //        //    Value = cliente.cn_regmerc
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@ct_giro",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 85,
-        //        //    Value = cliente.ct_giro
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@dt_constit",
-        //        //    SqlDbType = SqlDbType.DateTime,
-        //        //    Value = cliente.dt_constit
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@dt_registro",
-        //        //    SqlDbType = SqlDbType.DateTime,
-        //        //    Value = cliente.dt_registro
-        //        //},
-        //        new SqlParameter
-        //        {
-        //            ParameterName = "@cn_telf1",
-        //            SqlDbType = SqlDbType.VarChar,
-        //            Size = 15,
-        //            Value = cliente.cn_telf1
-        //        },
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cn_telf2",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 15,
-        //        //    Value = cliente.cn_telf2
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cn_telf3",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 15,
-        //        //    Value = cliente.cn_telf3
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cb_cheque",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 1,
-        //        //    Value = cliente.cb_cheque
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cb_sector",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 1,
-        //        //    Value = cliente.cb_sector
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@dt_ultcomp",
-        //            //SqlDbType = SqlDbType.DateTime,
-        //            //Value = cliente.dt_ultcomp
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@ct_legal",
-        //            //SqlDbType = SqlDbType.VarChar,
-        //            //Size = 45,
-        //            //Value = cliente.ct_legal
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@cn_rucleg",
-        //            //SqlDbType = SqlDbType.VarChar,
-        //            //Size = 11,
-        //            //Value = cliente.cn_rucleg
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@dt_ultdeuda",
-        //            //SqlDbType = SqlDbType.DateTime,
-        //            //Value = cliente.dt_ultdeuda
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_compmn",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_compmn
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@cd_direcleg",
-        //            //SqlDbType = SqlDbType.VarChar,
-        //            //Size = 45,
-        //            //Value = cliente.cd_direcleg
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_compme",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_compme
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@cn_telfleg",
-        //            //SqlDbType = SqlDbType.VarChar,
-        //            //Size = 10,
-        //            //Value = cliente.cn_telfleg
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_acummn",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_acummn
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@cn_faxleg",
-        //            //SqlDbType = SqlDbType.VarChar,
-        //            //Size = 10,
-        //            //Value = cliente.cn_faxleg
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_acumme",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_acumme
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_saldomn",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_saldomn
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_saldome",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_saldome
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fq_descto",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fq_descto
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_cantporc",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_cantporc
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_desctomn",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_desctomn
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_montporcmn",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_montporcmn
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_desctome",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_desctome
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_montporcme",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_montporcme
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@cb_cheqdif",
-        //            //SqlDbType = SqlDbType.VarChar,
-        //            //Size = 1,
-        //            //Value = cliente.cb_cheqdif
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_diferidomn",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_diferidomn
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //            //ParameterName = "@fm_diferidome",
-        //            //SqlDbType = SqlDbType.Float,
-        //            //Value = cliente.fm_diferidome
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@fm_limcred",
-        //        //    SqlDbType = SqlDbType.Money,
-        //        //    Value = cliente.fm_limcred
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cd_nomcom",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 45,
-        //        //    Value = cliente.cd_nomcom
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cd_appaterno",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 30,
-        //        //    Value = cliente.cd_appaterno
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cd_apmaterno",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 330,
-        //        //    Value = cliente.cd_apmaterno
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cd_nombre1",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 30,
-        //        //    Value = cliente.cd_nombre1
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cd_nombre2",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 30,
-        //        //    Value = cliente.cd_nombre2
-        //        //},
-        //        //new SqlParameter
-        //        //{
-        //        //    ParameterName = "@cc_proyecto",
-        //        //    SqlDbType = SqlDbType.VarChar,
-        //        //    Size = 1,
-        //        //    Value = cliente.cc_proyecto
-        //        //},
-        //        new SqlParameter
-        //        {
-        //            ParameterName = "@ct_email",
-        //            SqlDbType = SqlDbType.VarChar,
-        //            Size = 225,
-        //            Value = cliente.ct_email
-        //        }
-
-        //    };
-        //    var resultado = _dbContext.GetExecSpEnumerable("spRegistrarNuevoCliente", sqlParams).ToList();
-        //    return "ok";
-        //}
         public Dictionary<int, string> NuevoCliente(MCLIENTE cliente, string emailUsuario) {
             Dictionary<int, string> diccionario1 = new Dictionary<int, string>();
-            //int resultado=0;
-            //string texto="";
             var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection sqlConnection = new SqlConnection(connection))
             {
@@ -676,60 +280,57 @@ namespace Acetesa.TomaPedidos.Repository
         {
             List<UBIGEO> listaDepartamentos = new List<UBIGEO>();
 
-            string query = "[dbo].[sp_cat_cli_ay_dpto]";
-            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connect))
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
             {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                SqlCommand sqlCommand = new SqlCommand("dbo.sp_cat_cli_ay_dpto", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    conn.Open();
-                    using(SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            listaDepartamentos.Add(
-                                new UBIGEO {
-                                    cc_dpto = reader["cc_dpto"].ToString(),
-                                    cd_dpto = reader["cd_dpto"].ToString()
-                                }
-                                );
-                        }
+                        UBIGEO Ubigeo = new UBIGEO();
+                        Ubigeo.cc_dpto = reader["cc_dpto"].ToString();
+                        Ubigeo.cd_dpto = reader["cd_dpto"].ToString();
+                        listaDepartamentos.Add(Ubigeo);
                     }
                 }
+                sqlConnection.Close();
             }
             return listaDepartamentos;
         }
+
         public List<UBIGEO> ListarProvincia(string cc_dpto)
         {
-            List<UBIGEO> listaProvincia = new List<UBIGEO>();
+            List<UBIGEO> listaUbigeo = new List<UBIGEO>();
 
-            string query = "[dbo].[sp_cat_cli_ay_prov]";
-            string connect = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connect))
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
             {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                SqlCommand sqlCommand = new SqlCommand("dbo.sp_cat_cli_ay_prov", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@cc_dpto", cc_dpto);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@cc_dpto", cc_dpto);
-                    conn.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            listaProvincia.Add(
-                                new UBIGEO
-                                {
-                                    cc_prov = reader["cc_prov"].ToString(),
-                                    cd_prov = reader["cd_prov"].ToString()
-                                }
-                                );
-                        }
+                        UBIGEO Ubigeo = new UBIGEO();
+                        Ubigeo.cc_prov = reader["cc_prov"].ToString();
+                        Ubigeo.cd_prov = reader["cd_prov"].ToString();
+                        listaUbigeo.Add(Ubigeo);
                     }
                 }
+                sqlConnection.Close();
             }
-            return listaProvincia;
+            return listaUbigeo;
         }
+
         public List<UBIGEO> ListarDistrito(string cc_dpto, string cc_prov)
         {
             List<UBIGEO> listaDistrito = new List<UBIGEO>();

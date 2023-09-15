@@ -189,14 +189,14 @@
             <div class="card-body">
                 <div id="articulo">
                     <div class="row">
-                        <div class="col-12 mb-3">
+                        <div class="col-12 col-lg-6 mb-3">
                             @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_grupo, htmlAttributes: new { @class = "form-label" })
                             @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_grupo, ViewBag.GetGrupo as SelectList, new { @class = "form-select" })
                             @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_grupo, "", new { @class = "text-danger" })
                         </div>
 
 
-                        <div class="col-12 mb-3">
+                        <div class="col-12 col-lg-6 mb-3">
                             @Html.LabelFor(model => model.CotizacionDetailViewModel.cc_subgrupo, htmlAttributes: new { @class = "form-label" })
                             @Html.DropDownListFor(model => model.CotizacionDetailViewModel.cc_subgrupo, ViewBag.GetSubGrupo as SelectList, new { @class = "form-select" })
                             @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.cc_subgrupo, "", new { @class = "text-danger" })
@@ -233,14 +233,14 @@
                         </div>
 
 
-                        <div class="col-12 mb-3">
+                        <div class="col-12 col-lg-4 mb-3">
                             @Html.LabelFor(model => model.CotizacionDetailViewModel.fq_cantidad, htmlAttributes: new { @class = "form-label" })
                             @Html.EditorFor(model => model.CotizacionDetailViewModel.fq_cantidad, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fq_cantidad, "", new { @class = "text-danger" })
                         </div>
 
 
-                        <div class="col-12 col-lg-6 mb-3">
+                        <div class="col-12 col-lg-4 mb-3">
                             @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio_tonelada, htmlAttributes: new { @class = "form-label" })
                             <div class="input-group">
                                 @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio_tonelada, new { htmlAttributes = new { @class = "form-control" } })
@@ -250,7 +250,7 @@
                             </div>
                             @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio_tonelada, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-12 col-lg-6 mb-3">
+                        <div class="col-12 col-lg-4 mb-3">
                             @Html.LabelFor(model => model.CotizacionDetailViewModel.fq_peso_teorico, htmlAttributes: new { @class = "form-label" })
                             @Html.EditorFor(model => model.CotizacionDetailViewModel.fq_peso_teorico, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                             @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fq_peso_teorico, "", new { @class = "text-danger" })
@@ -261,12 +261,12 @@
                         @{var sqlDB3 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
                             if (sqlDB3.InitialCatalog == "ZICO_ERP01")
                             {
-                                <div class="col-12 col-lg-6 mb-3">
+                                <div class="col-12 col-lg-4 mb-3">
                                     @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio, htmlAttributes: new { @class = "form-label" })
                                     @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
                                     @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-12 col-lg-6 mb-3">
+                                <div class="col-12 col-lg-4 mb-3">
                                     @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio2, htmlAttributes: new { @class = "form-label" })
                                     @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio2, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
                                     @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio2, "", new { @class = "text-danger" })
@@ -274,7 +274,7 @@
                             }
                             else
                             {
-                                <div class="col-12 mb-3">
+                                <div class="col-12 col-lg-8 mb-3">
                                     @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio, htmlAttributes: new { @class = "form-label" })
                                     @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
                                     @Html.ValidationMessageFor(model => model.CotizacionDetailViewModel.fm_precio, "", new { @class = "text-danger" })
@@ -282,7 +282,7 @@
                             }
                         }
 
-                        <div class="col-12 mb-3">
+                        <div class="col-12 col-lg-4 mb-3">
                             @Html.LabelFor(model => model.CotizacionDetailViewModel.fm_precio_fin, htmlAttributes: new { @class = "control-label" })
                             <div class="input-group">
                                 @Html.EditorFor(model => model.CotizacionDetailViewModel.fm_precio_fin, new { htmlAttributes = new { @class = "form-control" } })

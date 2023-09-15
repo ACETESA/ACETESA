@@ -446,5 +446,161 @@ namespace Acetesa.TomaPedidos.Repository
             return ProformaIDs;
         }
 
+        public LCPEDIDO_WEB GetLastPedido()
+        {
+            LCPEDIDO_WEB pedido = new LCPEDIDO_WEB();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[spObtenerUltimoIDPedidoWeb]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        pedido.cn_pedido = reader["cn_pedido"].ToString();
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return pedido;
+        }
+
+        public LCPEDIDO_WEB RecuperarDatosPedidoByID(string PedidoID)
+        {
+            LCPEDIDO_WEB Pedido = new LCPEDIDO_WEB();
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[spRecuperarDatosPedidoByID]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@PedidoID", PedidoID);
+                sqlConnection.Open();
+
+                var reader = sqlCommand.ExecuteReader();
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        Pedido.df_proceso = DateTime.Parse(reader["df_proceso"].ToString());
+                        Pedido.cb_estado = reader["cb_estado"].ToString();
+
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return Pedido;
+        }
+
+        public void EliminarPedidoByID(string PedidoID)
+        {
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[spEliminarPedidoByID]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@PedidoID", PedidoID);
+                sqlConnection.Open();
+
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
+
+        public void GuardarCabeceraPedido(LCPEDIDO_WEB Pedido)
+        {
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("web.spGuardarCabeceraPedido", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.AddWithValue("@cn_pedido", Pedido.cn_pedido);
+                sqlCommand.Parameters.AddWithValue("@cn_proforma", Pedido.cn_proforma);
+                sqlCommand.Parameters.AddWithValue("@cc_tipana", Pedido.cc_tipana);
+                sqlCommand.Parameters.AddWithValue("@cc_analis", Pedido.cc_analis);
+                sqlCommand.Parameters.AddWithValue("@cn_suc", Pedido.cn_suc);
+                //sqlCommand.Parameters.AddWithValue("@cn_lug", Pedido.cn_lug);
+                sqlCommand.Parameters.AddWithValue("@cd_razsoc", Pedido.cd_razsoc);
+                sqlCommand.Parameters.AddWithValue("@cc_moneda", Pedido.cc_moneda);
+                sqlCommand.Parameters.AddWithValue("@cc_vta", Pedido.cc_vta);
+                sqlCommand.Parameters.AddWithValue("@df_proceso", Pedido.df_proceso);
+                sqlCommand.Parameters.AddWithValue("@df_emision", Pedido.df_emision);
+                sqlCommand.Parameters.AddWithValue("@fm_tipcam", Pedido.fm_tipcam);
+                sqlCommand.Parameters.AddWithValue("@fm_valvta", Pedido.fm_valvta);
+                sqlCommand.Parameters.AddWithValue("@fm_igv", Pedido.fm_igv);
+                sqlCommand.Parameters.AddWithValue("@fm_totvta", Pedido.fm_totvta);
+                sqlCommand.Parameters.AddWithValue("@cb_recojo", Pedido.cb_recojo);
+                sqlCommand.Parameters.AddWithValue("@cb_estado", Pedido.cb_estado);
+                //sqlCommand.Parameters.AddWithValue("@cc_analisvend", Pedido.cc_analisvend);
+                //sqlCommand.Parameters.AddWithValue("@cc_transp", Pedido.cc_transp);
+                //sqlCommand.Parameters.AddWithValue("@vt_observacion", Pedido.vt_observacion);
+                //sqlCommand.Parameters.AddWithValue("@cn_contacto", Pedido.cn_contacto);
+                //sqlCommand.Parameters.AddWithValue("@AprobacionID", Pedido.AprobacionID);
+                //sqlCommand.Parameters.AddWithValue("@FechaEntrega", Pedido.FechaEntrega);
+                //sqlCommand.Parameters.AddWithValue("@cc_tienda", Pedido.cc_tienda);
+                //sqlCommand.Parameters.AddWithValue("@cc_locac", Pedido.cc_locac);
+                //sqlCommand.Parameters.AddWithValue("@cc_artic", Pedido.cc_artic);
+                //sqlCommand.Parameters.AddWithValue("@cc_lista", Pedido.cc_lista);
+                //sqlCommand.Parameters.AddWithValue("@IncluyeIGV", Pedido.IncluyeIGV);
+                //sqlCommand.Parameters.AddWithValue("@IdContactoEntregaDirecta", Pedido.IdContactoEntregaDirecta);
+                //sqlCommand.Parameters.AddWithValue("@cn_ocompra", Pedido.cn_ocompra);
+                //sqlCommand.Parameters.AddWithValue("@zonaLiberada", Pedido.zonaLiberada);
+
+                sqlConnection.Open();
+                var reader = sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
+
+        public void GuardarDetallePedido(LDPEDIDO_WEB DetallePedido)
+        {
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("web.spGuardarDetallePedido", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.AddWithValue("@cn_pedido", DetallePedido.cn_pedido);
+                sqlCommand.Parameters.AddWithValue("@cn_item", DetallePedido.cn_item);
+                sqlCommand.Parameters.AddWithValue("@cc_artic", DetallePedido.cc_artic);
+                //sqlCommand.Parameters.AddWithValue("@descripcionArticulo", DetallePedido.descripcionArticulo);
+                sqlCommand.Parameters.AddWithValue("@fq_cantidad", DetallePedido.fq_cantidad);
+                sqlCommand.Parameters.AddWithValue("@fq_peso", DetallePedido.fq_peso);
+                sqlCommand.Parameters.AddWithValue("@fq_stock", DetallePedido.fq_stock);
+                sqlCommand.Parameters.AddWithValue("@cc_lista", DetallePedido.cc_lista);
+                sqlCommand.Parameters.AddWithValue("@fm_precio", DetallePedido.fm_precio);
+                sqlCommand.Parameters.AddWithValue("@fm_precio2", DetallePedido.fm_precio2);
+                sqlCommand.Parameters.AddWithValue("@fm_precio_fin", DetallePedido.fm_precio_fin);
+                sqlCommand.Parameters.AddWithValue("@fm_total", DetallePedido.fm_total);
+
+                sqlConnection.Open();
+                var reader = sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
+
+        public void RegistrarDocumentoPedido(string PedidoID, byte[] Documento)
+        {
+            var connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            {
+                SqlCommand sqlCommand = new SqlCommand("[web].[spRegistrarDocumentoPedido]", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@PedidoID", PedidoID);
+                sqlCommand.Parameters.AddWithValue("@Documento", Documento);
+
+
+                sqlConnection.Open();
+                var reader = sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
+
+
+
     }
 }
