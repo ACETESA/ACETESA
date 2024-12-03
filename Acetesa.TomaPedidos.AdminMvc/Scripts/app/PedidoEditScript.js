@@ -782,6 +782,7 @@ function limpiarCamposArticulo() {
     var $sCC_transp = $("#sCC_transp");
     var $sContactoTransporte = $("#sContactoTransporte");
     var $sVt_observacion = $("#sVt_observacion");
+    var $sVt_observacionGuia = $("#sVt_observacionGuia");
     var $sCn_ocompra = $("#sCn_ocompra");
     var $sCbRecojo = $("#scb_recojo");
     var $sFechaEmision = $("#sfecha_emision");
@@ -828,6 +829,7 @@ function limpiarCamposArticulo() {
         $sIgv_bo.val($("#igv_bo").val());
         $sZonaLiberada.val($("#zonaLiberada_bo").val());
         $sVt_observacion.val($("#Vt_observacion").val());
+        $sVt_observacionGuia.val($("#Vt_observacionGuia").val());
         $sCn_ocompra.val($("#cn_ocompra").val().trim());
         $sCbRecojo.val($("#cb_recojo").val());
         return Validaciones();
@@ -887,6 +889,7 @@ function limpiarCamposArticulo() {
         $sIgv_bo.val($("#igv_bo").val());
         $sZonaLiberada.val($("#zonaLiberada_bo").val());
         $sVt_observacion.val($("#Vt_observacion").val());
+        $sVt_observacionGuia.val($("#Vt_observacionGuia").val());
         $sCn_ocompra.val($("#cn_ocompra").val());
         $sCbRecojo.val($("#cb_recojo").val());
         var $cnPedido = $("#cn_pedido");
@@ -965,7 +968,7 @@ function limpiarCamposArticulo() {
                                     });
                                 });
                             }
-                            else if (mensajeID == "0") {
+                            else if (mensajeID == "0" && EsCredito =="1") {
                                 toastr.error(mensajeVLC, "Validación de Linea de Crédito", {
                                     closeButton: true,
                                     timeOut: 15000,

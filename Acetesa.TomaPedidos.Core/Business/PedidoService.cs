@@ -200,13 +200,13 @@ namespace Acetesa.TomaPedidos.Core.Business
             _dbContext.Commit();
         }
 
-        public void GuardarAdicional(LCPEDIDO_WEB entityMaster, string email, string Lugar, string Transporte, string Observacion, string contacto, string IdContactoEntregaDirecta, string Tienda, DateTime FechaEntrega, int IncluyeIGV, string cn_ocompra, int zonaLiberada)
+        public void GuardarAdicional(LCPEDIDO_WEB entityMaster, string email, string Lugar, string Transporte, string Observacion, string contacto, string IdContactoEntregaDirecta, string Tienda, DateTime FechaEntrega, int IncluyeIGV, string cn_ocompra, int zonaLiberada, string ObservacionGuia)
         {
             if (cn_ocompra == null)
             {
                 cn_ocompra = "";
             }
-            _pedidoRepository.GuardarAdicional(entityMaster, email, Lugar, Transporte, Observacion, contacto, IdContactoEntregaDirecta, Tienda, FechaEntrega, IncluyeIGV, cn_ocompra, zonaLiberada);
+            _pedidoRepository.GuardarAdicional(entityMaster, email, Lugar, Transporte, Observacion, contacto, IdContactoEntregaDirecta, Tienda, FechaEntrega, IncluyeIGV, cn_ocompra, zonaLiberada, ObservacionGuia);
         }
         public Dictionary<string, string> RegistrarDocumentoOCPorPedido(string idPedido, string usuarioRegistro, byte[] documento)
         {

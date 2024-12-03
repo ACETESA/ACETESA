@@ -33,10 +33,10 @@
     <div class="row ms-1 me-1">
         <hr />
         @*<div class="col-9 col-lg-5 mb-3">
-            @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label" })
-            @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
-            @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
-        </div>*@
+                @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+            </div>*@
         <div class="col-9 col-lg-5 mb-3">
             @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label ps-2" })
             <div class="input-group">
@@ -174,6 +174,10 @@
             @Html.TextAreaFor(model => model.Vt_observacion, new { maxlength = 250, @class = "form-control" })
         </div>
 
+        <div class="col-12  mb-3">
+            @Html.LabelFor(model => model.Vt_observacionGuia, htmlAttributes: new { @class = "form-label" })
+            @Html.TextAreaFor(model => model.Vt_observacionGuia, new { maxlength = 250, @class = "form-control" })
+        </div>
 
         <div id="containerArticulo" class="col-12">
 
@@ -334,6 +338,7 @@
     @Html.Hidden("sCC_transp", "")
     @Html.Hidden("sContactoTransporte", "")
     @Html.Hidden("sVt_observacion", "")
+    @Html.Hidden("sVt_observacionGuia", "")
     @Html.Hidden("sCn_ocompra", "")
     @Html.Hidden("scb_recojo", "")
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

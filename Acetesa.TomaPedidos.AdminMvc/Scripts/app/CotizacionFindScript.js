@@ -244,17 +244,17 @@ function ValidarTrnasformacionCotizacionAPedido(CotizacionID) {
                 var mensajeID = value["item1"];
                 var mensaje = value["item2"];
 
-                if (mensajeID == "0") {
-                    toastr.error(mensaje, "Validación de Stock de Artículos", {
-                        closeButton: true,
-                        timeOut: 30000,
-                        progressBar: true
-                    });
-                }
-                else {
-                    var URL = "/Pedido/Nuevo/" + CotizacionID;
+              //  if (mensajeID == "0") {
+               //     toastr.error(mensaje, "Validación de Stock de Artículos", {
+                //        closeButton: true,
+                //        timeOut: 30000,
+                //        progressBar: true
+                //    });
+               // }
+               // else {
+                    var URL = getRutaAbsoluta("Pedido/Nuevo/" + CotizacionID);
                     window.location = URL;
-                }
+              //  }
             });
 
             //alert(JSON.stringify(result));

@@ -156,6 +156,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         private string _CC_transp;
         private string _ContactoTransporte;
         private string _Vt_observacion;
+        private string _Vt_observacionGuia;
         private string _cn_ocompra;
         private int _zonaLiberada_bo;
         private string _cbRecojo;
@@ -202,6 +203,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         private const string SessionContactoTransporteEditar = "pedido_ContactoTransporte_editar";
         private const string SessionVt_observacionNuevo = "pedido_Vt_observacion_nuevo";
         private const string SessionVt_observacionEditar = "pedido_Vt_observacion_editar";
+        private const string SessionVt_observacionGuiaNuevo = "pedido_Vt_observacionGuia_nuevo";
+        private const string SessionVt_observacionGuiaEditar = "pedido_Vt_observacionGuia_editar";
         private const string SessionCn_ocompraNuevo = "pedido_Cn_ocompra_nuevo";
         private const string SessionCn_ocompraEditar = "pedido_Cn_ocompra_editar";
         private const string SessionZonaLiberadaNuevo = "pedido_ZonaLiberada_nuevo";
@@ -224,6 +227,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
         private string _sessionCC_transp;
         private string _sessionContactoTransporte;
         private string _sessionVt_observacion;
+        private string _sessionVt_observacionGuia;
         private string _sessionCn_ocompra;
         private string _sessionZonaLiberada;
         private string _sessionCbRecojo;
@@ -603,6 +607,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             var cNtransp = (string)Session[SessionCC_transpNuevo];
             var cNContactoTransporte = (string)Session[SessionContactoTransporteNuevo];
             var cNobservacion = (string)Session[SessionVt_observacionNuevo];
+            var cNobservacionGuia = (string)Session[SessionVt_observacionGuiaNuevo];
             var cNocompra = (string)Session[SessionCn_ocompraNuevo];
             var cbRecojo = (string)Session[SessionCbRecojoNuevo];
             //var CNTienda = (string)Session[SessionTiendaNuevo];
@@ -622,6 +627,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 CC_transp = cNtransp,
                 ContactoTransporte = cNContactoTransporte,
                 Vt_observacion = cNobservacion,
+                Vt_observacionGuia = cNobservacionGuia,
                 cn_ocompra = cNocompra,
                 cb_recojo = cbRecojo,
                 Tienda = cCTienda,
@@ -677,6 +683,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 Cn_lug = _Cn_lug,
                 CC_transp = _CC_transp,
                 Vt_observacion = _Vt_observacion,
+                Vt_observacionGuia = _Vt_observacionGuia,
                 cn_ocompra = _cn_ocompra,
                 cb_recojo = _cbRecojo,
                 Tienda = _Tienda,
@@ -780,7 +787,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         break;
                 }
 
-                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo, model.Vt_observacionGuia + "");
 
 
                 //Inicio: Guardar PDF
@@ -812,31 +819,32 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 PedidoAdicional.Cn_lug = model.Cn_lug;
                 PedidoAdicional.cn_ocompra = model.cn_ocompra;
                 PedidoAdicional.Vt_observacion = model.Vt_observacion;
+                PedidoAdicional.Vt_observacionGuia = model.Vt_observacionGuia;
                 PedidoAdicional.cc_tienda = model.Tienda;
                 PedidoAdicional.CC_transp = model.CC_transp;
                 PedidoAdicional.FechaEntrega = DateTime.Parse(model.FechaEntrega);
                 PedidoAdicional.ContactoTransporte = model.ContactoTransporte;
 
 
-                if (emailModel.Para.Length > 0) //Guardar y Enviar
-                {
-                    var xml = new XDocument(new XElement("DetallePedido",
-                                     from pedidoDetalle in pedidoDetalleList
-                                     select new XElement("Articulo",
-                                       new XElement("cn_item", pedidoDetalle.cn_item),
-                                       new XElement("cc_artic", pedidoDetalle.cc_artic),
-                                       new XElement("cc_unmed", pedidoDetalle.MARTICUL.cc_unmed),
-                                       new XElement("fq_cantped", pedidoDetalle.fq_cantidad),
-                                       new XElement("fm_valunit", pedidoDetalle.fm_precio2),
-                                       new XElement("fm_monvta", pedidoDetalle.fm_total),
-                                       new XElement("cd_artic", pedidoDetalle.MARTICUL.cd_artic),
-                                       new XElement("fq_embalaje", pedidoDetalle.MARTICUL.fq_embalaje),
-                                       new XElement("fm_valuni_cd", pedidoDetalle.fm_precio_fin)
-                                       )
-                                ));
+                //if (emailModel.Para.Length > 0) //Guardar y Enviar
+                //{
+                //    var xml = new XDocument(new XElement("DetallePedido",
+                //                     from pedidoDetalle in pedidoDetalleList
+                //                     select new XElement("Articulo",
+                //                       new XElement("cn_item", pedidoDetalle.cn_item),
+                //                       new XElement("cc_artic", pedidoDetalle.cc_artic),
+                //                       new XElement("cc_unmed", pedidoDetalle.MARTICUL.cc_unmed),
+                //                       new XElement("fq_cantped", pedidoDetalle.fq_cantidad),
+                //                       new XElement("fm_valunit", pedidoDetalle.fm_precio2),
+                //                       new XElement("fm_monvta", pedidoDetalle.fm_total),
+                //                       new XElement("cd_artic", pedidoDetalle.MARTICUL.cd_artic),
+                //                       new XElement("fq_embalaje", pedidoDetalle.MARTICUL.fq_embalaje),
+                //                       new XElement("fm_valuni_cd", pedidoDetalle.fm_precio_fin)
+                //                       )
+                //                ));
 
-                    PedidoService.RegistrarNotaPedidoVenta(entityMaster, PedidoAdicional, xml.ToString(), User.Identity.Name);
-                }
+                //    PedidoService.RegistrarNotaPedidoVenta(entityMaster, PedidoAdicional, xml.ToString(), User.Identity.Name);
+                //}
                 //Fin: Registra la Nota de Pedido Tortuga
 
                 if (!string.IsNullOrEmpty(model.cn_proforma) && !string.IsNullOrWhiteSpace(model.cn_proforma))
@@ -987,6 +995,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 CC_transp = pedidoAdicional.CC_transp,
                 ContactoTransporte = pedidoAdicional.ContactoTransporte,
                 Vt_observacion = pedidoAdicional.Vt_observacion,
+                Vt_observacionGuia = pedidoAdicional.Vt_observacionGuia,
                 cn_ocompra = pedidoAdicional.cn_ocompra,
                 cb_recojo = pedido.cb_recojo
             };
@@ -1003,7 +1012,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                                         cc_unmed = articulo.cc_unmed,
                                         fq_cantidad = item.fq_cantidad,
                                         fq_peso_teorico = (decimal)item.MARTICUL.fq_peso_teorico,
-                                        fm_precio_tonelada = (item.fm_precio_fin/(decimal)item.MARTICUL.fq_peso_teorico)*1000,
+                                        fm_precio_tonelada = (item.fm_precio_fin / (decimal)item.MARTICUL.fq_peso_teorico) * 1000,
                                         fq_stock = item.fq_stock ?? 0,
                                         cc_lista = item.cc_lista,
                                         fm_precio = item.fm_precio,
@@ -1060,6 +1069,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 IdContactoEntregaDirecta = _IdContactoEntregaDirecta,
                 CC_transp = _CC_transp,
                 Vt_observacion = _Vt_observacion,
+                Vt_observacionGuia = _Vt_observacionGuia,
                 cn_ocompra = _cn_ocompra,
                 cb_recojo = _cbRecojo,
                 Tienda = _Tienda,
@@ -1174,7 +1184,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         model.IdContactoEntregaDirecta = "";
                         break;
                 }
-                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra + "", model.zonaLiberada_bo, model.Vt_observacionGuia + "");
 
                 //Inicio: Guardar PDF
                 var idPedido = entityMaster.cn_pedido;
@@ -1897,6 +1907,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             _CC_transp = SetValue(formCollection["sCC_transp"], Session[_sessionCC_transp]);
             _ContactoTransporte = SetValue(formCollection["sContactoTransporte"], Session[_sessionContactoTransporte]);
             _Vt_observacion = SetValue(formCollection["sVt_observacion"], Session[_sessionVt_observacion]);
+            _Vt_observacionGuia = SetValue(formCollection["sVt_observacionGuia"], Session[_sessionVt_observacionGuia]);
             _cn_ocompra = SetValue(formCollection["sCn_ocompra"], Session[_sessionCn_ocompra]);
             _cbRecojo = SetValue(formCollection["scb_recojo"], Session[_sessionCbRecojo]);
             _Tienda = SetValue(formCollection["sTienda"], Session[_sessionTienda]);
@@ -1927,6 +1938,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
             Session[_sessionCC_transp] = _CC_transp;
             Session[_sessionContactoTransporte] = _ContactoTransporte;
             Session[_sessionVt_observacion] = _Vt_observacion;
+            Session[_sessionVt_observacionGuia] = _Vt_observacionGuia;
             Session[_sessionCn_ocompra] = _cn_ocompra;
             Session[_sessionCbRecojo] = _cbRecojo;
             Session[_sessionTienda] = _Tienda;
@@ -1956,6 +1968,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     Session[SessionCC_transpNuevo] = null;
                     Session[SessionContactoTransporteNuevo] = null;
                     Session[SessionVt_observacionNuevo] = null;
+                    Session[SessionVt_observacionGuiaNuevo] = null;
                     Session[SessionCn_ocompraNuevo] = null;
                     Session[SessionCbRecojoNuevo] = null;
                     Session[SessionTiendaNuevo] = null;
@@ -1979,6 +1992,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     Session[SessionCC_transpEditar] = null;
                     Session[SessionContactoTransporteEditar] = null;
                     Session[SessionVt_observacionEditar] = null;
+                    Session[SessionVt_observacionGuiaEditar] = null;
                     Session[SessionCn_ocompraEditar] = null;
                     Session[SessionCbRecojoEditar] = null;
                     Session[SessionTiendaEditar] = null;
@@ -2008,6 +2022,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     _sessionCC_transp = SessionCC_transpNuevo;
                     _sessionContactoTransporte = SessionContactoTransporteNuevo;
                     _sessionVt_observacion = SessionVt_observacionNuevo;
+                    _sessionVt_observacionGuia = SessionVt_observacionGuiaNuevo;
                     _sessionCn_ocompra = SessionCn_ocompraNuevo;
                     _sessionCbRecojo = SessionCbRecojoNuevo;
                     _sessionTienda = SessionTiendaNuevo;
@@ -2031,6 +2046,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                     _sessionCC_transp = SessionCC_transpEditar;
                     _sessionContactoTransporte = SessionContactoTransporteEditar;
                     _sessionVt_observacion = SessionVt_observacionEditar;
+                    _sessionVt_observacionGuia = SessionVt_observacionGuiaEditar;
                     _sessionCn_ocompra = SessionCn_ocompraEditar;
                     _sessionCbRecojo = SessionCbRecojoEditar;
                     _sessionTienda = SessionTiendaEditar;
@@ -2573,6 +2589,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 Session[_sessionCC_transp] = model.CC_transp;
                 Session[_sessionContactoTransporte] = model.ContactoTransporte;
                 Session[_sessionVt_observacion] = model.Vt_observacion;
+                Session[_sessionVt_observacionGuia] = model.Vt_observacionGuia;
                 Session[_sessionCn_ocompra] = model.cn_ocompra;
                 Session[_sessionCbRecojo] = model.cb_recojo;
                 Session[_sessionTienda] = model.Tienda;
@@ -2748,6 +2765,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 CC_transp = _CC_transp,
                 ContactoTransporte = _ContactoTransporte,
                 Vt_observacion = _Vt_observacion,
+                Vt_observacionGuia = _Vt_observacionGuia,
                 cn_ocompra = _cn_ocompra,
                 cb_recojo = _cbRecojo,
                 Tienda = _Tienda,
@@ -2847,7 +2865,7 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                         model.IdContactoEntregaDirecta = "";
                         break;
                 }
-                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo);
+                PedidoService.GuardarAdicional(entityMaster, User.Identity.Name, model.Cn_lug + "", model.CC_transp + "", model.Vt_observacion + "", model.ContactoTransporte + "", model.IdContactoEntregaDirecta + "", model.Tienda + "", model.FechaEntrega.ConvertDateTime(), model.igv_bo, model.cn_ocompra, model.zonaLiberada_bo, model.Vt_observacionGuia + "");
 
                 //Inicio: Guardar PDF
                 var idPedido = entityMaster.cn_pedido;
@@ -2876,31 +2894,32 @@ namespace Acetesa.TomaPedidos.AdminMvc.Controllers
                 PedidoAdicional.Cn_lug = model.Cn_lug;
                 PedidoAdicional.cn_ocompra = model.cn_ocompra;
                 PedidoAdicional.Vt_observacion = model.Vt_observacion;
+                PedidoAdicional.Vt_observacionGuia = model.Vt_observacionGuia;
                 PedidoAdicional.cc_tienda = model.Tienda;
                 PedidoAdicional.CC_transp = model.CC_transp;
                 PedidoAdicional.FechaEntrega = DateTime.Parse(model.FechaEntrega);
                 PedidoAdicional.ContactoTransporte = model.ContactoTransporte;
 
-                    var xml = new XDocument(new XElement("DetallePedido",
-                                     from pedidoDetalle in pedidoDetalleList
-                                     select new XElement("Articulo",
-                                       new XElement("cn_item", pedidoDetalle.cn_item),
-                                       new XElement("cc_artic", pedidoDetalle.cc_artic),
-                                       new XElement("cc_unmed", pedidoDetalle.MARTICUL.cc_unmed),
-                                       new XElement("fq_cantped", pedidoDetalle.fq_cantidad),
-                                       new XElement("fm_valunit", pedidoDetalle.fm_precio2),
-                                       new XElement("fm_monvta", pedidoDetalle.fm_total),
-                                       new XElement("cd_artic", pedidoDetalle.MARTICUL.cd_artic),
-                                       new XElement("fq_embalaje", pedidoDetalle.MARTICUL.fq_embalaje),
-                                       new XElement("fm_valuni_cd", pedidoDetalle.fm_precio_fin)
-                                       )
-                                ));
+                //var xml = new XDocument(new XElement("DetallePedido",
+                //                 from pedidoDetalle in pedidoDetalleList
+                //                 select new XElement("Articulo",
+                //                   new XElement("cn_item", pedidoDetalle.cn_item),
+                //                   new XElement("cc_artic", pedidoDetalle.cc_artic),
+                //                   new XElement("cc_unmed", pedidoDetalle.MARTICUL.cc_unmed),
+                //                   new XElement("fq_cantped", pedidoDetalle.fq_cantidad),
+                //                   new XElement("fm_valunit", pedidoDetalle.fm_precio2),
+                //                   new XElement("fm_monvta", pedidoDetalle.fm_total),
+                //                   new XElement("cd_artic", pedidoDetalle.MARTICUL.cd_artic),
+                //                   new XElement("fq_embalaje", pedidoDetalle.MARTICUL.fq_embalaje),
+                //                   new XElement("fm_valuni_cd", pedidoDetalle.fm_precio_fin)
+                //                   )
+                //            ));
 
-                var resultadoRNPV = PedidoService.RegistrarNotaPedidoVenta(entityMaster, PedidoAdicional, xml.ToString(), User.Identity.Name);
-                if (resultadoRNPV["mensajeID"] == "0")
-                {
-                    return JsonError(resultadoRNPV["mensaje"]);
-                }
+                //var resultadoRNPV = PedidoService.RegistrarNotaPedidoVenta(entityMaster, PedidoAdicional, xml.ToString(), User.Identity.Name);
+                //if (resultadoRNPV["mensajeID"] == "0")
+                //{
+                //    return JsonError(resultadoRNPV["mensaje"]);
+                //}
                 //Fin: Registra la Nota de Pedido Tortuga
 
                 TempData["Guardado"] = true;

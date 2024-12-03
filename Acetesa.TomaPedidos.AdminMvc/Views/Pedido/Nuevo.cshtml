@@ -36,24 +36,26 @@
             @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "form-select" })
             @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
         </div>*@
-    <div class="col-9 col-lg-5 mb-3">
-        @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label ps-2" })
-        <div class="input-group">
-            @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
-            @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
-            <script>
-                $('#cc_analis').attr('data-show-subtext', 'true');
-                $('#cc_analis').attr('data-live-search', 'true');
-                $('#cc_analis').attr('data-width', '100%');
-            </script>
-            <style>
-                .bootstrap-select .dropdown-menu {
-                    max-width: 100% !important;
-                    font-size: 100%;
-                }
-            </style>
+     <div class="col-9 col-lg-5 mb-3">
+            @Html.LabelFor(model => model.cc_analis, htmlAttributes: new { @class = "form-label ps-2" })
+            <div class="input-group">
+                @Html.DropDownListFor(model => model.cc_analis, ViewBag.GetClientes as SelectList, new { @class = "selectpicker" })
+                @Html.ValidationMessageFor(model => model.cc_analis, "", new { @class = "text-danger", @id = "msgeCliente" })
+                <script>
+                    $('#cc_analis').attr('data-show-subtext', 'true');
+                    $('#cc_analis').attr('data-live-search', 'true');
+                    $('#cc_analis').attr('data-width', '100%');
+                </script>
+                <style>
+                    .bootstrap-select .dropdown-menu {
+                        max-width: 100% !important;
+                        font-size: 100%;
+                    }
+                </style>
+            </div>
         </div>
-    </div>
+
+ 
     <div class="col-3 col-lg-1 align-self-end mb-3">
         <button type="button" class="btn btn-secondary" data-target="#modal-cliente" id="btnClienteNew">Nuevo</button>
     </div>
@@ -172,6 +174,10 @@
         @Html.TextAreaFor(model => model.Vt_observacion, new { maxlength = 250, @class = "form-control" })
     </div>
 
+    <div class="col-12  mb-3">
+        @Html.LabelFor(model => model.Vt_observacionGuia, htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(model => model.Vt_observacionGuia, new { maxlength = 250, @class = "form-control" })
+    </div>
 
 
     <div id="containerArticulo" class="col-12">
@@ -291,114 +297,116 @@
         </div>
     </div>
 </div>
-}
-<hr />
-<div class="table-responsive" id="result">
-    @if (Session["pedido_DetailNuevo"] != null)
-    {
-        Html.RenderPartial("_PartialPedidoDetail", Session["pedido_DetailNuevo"]);
-    }
-</div>
-
-@{
-    Html.RenderPartial("_PartialClienteNew", Model.ClienteNewViewModel);
-    Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
-    Html.RenderPartial("_PartialLugarEntrega", Model.LugarEntregaNewViewModel);
-    Html.RenderPartial("_PartialContactoEntregaDirecta", Model.ContactoEntregaDirectaNewViewModel);
-    Html.RenderPartial("_PartialTransporteCliente", Model.TransportistaNewViewModel);
-    Html.RenderPartial("_PartialContactoTransporte", Model.ContactoTransporteNewModel);
-    Html.RenderPartial("_PartialMensajeConfirmacion");
-}
-
-@using (Html.BeginForm("Nuevo", "Pedido", FormMethod.Post, new { @id = "formNewPedido" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.cn_pedido)
-    @Html.HiddenFor(model => model.cn_proforma)
-    @Html.HiddenFor(model => model.EsProforma)
-    @Html.Hidden("scc_analis", "")
-    @Html.Hidden("scc_moneda", "")
-    @Html.Hidden("scc_vta", "")
-    @Html.Hidden("sfecha_emision", "")
-    @Html.Hidden("sfecha_entrega", "")
-    @Html.Hidden("sfm_tipcam", "0")
-    @Html.Hidden("scn_suc", "")
-    @Html.Hidden("scb_recojo", "")
-    @Html.Hidden("sPara", "")
-    @Html.Hidden("sConCopia", "")
-    @Html.Hidden("sAsunto", "")
-    @Html.Hidden("sMensaje", "")
-    @Html.Hidden("sCn_lug", "")
-    @Html.Hidden("sIdContactoEntregaDirecta", "")
-    @Html.Hidden("sTienda", "")
-    @Html.Hidden("sIgv_bo", "")
-    @Html.Hidden("sZonaLiberada", "")
-    @Html.Hidden("sCC_transp", "")
-    @Html.Hidden("sContactoTransporte", "")
-    @Html.Hidden("sVt_observacion", "")
-    @Html.Hidden("sCn_ocompra", "")
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-horizontal">
-        <div class="row">
-            <div class="col-offset-2 col-10">
-                <input type="submit" value="Guardar" class="btn btn-success" id="btnSave" />
-                <input type="button" value="Guardar y enviar" class="btn btn-outline-success" id="btnSaveAndSend" />
-            </div>
+        }
+        <hr />
+        <div class="table-responsive" id="result">
+            @if (Session["pedido_DetailNuevo"] != null)
+            {
+                Html.RenderPartial("_PartialPedidoDetail", Session["pedido_DetailNuevo"]);
+            }
         </div>
-    </div>
-}
 
-@section CssTop{
-    @Styles.Render("~/Content/ui")
-    <link href="~/Content/toastr.min.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
-}
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryui")
-    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
-    <script src="~/Scripts/jquery.dataTables.min.js"></script>
-    <script src="~/Scripts/toastr.min.js"></script>
-    <script src="~/Scripts/lib/Ajax.js?v=7"></script>
-    <script src="~/Scripts/app/email-service.js?v=7"></script>
-    <script src="~/Scripts/bootstrap-select.min.js"></script>
-    <script type="text/javascript">
-        var urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
-        var urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
-        var urlListarSectores = "@Url.Action("Sectores", "Pedido")";
-        var urlListarDepartamentos = "@Url.Action("Departamentos", "Pedido")";
-        var urlListarProvincias = "@Url.Action("Provincias", "Pedido")";
-        var urlListarDistritos = "@Url.Action("Distritos", "Pedido")";
-        var urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Pedido")";
-        var urlGetColumnasContactoEntregaDirecta = "@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
-        var urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Pedido")";
-        var urlValidarStockPedido = "@Url.Action("ValidarStockPedido", "Pedido")";
-        var urlValidaProductosCotizacion = '@Url.Action("ValidaProductosCotizacion", "Pedido")';
-        var urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
-        var urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
-        var urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Pedido")";
-        var urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
-        var urlValidaCreditoSobregiroPorPedido = "@Url.Action("ValidaCreditoSobregiroPorPedido", "Pedido")";
-        var urlStockTodasTiendasPorArticulo ="@Url.Action("StockTodasTiendasPorArticulo", "Cotizacion")";
-        var urlSelectClientesSegunCarteraVendedorYLibres ="@Url.Action("SelectClientesSegunCarteraVendedorYLibres", "Cliente")";
-
-    </script>
-    <script>
-        var gl_IdArtic;
-        _baseUrl = "@ViewBag.BaseUrl";
-        var emailModel = @Html.Json(emailModel);
-        if (emailModel != null) {
-            emailModel.cnPedido = "@ViewBag.CnPedido";
+        @{
+            Html.RenderPartial("_PartialClienteNew", Model.ClienteNewViewModel);
+            Html.RenderPartial("_PartialEnviarMail", Model.EnviarMailViewModel);
+            Html.RenderPartial("_PartialLugarEntrega", Model.LugarEntregaNewViewModel);
+            Html.RenderPartial("_PartialContactoEntregaDirecta", Model.ContactoEntregaDirectaNewViewModel);
+            Html.RenderPartial("_PartialTransporteCliente", Model.TransportistaNewViewModel);
+            Html.RenderPartial("_PartialContactoTransporte", Model.ContactoTransporteNewModel);
+            Html.RenderPartial("_PartialMensajeConfirmacion");
+            Html.RenderPartial("_PartialVerificarPrecio");
         }
 
-        //Variable Global de edicion:
-        var gs_editando = 0;
+        @using (Html.BeginForm("Nuevo", "Pedido", FormMethod.Post, new { @id = "formNewPedido" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.cn_pedido)
+            @Html.HiddenFor(model => model.cn_proforma)
+            @Html.HiddenFor(model => model.EsProforma)
+            @Html.Hidden("scc_analis", "")
+            @Html.Hidden("scc_moneda", "")
+            @Html.Hidden("scc_vta", "")
+            @Html.Hidden("sfecha_emision", "")
+            @Html.Hidden("sfecha_entrega", "")
+            @Html.Hidden("sfm_tipcam", "0")
+            @Html.Hidden("scn_suc", "")
+            @Html.Hidden("scb_recojo", "")
+            @Html.Hidden("sPara", "")
+            @Html.Hidden("sConCopia", "")
+            @Html.Hidden("sAsunto", "")
+            @Html.Hidden("sMensaje", "")
+            @Html.Hidden("sCn_lug", "")
+            @Html.Hidden("sIdContactoEntregaDirecta", "")
+            @Html.Hidden("sTienda", "")
+            @Html.Hidden("sIgv_bo", "")
+            @Html.Hidden("sZonaLiberada", "")
+            @Html.Hidden("sCC_transp", "")
+            @Html.Hidden("sContactoTransporte", "")
+            @Html.Hidden("sVt_observacion", "")
+            @Html.Hidden("sVt_observacionGuia", "")
+            @Html.Hidden("sCn_ocompra", "")
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-offset-2 col-10">
+                        <input type="submit" value="Guardar" class="btn btn-success" id="btnSave" />
+                        <input type="button" value="Guardar y enviar" class="btn btn-outline-success" id="btnSaveAndSend" />
+                    </div>
+                </div>
+            </div>
+        }
 
-    </script>
+        @section CssTop{
+            @Styles.Render("~/Content/ui")
+            <link href="~/Content/toastr.min.css" rel="stylesheet" />
+            <link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
+        }
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/jqueryui")
+            <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+            <script src="~/Scripts/jquery.dataTables.min.js"></script>
+            <script src="~/Scripts/toastr.min.js"></script>
+            <script src="~/Scripts/lib/Ajax.js?v=7"></script>
+            <script src="~/Scripts/app/email-service.js?v=7"></script>
+            <script src="~/Scripts/bootstrap-select.min.js"></script>
+            <script type="text/javascript">
+                var urlObtenerGrupoSubgrupoArtic = "@Url.Action("ObtenerGrupoSubgrupoArticulo", "Cotizacion")";
+                var urlStockSegunArticulo = "@Url.Action("StockSegunArticulo", "Pedido")";
+                var urlListarSectores = "@Url.Action("Sectores", "Pedido")";
+                var urlListarDepartamentos = "@Url.Action("Departamentos", "Pedido")";
+                var urlListarProvincias = "@Url.Action("Provincias", "Pedido")";
+                var urlListarDistritos = "@Url.Action("Distritos", "Pedido")";
+                var urlValidarVendedorCliente = "@Url.Action("ValidarVendedorCliente", "Pedido")";
+                var urlGetColumnasContactoEntregaDirecta = "@Url.Action("GetColumnasContactoEntregaDirecta", "Pedido")";
+                var urlGetEmailCliente ="@Url.Action("GetEmailCliente", "Pedido")";
+                var urlValidarStockPedido = "@Url.Action("ValidarStockPedido", "Pedido")";
+                var urlValidaProductosCotizacion = '@Url.Action("ValidaProductosCotizacion", "Pedido")';
+                var urlValidarExistenciaClienteRUC = '@Url.Action("ValidarExistenciaClientePorRUC", "Cliente")'
+                var urlValidarClienteEnZonaLiberada = '@Url.Action("ValidarClienteEnZonaLiberada", "Pedido")'
+                var urlGetArticulosByGrupoParam ="@Url.Action("GetArticulosByGrupoParam", "Pedido")";
+                var urlGetSubGrupos ="@Url.Action("GetSubGrupos", "Pedido")";
+                var urlValidaCreditoSobregiroPorPedido = "@Url.Action("ValidaCreditoSobregiroPorPedido", "Pedido")";
+                var urlStockTodasTiendasPorArticulo ="@Url.Action("StockTodasTiendasPorArticulo", "Cotizacion")";
+                var urlSelectClientesSegunCarteraVendedorYLibres ="@Url.Action("SelectClientesSegunCarteraVendedorYLibres", "Cliente")";
 
-    @{var sqlDB1 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
+            </script>
+            <script>
+                var gl_IdArtic;
+                _baseUrl = "@ViewBag.BaseUrl";
+                var emailModel = @Html.Json(emailModel);
+                if (emailModel != null) {
+                    emailModel.cnPedido = "@ViewBag.CnPedido";
+                }
 
-    @*INICIO: Bloquear controles select*@
+                //Variable Global de edicion:
+                var gs_editando = 0;
+
+            </script>
+
+            @{var sqlDB1 = new System.Data.SqlClient.SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString); }
+
+            @*INICIO: Bloquear controles select*@
     @if (sqlDB1.InitialCatalog == "ZICO_ERP04")
     {
         <script>
@@ -638,4 +646,4 @@
             disableSelect();
         }
     </script>
-}
+    }

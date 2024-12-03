@@ -163,8 +163,8 @@
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;">@direccion</td>
             @*<td>Correo</td>
-            <td>:</td>
-            <td style="border-bottom: 1px solid #000000;" colspan="3">@email</td>*@
+                <td>:</td>
+                <td style="border-bottom: 1px solid #000000;" colspan="3">@email</td>*@
             <td>Teléfono</td>
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;" colspan="3">@telefono</td>
@@ -174,8 +174,8 @@
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Cn_lug) ? "" : pedidoAdicional.cd_direc))</td>
             @*<td>Teléfono</td>
-            <td>:</td>
-            <td style="border-bottom: 1px solid #000000;">@telefono</td>*@
+                <td>:</td>
+                <td style="border-bottom: 1px solid #000000;">@telefono</td>*@
             <td>Fecha</td>
             <td>:</td>
             <td style="border-bottom: 1px solid #000000;" colspan="3">@fecha</td>
@@ -363,6 +363,16 @@
             <tr><td>&nbsp;</td></tr>
             <tr>
                 <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Vt_observacion) ? "" : pedidoAdicional.Vt_observacion))</td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+        </table>
+    }
+    @if (!string.IsNullOrWhiteSpace(pedidoAdicional.Vt_observacionGuia))
+    {
+        <table border="0" style="width:100%; padding: 5px;">
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td style="border-bottom: 1px solid #000000;">@((string.IsNullOrWhiteSpace(pedidoAdicional.Vt_observacionGuia) ? "" : pedidoAdicional.Vt_observacionGuia))</td>
             </tr>
             <tr><td>&nbsp;</td></tr>
         </table>

@@ -16,7 +16,7 @@ namespace Acetesa.TomaPedidos.Core.IBusiness
         LCPEDIDOADICIONAL_WEB GetAdicionalById(string cnPedido);
         string GetLastId();
         void Guardar(LCPEDIDO_WEB entity, int igv_bo, string empresa, int zonaLiberada);
-        void GuardarAdicional(LCPEDIDO_WEB entity, string email, string Lugar, string Transporte, string Observacion, string contacto, string IdContactoEntregaDirecta, string Tienda, DateTime FechaEntrega, int IncluyeIGV, string cn_ocompra, int zonaLiberada);
+        void GuardarAdicional(LCPEDIDO_WEB entity, string email, string Lugar, string Transporte, string Observacion, string contacto, string IdContactoEntregaDirecta, string Tienda, DateTime FechaEntrega, int IncluyeIGV, string cn_ocompra, int zonaLiberada, string ObservacionGuia);
         IEnumerable<LDPEDIDO_WEB> PedidoDetalleServices { get; set; }
         void UpdateEstado(string cnProforma, string estado);
         Dictionary<string, string> RegistrarDocumentoOCPorPedido(string idPedido, string usuarioRegistro, byte[] documento);

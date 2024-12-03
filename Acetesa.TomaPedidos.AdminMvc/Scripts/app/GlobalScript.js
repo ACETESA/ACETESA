@@ -283,7 +283,9 @@ function ScrollToElement(element, time) {
 }
 
 function blockScreen() {
-    $('#Loading').modal('show');
+    if ($('#Loading').length > 0) {
+        $('#Loading').modal('show');
+    }
 }
 
 function unBlockScreen() {
@@ -292,6 +294,16 @@ function unBlockScreen() {
             document.getElementById("btnCloseModalLoading").click();
         }, 1000);
 }
-
-
-
+var sRutaRaiz;
+function getRutaAbsoluta(sPath) {
+    if (!sRutaRaiz) {
+        sRutaRaiz = $("#VIRTUAL_PATH").val();
+    }
+    if (sPath[0] != "/") {
+        sPath = "/" + sPath;
+    }
+    if (sPath.indexOf(sRutaRaiz) == -1) {
+        sPath = (sRutaRaiz[sRutaRaiz.length - 1] === "/" ? sRutaRaiz.substring(0, sRutaRaiz.length - 1) : sRutaRaiz) + sPath;
+    }
+    return sPath;
+};

@@ -566,62 +566,85 @@ function limpiarCamposArticulo() {
     //var $Articulo = $("#PedidoDetailViewModel_cc_artic");
     var $msgeArticulo = $("#msgeArticulo");
 
+
+
     //Ajax para validar el stock de articulo disponible
-    function ValidaStockArticuloPedido() {
-        return new Promise(function (resolve, reject) {
+    function ValidaStockArticuloPedido(gl_IdArtic, cantidadSolicitado, precio, precio2, precioFinal, descripcion, validar) {
+        var retorno = true;
+
             var cc_tienda = $('#Tienda option:selected').val();
             var cantidadSolicitado = $("#PedidoDetailViewModel_fq_cantidad").val();
             var EsProforma = $("#EsProforma").val();
             var cn_proforma = $("#cn_proforma").val();
-            var cc_tienda = $("#Tienda").val();
+        var cc_tienda = $("#Tienda").val();
+        var descripcionn = $("PedidoDetailViewModel_cc_artic").val();
+        
 
-            if (gl_IdArtic === undefined) {
-               var gl_IdArtic = $("#PedidoDetailViewModel_cc_artic").val();
+            if (precioFinal < precio2) {
+                //toastr.warning("El precio final no puede ser menor al precio 2");
+                // $("#PedidoDetailViewModel_fm_precio_fin").val("");
+                // $('#modal-stock-alert').modal('show');
+                return {
+                    necesitaAprobacion: true,
+                    articulo: descripcion, // o puedes usar `descripcion` si prefieres mostrar el nombre
+                };
+
+              
+            } else {
+                $.ajax({
+                    destroy: true,
+                    async: false,
+                    url: _baseUrl + "Pedido/ValidaStockArticuloPedido",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        cc_artic: gl_IdArtic,
+                        cc_tienda: cc_tienda,
+                        StockSolicitado: cantidadSolicitado,
+                        EsProforma: EsProforma,
+                        cn_proforma: cn_proforma,
+                        cn_pedido: cn_pedido
+
+                    }),
+                    dataType: "json",
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        var id = data.id;
+                        var mensaje = data.mensaje;
+                        if (!validar) {
+                            toastr.warning(mensaje);
+                        } else {
+                            if (id == 1) {
+                                toastr.warning(mensaje);
+                                if (!validar) {
+                                    $("#PedidoDetailViewModel_fq_cantidad").val("");
+                                }
+                                retorno = false;
+                             }
+                        } 
+                       
+                        if (!validar) {
+                            return true;
+                        }
+                    },
+                    error: function (err) {
+                        reject(err)
+                    }
+                });
             }
-
-            $.ajax({
-                destroy: true,
-                async: false,
-                url: _baseUrl + "Pedido/ValidaStockArticuloPedido",
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({
-                    cc_artic: gl_IdArtic,
-                    cc_tienda: cc_tienda,
-                    StockSolicitado: cantidadSolicitado,
-                    EsProforma: EsProforma,
-                    cn_proforma: cn_proforma,
-                    cn_pedido: cn_pedido
-
-                }),
-                dataType: "json",
-                beforeSend: function () {
-                },
-                success: function (data) {
-                    var id = data.id;
-                    var mensaje = data.mensaje;
-
-                    if (id == 0) {
-                        toastr.warning(mensaje);
-                        $("#PedidoDetailViewModel_fq_cantidad").val("");
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                     resolve(data);
-                },
-                error: function (err) {
-                    reject(err)
-                }
-            });
-        });
+       
+        return retorno;
     }
+
+
 
     //Llamada del evento submit validar si continua o no
     $('#pedidoForm').submit(async function (e) {
         try {
-            const result = await ValidaStockArticuloPedido();
+            const result = ValidaStockArticuloPedido($("#PedidoDetailViewModel_cc_artic").val(), $("#PedidoDetailViewModel_fq_cantidad").val(),
+                $("#PedidoDetailViewModel_fm_precio").val(), $("#PedidoDetailViewModel_fm_precio2").val(), $("#PedidoDetailViewModel_fm_precio_fin").val(), $("PedidoDetailViewModel_cc_artic").val(), false);
+            //result = await ValidaPrecio();
         } catch (e) {
             console.log(e);
         }
@@ -648,14 +671,7 @@ function limpiarCamposArticulo() {
 
         $("#pedidoForm").valid();
 
-        //if ($.trim($txtRazonSocial.val()).length === 0) {
-        //    $msgeCliente.text("Debe seleccionar un cliente.");
-        //    $msgeCliente.show();
-        //} else {
-        //    bValidRazonSocial = true;
-        //    $msgeCliente.hide();
-        //}
-
+      
         //Valida si cliente esta seleccionado
         var selectedCliente = 0;
         $('#cc_analis option').each(function () {
@@ -748,6 +764,7 @@ function limpiarCamposArticulo() {
     var $sCC_transp = $("#sCC_transp");
     var $sContactoTransporte = $("#sContactoTransporte");
     var $sVt_observacion = $("#sVt_observacion");
+    var $sVt_observacionGuia = $("#sVt_observacionGuia");
     var $sCn_ocompra = $("#sCn_ocompra");
     var $sCbRecojo = $("#scb_recojo");
     var $sFechaEmision = $("#sfecha_emision");
@@ -800,6 +817,7 @@ function limpiarCamposArticulo() {
         $sIgv_bo.val($("#igv_bo").val());
         $sZonaLiberada.val($("#zonaLiberada_bo").val());
         $sVt_observacion.val($("#Vt_observacion").val());
+        $sVt_observacionGuia.val($("#Vt_observacionGuia").val());
         $sCn_ocompra.val($("#cn_ocompra").val().trim());
         $sCbRecojo.val($("#cb_recojo").val());
 
@@ -861,8 +879,15 @@ function limpiarCamposArticulo() {
         return true;
     }
 
-    
-    $btnSaveAndSend.on("click", function (e) {
+    //$btnSaveAndSend.on("click", function (e) {
+
+
+
+    //});
+
+
+
+   /* $btnSaveAndSend.on("click", function (e) {
         var table = document.getElementById("table-detail-pedidos");
         var r = 1; //start counting rows in table
         var filasNoInvolucradas = 4;
@@ -895,7 +920,7 @@ function limpiarCamposArticulo() {
             dataType: "json",
             success: function (result) {
                 id = result.id;
-                if (id == "0") {
+                if (id == "") {
                     toastr.error(result.mensaje);
                 }
                 else {
@@ -978,8 +1003,88 @@ function limpiarCamposArticulo() {
                 alert("Error en javascript...");
             }
         });
-    });
+    });*/
 
+    /* $btnSaveAndSend.on("click", function (e) {
+        var table = document.getElementById("table-detail-pedidos");
+        var r = 1; //start counting rows in table
+        var filasNoInvolucradas = 4;
+        var filas = $('#table-detail-pedidos tr').length - filasNoInvolucradas;
+        var lista_ccArtic = "";
+        var lista_stockSolicitado = "";
+        while (r <= filas) {
+            //Codigos de articulos
+            var articulo = table.rows[r].cells[3].innerHTML;
+            var cantidad = table.rows[r].cells[6].innerHTML.replace(",", "");
+            var precio = table.rows[r].cells[9].innerHTML.replace(",", "");
+            var precio2 = table.rows[r].cells[10].innerHTML.replace(",", "");
+            var precioFinal = table.rows[r].cells[11].innerHTML.replace(",", "");
+
+            const result = ValidaStockArticuloPedido(articulo, cantidad,
+                precio, precio2, precioFinal, true);
+
+            if (result == false) {
+                alert("algo salio mal");
+                return false;
+            }
+
+            r++;
+         }
+         SaveNSendPedido();
+
+    });*/
+
+
+$btnSaveAndSend.on("click", function (e) {
+    e.preventDefault(); // Evitar el envío del formulario por defecto
+    var table = document.getElementById("table-detail-pedidos");
+    var r = 1; // Iniciar el conteo de filas en la tabla
+    var filasNoInvolucradas = 4;
+    var filas = $('#table-detail-pedidos tr').length - filasNoInvolucradas;
+    
+    // Array para almacenar los artículos que necesitan aprobación
+    var articulosSinAprobacion = [];
+
+    while (r <= filas) {
+        // Obtener los datos del artículo
+        var articulo = table.rows[r].cells[3].innerHTML;
+        var cantidad = table.rows[r].cells[6].innerHTML.replace(",", "");
+        var precio = table.rows[r].cells[9].innerHTML.replace(",", "");
+        var precio2 = table.rows[r].cells[10].innerHTML.replace(",") 
+        var precioFinal = table.rows[r].cells[11].innerHTML.replace(",","");
+        var descripcion = table.rows[r].cells[4].innerHTML.replace(",", "");
+
+        // Llamar a la función de validación
+        const resultado = ValidaStockArticuloPedido(articulo, cantidad,  precio, precio2, precioFinal, descripcion, true);
+
+        // Comprobar si necesita aprobación
+        if (resultado.necesitaAprobacion) {
+            articulosSinAprobacion.push(resultado.articulo); // Agregar el artículo al array si necesita aprobación
+        }
+
+        r++;
+    }
+
+    // Si hay artículos que necesitan aprobación, mostrarlos en el modal
+    if (articulosSinAprobacion.length > 0) {
+        mostrarModalArticulos(articulosSinAprobacion); // Llama a la función para mostrar los artículos en el modal
+    } else {
+        SaveNSendPedido(); // Si no hay artículos, proceder con el envío
+    }
+});
+
+    
+
+    function mostrarModalArticulos(articulos) {
+        var $stockAlertItems = $('#stockAlertItems');
+        $stockAlertItems.empty(); // Limpiar cualquier contenido previo
+
+        articulos.forEach(function (articulo) {
+            $stockAlertItems.append('<li>' + articulo + '</li>'); // Agregar cada artículo a la lista
+        });
+
+        $('#modal-stock-alert').modal('show'); // Mostrar el modal
+    }
 
     function SaveNSendPedido() {
         //Inicio: Save N Send
@@ -1005,6 +1110,7 @@ function limpiarCamposArticulo() {
         $sIgv_bo.val($("#igv_bo").val());
         $sZonaLiberada.val($("#zonaLiberada_bo").val());
         $sVt_observacion.val($("#Vt_observacion").val());
+        $sVt_observacionGuia.val($("#Vt_observacionGuia").val());
         $sCn_ocompra.val($("#cn_ocompra").val());
         $sCbRecojo.val($("#cb_recojo").val());
         if (!Validaciones()) {
@@ -1109,8 +1215,9 @@ function limpiarCamposArticulo() {
                         option += "</option>";
                         $ccAnalisNew.append(option);
 
-                        $ccAnalisNew.combobox("setValue", $Ruc.val());
-                        callbackCliente($Ruc.val());
+                        $ccAnalisNew.val($Ruc.val());
+                        $ccAnalisNew.selectpicker('refresh');
+                        //callbackCliente($Ruc.val());
                         $btnCloseModal.trigger("click");
                         toastr.success("Cliente Registrado.");
                     }

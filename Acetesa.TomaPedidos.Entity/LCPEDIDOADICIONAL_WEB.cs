@@ -22,7 +22,7 @@ namespace Acetesa.TomaPedidos.Entity
         public string ct_contacto { get; set; }
 
         public string Vt_observacion { get; set; }
-        
+        public string Vt_observacionGuia { get; set; }
         public string ContactoTransporte { get; set; }
         public string ContactoNombre { get; set; }
         public string ContactoTelefono1 { get; set; }

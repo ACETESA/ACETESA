@@ -92,7 +92,8 @@ namespace Acetesa.TomaPedidos.AdminMvc.Models
         public string cn_ocompra { get; set; }
         [Display(Name = "Observación")]
         public string Vt_observacion { get; set; }
-
+        [Display(Name = "Observación de la Guia")]
+        public string Vt_observacionGuia { get; set; }
         [Display(Name = "Lugar de Entrega")]
         public string Cn_lug { get; set; }
 

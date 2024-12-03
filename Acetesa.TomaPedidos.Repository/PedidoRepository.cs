@@ -120,7 +120,7 @@ namespace Acetesa.TomaPedidos.Repository
             _dbContext.Delete(entity);
         }
 
-        public void GuardarAdicional(LCPEDIDO_WEB entityMaster, string email, string Lugar, string Transporte, string Observacion, string contacto, string IdContactoEntregaDirecta, string Tienda, DateTime FechaEntrega,int IncluyeIGV, string cn_ocompra, int zonaLiberada)
+        public void GuardarAdicional(LCPEDIDO_WEB entityMaster, string email, string Lugar, string Transporte, string Observacion, string contacto, string IdContactoEntregaDirecta, string Tienda, DateTime FechaEntrega,int IncluyeIGV, string cn_ocompra, int zonaLiberada, string ObservacionGuia)
         {
             object[] sqlParams =
             {
@@ -205,6 +205,13 @@ namespace Acetesa.TomaPedidos.Repository
                     ParameterName = "@zonaLiberada",
                     SqlDbType = SqlDbType.Int,
                     Value = zonaLiberada
+                },
+                new SqlParameter
+                {
+                    ParameterName = "@Vt_observacionGuia",
+                    SqlDbType = SqlDbType.VarChar,
+                    Size = 500,
+                    Value = ObservacionGuia.Trim()
                 }
             };
             var query = _dbContext.GetExecSpEnumerable<PedidoListadoModel>("usp_web_graba_pedido_ext", sqlParams);

@@ -21,12 +21,20 @@
 </head>
 <body style="padding-top:100px;">
     @Html.Hidden("VALIDA_RUC", ConfigurationManager.AppSettings["HABILITA_CONSULTA_RUC"])
+    @{
+        var url = VirtualPathUtility.ToAbsolute("~");
+        if (url.Substring(VirtualPathUtility.ToAbsolute("~").Length - 1) != "/")
+        {
+            url += "/";
+        }
+        @Html.Hidden("VIRTUAL_PATH", url)
+    }
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark p-0">
         <div class="container-fluid p-0 pb-0">
             <a class="navbar-brand m-0 p-0" href="#">
                 @{
                     var sqlDB = new System.Data.SqlClient.SqlConnectionStringBuilder(
-                        System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                                System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
                     if (sqlDB.InitialCatalog == "ZICO_ERP04")
                     {
                         <img src='@Url.Content("~/Content/Images/GALPESA LOGO.png")' style='width: 110px; height: 32px;' />
@@ -83,16 +91,16 @@
                     </li>
 
                     @*<li class="nav-item">
-                        @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "nav-link mx-2" })
-                    </li>*@
+                            @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "nav-link mx-2" })
+                        </li>*@
                     <li class="nav-item dropdown root">
                         <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Estado de Cuenta
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             @*<li>
-                                @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "dropdown-item" })
-                            </li>*@
+                                    @Html.ActionLink("Estado de Cuenta", "Index", "EstadoCuenta", null, new { @class = "dropdown-item" })
+                                </li>*@
                             <li>
                                 @Html.ActionLink("Estado de Cuenta por Cliente", "EstadoCuentaPorCliente", "EstadoCuenta", null, new { @class = "dropdown-item" })
                             </li>
